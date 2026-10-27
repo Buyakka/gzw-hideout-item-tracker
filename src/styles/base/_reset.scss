@@ -16,6 +16,15 @@
 html {
   -webkit-text-size-adjust: 100%;
   scrollbar-color: color('line-strong') color('bg');
+
+  // Text size button (js/text-size.js): everything in rem scales
+  &[data-text='lg'] {
+    font-size: 112.5%;
+  }
+
+  &[data-text='xl'] {
+    font-size: 125%;
+  }
 }
 
 body {

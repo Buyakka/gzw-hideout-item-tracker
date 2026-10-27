@@ -26,6 +26,24 @@
     padding: space('3') space('6');
   }
 
+  // Extra large text on small phones: just the logo, no cut-off title
+  [data-text='xl'] & &__brand > div {
+    @include down('sm') {
+      display: none;
+    }
+  }
+
+  // With bigger text (js/text-size.js) the stats need their own row
+  // until the screen is really wide
+  [data-text] & {
+    @include down('xl') {
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas:
+        'brand brand actions'
+        'stats stats stats';
+    }
+  }
+
   &__brand {
     grid-area: brand;
     display: flex;
@@ -102,6 +120,13 @@
     gap: space('2');
     justify-self: end;
 
+    // Phones: the text-size button shows just A / A+ / A++
+    .text-size svg {
+      @include down('sm') {
+        display: none;
+      }
+    }
+
     // Stats share the row with the buttons here, so show icons only
     @include up('lg') {
       @include down('xl') {
@@ -174,6 +199,12 @@
     font-weight: 700;
     color: color('accent');
     white-space: nowrap;
+
+    // Narrow phones with big text: let it wrap instead of spilling out
+    @include down('sm') {
+      white-space: normal;
+      line-height: 1.2;
+    }
 
     svg {
       flex: none;

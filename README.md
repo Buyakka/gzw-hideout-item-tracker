@@ -29,6 +29,8 @@ second monitor while you play. Two open tabs stay in sync.
 - Backup and load your progress as a file
 - 3D tilt cards, 3D level flips, radar and HUD effects
 - Works on phones, tablets and wide screens
+- Text size button (A / A+ / A++) in the header and on the landing page, remembered
+  in this browser
 - Respects "reduce motion" in your system settings
 
 ## Run it
@@ -54,6 +56,7 @@ src/
     fx.js                3D tilt, parallax, toasts
     icons.js             SVG icons and small helpers
     logo.js              the Buyaka B logo (SVG)
+    text-size.js         the A / A+ / A++ text size button
     scenes.js            runs the animated background of the open room
     workshop-scene.js    Workshop background effects
     utility-scene.js     Utility Room background effects

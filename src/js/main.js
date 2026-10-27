@@ -26,6 +26,7 @@ import {
 } from './views/panel.js';
 import { initTilt, initParallax, toast } from './fx.js';
 import { initToTop, setToTopPage } from './to-top.js';
+import { cycleTextSize, syncTextSizeButtons } from './text-size.js';
 
 const $ = (s) => document.querySelector(s);
 const els = {
@@ -79,7 +80,10 @@ function renderAll(isStatic = false) {
   const search = document.activeElement?.matches?.('.search') ? document.activeElement : null;
   const caret = search?.selectionStart;
 
-  if (room === 'home') renderHome(els.main);
+  if (room === 'home') {
+    renderHome(els.main);
+    syncTextSizeButtons(els.main);
+  }
   else if (room === 'shopping') renderShopping(els.main);
   else if (room === 'disassembly') renderDisassembly(els.main);
   else renderRoom(els.main, room);
@@ -157,6 +161,10 @@ const actions = {
   },
   import() {
     els.file.click();
+  },
+  'text-size'() {
+    const size = cycleTextSize();
+    toast(`Text size: ${size.name}`);
   },
   reset() {
     if (confirm('Erase all your hideout progress? Save a backup first if you are not sure.')) {
@@ -237,6 +245,7 @@ new ResizeObserver(() => {
 
 // ---------- Start ----------
 mountLogos();
+syncTextSizeButtons();
 initScenes(els.bg);
 initPanel(els.panel, els.scrim);
 initTilt(els.main);

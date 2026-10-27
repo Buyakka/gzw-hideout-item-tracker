@@ -6,6 +6,13 @@
     <meta name="theme-color" content="#0c0c0c" />
     <meta name="description" content="Track every item you need to build and upgrade your Gray Zone Warfare hideout. Saves your progress in your browser." />
     <title>Buyaka // GZW Hideout Item Tracker</title>
+    <!-- Apply the saved text size (js/text-size.js) before the page paints -->
+    <script>
+      try {
+        var t = localStorage.getItem('buyaka-gzw-hideout:text');
+        if (t === 'lg' || t === 'xl') document.documentElement.dataset.text = t;
+      } catch (e) {}
+    </script>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -57,6 +64,10 @@
         </div>
 
         <div class="hud__actions">
+          <button class="btn btn--sm text-size" type="button" data-action="text-size" aria-label="Text size">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19 9 5l5 14M5.8 14h6.4M15 19l3.5-9 3.5 9M16.2 16h4.6"/></svg>
+            <span data-text-label>A</span>
+          </button>
           <button class="btn btn--sm" data-action="export" title="Save a backup file of your progress">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>
             <span class="btn__text--md">Backup</span>

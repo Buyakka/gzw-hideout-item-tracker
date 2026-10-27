@@ -89,6 +89,9 @@ export function renderHome(el) {
         <div class="home__tools">
           <a class="home__tool" href="#shopping" ${step()}>${icon('list')}<span>Shopping List</span>${icon('chevron')}</a>
           <a class="home__tool" href="#disassembly" ${step()}>${icon('split')}<span>Disassembly</span>${icon('chevron')}</a>
+          <button class="home__tool" type="button" data-action="text-size" ${step()}>
+            ${icon('text')}<span>Text size</span><span class="home__tool-value" data-text-label>A</span>
+          </button>
         </div>
 
         <dl class="home__stats" ${step()}>

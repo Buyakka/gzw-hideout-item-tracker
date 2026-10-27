@@ -32,6 +32,7 @@ const P = {
   split: '<rect x="3" y="9" width="6" height="6" rx="1"/><path d="M9 12h4M13 12l3-5h3M13 12l3 5h3"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   chevron: '<path d="m9 5 7 7-7 7"/>',
+  text: '<path d="M4 19 9 5l5 14M5.8 14h6.4M15 19l3.5-9 3.5 9M16.2 16h4.6"/>',
   play: '<path d="M7 4v16l13-8L7 4z" fill="currentColor"/>',
 };
 
