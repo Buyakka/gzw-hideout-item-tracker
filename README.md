@@ -10,7 +10,8 @@ second monitor while you play. Two open tabs stay in sync.
 
 - Landing page like the game's main menu: pick a room, or Continue where you left off
 - Room tabs in the game's order (Laboratory, Workshop, Utility Room, locked Personal)
-- Animated Buyaka emblem (original, not the game's logo)
+- Buyaka "B" logo with a gold crown (SVG): builds itself on the landing page,
+  glints in the header, and is the browser tab icon
 - Animated room backgrounds: Laboratory (fan, smoke, fridge flicker),
   Workshop (light and screen flicker, smoke, dust) and Utility Room (blinking lamp,
   running generator, exhaust, dust)
@@ -49,7 +50,7 @@ src/
     calc.js              progress math and shopping list
     fx.js                3D tilt, parallax, toasts
     icons.js             SVG icons and small helpers
-    logo.js              the Buyaka emblem (SVG)
+    logo.js              the Buyaka B logo (SVG)
     scenes.js            runs the animated background of the open room
     workshop-scene.js    Workshop background effects
     utility-scene.js     Utility Room background effects

@@ -1,8 +1,9 @@
 // =============================================================
 // LOGO
-// Buyaka emblem (see js/logo.js). Gray plate, yellow top chevron.
-// .logo--intro draws it in once (landing page).
-// .logo--idle  gives the small header logo a slow shine.
+// The Buyaka B (see js/logo.js).
+// .logo--intro builds it on the landing page: stem and B rise,
+//              the chevron slides in, the crown drops on last.
+// .logo--idle  gives the small header logo a glint on the crown.
 // =============================================================
 @use '../abstracts' as *;
 
@@ -12,59 +13,39 @@
   height: 100%;
   overflow: visible;
 
-  &__plate {
-    stroke: #d9d9d9;
-    stroke-width: 5;
-    stroke-linejoin: miter;
+  path {
+    transform-box: fill-box;
+    transform-origin: center;
   }
 
-  &__chev {
-    stroke-width: 6;
-    stroke-linejoin: miter;
-
-    &--top {
-      stroke: color('accent');
-    }
-
-    &--low {
-      stroke: #d9d9d9;
-      stroke-width: 5;
-    }
-  }
-
-  &__streaks path {
-    stroke: #d9d9d9;
-    stroke-width: 1.6;
-    opacity: 0.55;
-  }
-
-  // Landing page: plate draws, chevrons drop in, streaks slide
   &--intro {
     @include motion {
-      .logo__plate {
-        stroke-dasharray: 1;
-        animation: logo-draw 1.1s var(--t-ease) 0.2s both;
+      .logo__stem {
+        animation: logo-rise 600ms var(--t-ease) 0.2s both;
       }
 
-      .logo__chev--top {
-        animation: logo-drop 600ms var(--t-spring) 0.9s both;
+      .logo__b {
+        animation: logo-rise 700ms var(--t-ease) 0.3s both;
       }
 
-      .logo__chev--low {
-        animation: logo-drop 600ms var(--t-spring) 1.05s both;
+      .logo__chev {
+        animation: logo-slide 600ms var(--t-ease) 0.75s both;
       }
 
-      .logo__streaks {
-        animation: logo-streak 700ms var(--t-ease) 1.2s both;
+      .logo__crown {
+        animation: logo-drop 700ms var(--t-spring) 1s both;
+      }
+
+      .logo__grime {
+        animation: logo-fade 600ms ease 0.3s both;
       }
     }
   }
 
-  // Header: the streaks flash now and then
   &--idle {
     @include motion {
-      .logo__streaks {
-        animation: logo-shine 6s ease-in-out infinite;
+      .logo__crown {
+        animation: logo-glint 6s ease-in-out infinite;
       }
     }
   }
