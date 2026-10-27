@@ -97,4 +97,15 @@
   a {
     color: color('text-dim');
   }
+
+  &__copy {
+    margin-top: space('2');
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: color('text-dim');
+
+    b {
+      color: color('accent');
+    }
+  }
 }
