@@ -9,6 +9,7 @@
 //   new WorkshopScene(root, { paused }) · setPaused() · destroy()
 // Motion stops for reduced motion, hidden tabs and while paused.
 // =============================================================
+import { dustMarkup } from './scene-dust.js';
 
 const W = 1759;
 const H = 894;
@@ -18,41 +19,13 @@ const TUBE = { from: [635, 197], to: [810, 215] };
 const SMOKE = [1286, 578];
 const SCREEN = 'M1372,532 L1425,533 L1425,573 L1372,574Z';
 
-// Small seeded random so the dust looks the same on every load
-function seeded(seed) {
-  return () => {
-    seed = (seed * 16807) % 2147483647;
-    return (seed - 1) / 2147483646;
-  };
-}
-
-function dustMarkup() {
-  const rand = seeded(7);
-  // Light pools get more dust: [x, y, w, h, count]
-  const zones = [
-    [600, 200, 260, 260, 16], // under the left ceiling light
-    [1060, 90, 260, 300, 8], // under the right ceiling light
-    [1230, 230, 160, 220, 5], // orange lamp
-    [0, 80, W, H - 160, 14], // a little everywhere
-  ];
-  let out = '';
-  for (const [x, y, w, h, n] of zones) {
-    for (let i = 0; i < n; i++) {
-      const cx = (x + rand() * w).toFixed(1);
-      const cy = (y + rand() * h).toFixed(1);
-      const r = (0.6 + rand() * 1.3).toFixed(2);
-      const style = [
-        `--dx:${(-14 + rand() * 28).toFixed(1)}px`,
-        `--dy:${(-30 - rand() * 40).toFixed(1)}px`,
-        `--o:${(0.25 + rand() * 0.45).toFixed(2)}`,
-        `--dur:${(9 + rand() * 10).toFixed(1)}s`,
-        `--delay:${(-rand() * 18).toFixed(1)}s`,
-      ].join(';');
-      out += `<circle cx="${cx}" cy="${cy}" r="${r}" style="${style}"/>`;
-    }
-  }
-  return out;
-}
+// Light pools get more dust: [x, y, w, h, count]
+const DUST = [
+  [600, 200, 260, 260, 16], // under the left ceiling light
+  [1060, 90, 260, 300, 8], // under the right ceiling light
+  [1230, 230, 160, 220, 5], // orange lamp
+  [0, 80, W, H - 160, 14], // a little everywhere
+];
 
 let count = 0;
 
@@ -90,7 +63,7 @@ export class WorkshopScene {
           <clipPath id="${id}-screen"><path d="${SCREEN}"/></clipPath>
         </defs>
 
-        <g class="ws__dust" fill="#e9eef0">${dustMarkup()}</g>
+        ${dustMarkup(DUST)}
 
         <!-- Ceiling light: soft white bloom, and a dark layer that the flicker shows -->
         <path class="ws__tube-bloom" d="M${x1},${y1} L${x2},${y2}" stroke="#eef5ff" stroke-opacity=".22" stroke-width="9" stroke-linecap="round" filter="url(#${id}-glow)"/>

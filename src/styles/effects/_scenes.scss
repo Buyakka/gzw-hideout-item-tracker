@@ -1,6 +1,7 @@
 // =============================================================
 // SCENES
-// Our own animated room backgrounds (js/workshop-scene.js).
+// Our own animated room backgrounds (js/workshop-scene.js,
+// js/utility-scene.js).
 // The lab scene has its own CSS in vendor/lab-background.
 // The image and the SVG effects use the same "contain" fit, so
 // they always line up and the whole scene stays visible.
@@ -51,9 +52,10 @@
   transition: opacity 40ms ease-out;
 }
 
-.ws__dust circle {
+// Shared dust (js/scene-dust.js)
+.scene-dust circle {
   opacity: 0;
-  animation: ws-dust var(--dur) linear var(--delay) infinite;
+  animation: scene-dust var(--dur) linear var(--delay) infinite;
 }
 
 .ws__scan {
@@ -87,9 +89,27 @@
   }
 }
 
+// ---------- Utility Room ----------
+.ut__lamp-dim {
+  opacity: 0;
+}
+
+.ut__shake {
+  animation: ut-shake 0.14s linear infinite;
+}
+
+.ut__puff {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ut-puff 3.5s ease-out var(--delay) infinite;
+}
+
 // Everything above waits until the scene is running
 .scene:not([data-running='true']) {
-  .ws__dust circle,
+  .ut__shake,
+  .ut__puff,
+  .scene-dust circle,
   .ws__scan,
   .ws__ember,
   .ws__smoke-thread,
@@ -98,11 +118,26 @@
   }
 }
 
-@keyframes ws-dust {
+@keyframes scene-dust {
   0%   { opacity: 0; transform: translate(0, 0); }
   20%  { opacity: var(--o); }
   80%  { opacity: var(--o); }
   100% { opacity: 0; transform: translate(var(--dx), var(--dy)); }
+}
+
+// Small, fast jitter: an engine running on its mounts
+@keyframes ut-shake {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(0.9px, -0.6px); }
+  50%  { transform: translate(-0.7px, 0.5px); }
+  75%  { transform: translate(0.6px, 0.8px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes ut-puff {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  15%  { opacity: 0.38; }
+  100% { opacity: 0; transform: translate(-28px, -120px) scale(2.4); }
 }
 
 @keyframes ws-scan {

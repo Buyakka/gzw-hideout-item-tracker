@@ -41,7 +41,7 @@
     transition: opacity 700ms ease;
   }
 
-  @each $room in ('laboratory', 'workshop') {
+  @each $room in ('laboratory', 'workshop', 'utility') {
     &[data-room='#{$room}'] {
       .bg-fx__scene[data-scene='#{$room}'] {
         opacity: var(--scene-opacity);
