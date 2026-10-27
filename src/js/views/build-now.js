@@ -21,7 +21,13 @@ function row(e, i) {
           <span class="bn__device">${esc(e.level.device)}${e.level.cash ? ` · ${money(e.level.cash)}` : ''}</span>
         </span>
         <span class="bn__state ${done ? 'is-done' : ''}">
-          <span class="bn__msg">${done ? `${icon('check')}All items found` : `${e.left} item${e.left === 1 ? '' : 's'} left`}</span>
+          <span class="bn__msg">${
+            done
+              ? `${icon('check')}All items set aside`
+              : e.coverable
+                ? `${icon('box')}Enough in storage, set it aside`
+                : `${e.left} item${e.left === 1 ? '' : 's'} left`
+          }</span>
           <span class="bar ${done ? 'is-done' : ''}" style="--p:${e.ratio}"><span class="bar__fill"></span></span>
         </span>
         ${icon('chevron', 'bn__go')}
@@ -40,7 +46,7 @@ export function renderBuildNow(el) {
         <div>
           <p class="room-banner__eyebrow">// Next moves</p>
           <h1 class="room-banner__title">Build Now</h1>
-          <p class="room-banner__desc">Every level you can work on right now: its requirements and power are met. Levels with all their items are at the top.</p>
+          <p class="room-banner__desc">Every level you can work on right now: its requirements and power are met. Levels with all their items set aside are at the top.</p>
         </div>
         <div class="room-banner__meta">
           <span class="chip">Ready <b>${ready.length}</b></span>

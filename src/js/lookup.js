@@ -90,10 +90,10 @@ function card(name, rows) {
   const breaksInto = DISASSEMBLY.filter((r) => r.outputs.includes(name));
   const breaksDown = DISASSEMBLY.find((r) => r.item === name);
 
-  const need = row
+  const need = row?.need
     ? `<dl class="lookup__nums">
-         <div><dt>Need</dt><dd>${row.need}</dd></div>
-         <div><dt>Have</dt><dd>${row.have}</dd></div>
+         <div><dt>Still need</dt><dd>${row.need}</dd></div>
+         <div><dt>In storage</dt><dd>${row.storage}</dd></div>
          <div><dt>Left</dt><dd class="${row.left ? 'is-left' : 'is-done'}">${row.left || '✓'}</dd></div>
        </dl>
        <div class="shop__used">${usedTags(row.uses)}</div>`

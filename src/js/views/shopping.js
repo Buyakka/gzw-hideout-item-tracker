@@ -23,10 +23,10 @@ export function renderShopping(el) {
         <div>
           <p class="room-banner__eyebrow">// Supply run</p>
           <h1 class="room-banner__title">Shopping List</h1>
-          <p class="room-banner__desc">Every item still needed for levels you have not built yet. Type what you find inside each station. This list adds it all up.</p>
+          <p class="room-banner__desc">Every item in the hideout. Levels you built already used their items, so they come off the total. Set how many you have in storage with − and +. Each item is counted once, for all stations.</p>
         </div>
         <div class="room-banner__meta">
-          <span class="chip">Items left <b>${o.itemsNeed - o.itemsHave}</b></span>
+          <span class="chip">Left to find <b>${o.itemsNeed - o.itemsHave}</b></span>
           <span class="chip">Cash left <b>${money(o.cash)}</b></span>
         </div>
       </header>
@@ -90,27 +90,42 @@ function body() {
       <thead>
         <tr>
           <th>Item</th>
-          <th class="num">Need</th>
-          <th class="num">Have</th>
-          <th class="num">Left</th>
+          <th class="num" title="All levels together">Total</th>
+          <th class="num" title="Already used by levels you built">Used</th>
+          <th class="num" title="Total minus used: for levels not built yet">Still need</th>
+          <th class="num" title="What you have in storage">Have</th>
+          <th class="num" title="Still need minus what you have">Left</th>
           <th>Used by</th>
         </tr>
       </thead>
       <tbody>
-        ${rows
-          .map(
-            (r, i) => `
-          <tr class="${r.left === 0 ? 'is-done' : ''}" style="--i:${i}">
-            <td class="shop__name">${esc(r.name)}</td>
-            <td class="num" data-label="Need">${r.need}</td>
-            <td class="num" data-label="Have">${r.have}</td>
-            <td class="num shop__left" data-label="Left">${r.left === 0 ? '✓' : r.left}</td>
-            <td class="shop__used-cell">
-              <div class="shop__used">${usedTags(r.uses)}</div>
-            </td>
-          </tr>`
-          )
-          .join('')}
+        ${rows.map(row).join('')}
       </tbody>
     </table>`;
+}
+
+// One item: the 5 numbers, a storage stepper, and the stations
+function row(r, i) {
+  const name = esc(r.name);
+  return `
+    <tr class="${r.left === 0 ? 'is-done' : ''}" style="--i:${i}">
+      <td class="shop__name">${name}</td>
+      <td class="num shop__total" data-label="Total">${r.total}</td>
+      <td class="num shop__usedn" data-label="Used">${r.used}</td>
+      <td class="num shop__need" data-label="Still need">${r.need}</td>
+      <td class="num shop__have" data-label="Have">
+        <div class="stepper stepper--sm">
+          <button class="stepper__btn" type="button" data-action="store-dec" data-item="${name}"
+                  ${r.storage ? '' : 'disabled'} aria-label="One less ${name} in storage">−</button>
+          <input class="stepper__input shop__have-input" type="number" min="0" inputmode="numeric"
+                 value="${r.storage}" data-item="${name}" aria-label="How many ${name} you have in storage">
+          <button class="stepper__btn" type="button" data-action="store-inc" data-item="${name}"
+                  aria-label="One more ${name} in storage">+</button>
+        </div>
+      </td>
+      <td class="num shop__left" data-label="Left">${r.left === 0 ? '✓' : r.left}</td>
+      <td class="shop__used-cell">
+        ${r.uses.length ? `<div class="shop__used">${usedTags(r.uses)}</div>` : '<span class="shop__all-built">All levels that need it are built</span>'}
+      </td>
+    </tr>`;
 }

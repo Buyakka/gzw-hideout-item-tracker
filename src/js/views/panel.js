@@ -4,7 +4,7 @@
 // how many you have and how many you need.
 // =============================================================
 import { STATION_BY_ID, ROOM_BY_ID } from '../data.js';
-import { levelProgress, levelState, power, hasPower, missingFor, missingLabel, missingFix, requiresText } from '../calc.js';
+import { levelProgress, levelState, power, hasPower, missingFor, missingLabel, missingFix, requiresText, otherNeeds } from '../calc.js';
 import { store } from '../state.js';
 import { icon, esc, money } from '../icons.js';
 
@@ -76,7 +76,9 @@ export function toggleEdit(key) {
   else panel.editing.add(key);
   panel.el.classList.add('is-static');
   render('');
-  panel.el.querySelector(`[data-need-key="${CSS.escape(key)}"]`)?.select();
+  const item = key.startsWith('store:') ? key.slice(6) : null;
+  const sel = item ? `[data-store-item="${CSS.escape(item)}"]` : `[data-need-key="${CSS.escape(key)}"]`;
+  panel.el.querySelector(sel)?.select();
 }
 
 export const panelLevel = () => panel.levelIndex;
@@ -105,6 +107,28 @@ export function refreshPanel() {
   }
 }
 
+// Under each item: the shared storage count (click to change it),
+// how many are still free, and which other levels want the same item
+function storeLine(it) {
+  const editing = panel.editing.has(`store:${it.name}`);
+  const count = editing
+    ? `<input class="item__store-input" type="number" min="0" inputmode="numeric" value="${it.storage}"
+              data-store-item="${esc(it.name)}" aria-label="How many ${esc(it.name)} you have in storage">`
+    : `<button class="item__store-btn" type="button" data-action="edit-storage" data-item="${esc(it.name)}"
+               title="Change how many you have in storage" aria-label="${esc(it.name)} in storage: ${it.storage}. Change">${it.storage}${icon('edit')}</button>`;
+  const others = otherNeeds(it.name, it.key);
+  const list = others.map((o) => `${o.station.name} L${o.step}${o.have ? ` (${o.have} set aside)` : ''}`);
+  const also = others.length
+    ? `<span class="item__also" title="${esc(list.join(', '))}">Also needed by ${esc(list.slice(0, 2).join(', '))}${list.length > 2 ? ` +${list.length - 2} more` : ''}</span>`
+    : '';
+  return `
+    <p class="item__store">
+      <span>Storage ${count}</span>
+      <span class="${it.free ? 'item__free' : 'item__free is-none'}">${it.free} free</span>
+      ${also}
+    </p>`;
+}
+
 function render(flip) {
   const station = STATION_BY_ID[panel.stationId];
   const room = ROOM_BY_ID[station.roomId];
@@ -130,7 +154,7 @@ function render(flip) {
   const badge = {
     built: ['built', 'Built'],
     ready: ['ready', 'Ready to build'],
-    progress: ['progress', `${Math.round(prog.ratio * 100)}% stocked`],
+    progress: ['progress', `${Math.round(prog.ratio * 100)}% set aside`],
     locked: ['locked', `Build L${station.levels[Math.max(0, i - 1)].step} first`],
   }[st];
 
@@ -169,12 +193,14 @@ function render(flip) {
             <span>${esc(it.name)}</span>
             ${it.edited ? `<span class="item__edited" title="Wiki says ${it.base}">EDITED</span>` : ''}
           </div>
+          ${readOnly ? '' : storeLine(it)}
           <div class="stepper">
-            <button class="stepper__btn" data-action="dec" data-key="${esc(it.key)}" ${readOnly ? 'disabled' : ''} aria-label="One less ${esc(it.name)}">−</button>
+            <button class="stepper__btn" data-action="dec" data-key="${esc(it.key)}" ${readOnly || !it.have ? 'disabled' : ''} aria-label="Set aside one less ${esc(it.name)}">−</button>
             <input class="stepper__input" type="number" min="0" inputmode="numeric"
                    value="${readOnly ? it.need : it.have}" data-key="${esc(it.key)}" ${readOnly ? 'disabled' : ''}
-                   aria-label="How many ${esc(it.name)} you have">
-            <button class="stepper__btn" data-action="inc" data-key="${esc(it.key)}" ${readOnly ? 'disabled' : ''} aria-label="One more ${esc(it.name)}">+</button>
+                   aria-label="How many ${esc(it.name)} are set aside for this level">
+            <button class="stepper__btn" data-action="inc" data-key="${esc(it.key)}" ${readOnly ? 'disabled' : ''}
+                    aria-label="Set aside one more ${esc(it.name)}" title="${it.free ? 'Take one from storage' : 'None free in storage: adds one you found'}">+</button>
           </div>
           <div class="item__need">
             ${needCell}
@@ -233,8 +259,9 @@ function render(flip) {
           readOnly
             ? ''
             : `<div class="level__progress">
-                 <div class="station-card__progress-row"><span class="label">Items stocked</span><span class="mono">${prog.have} / ${prog.need}</span></div>
+                 <div class="station-card__progress-row"><span class="label">Set aside for this level</span><span class="mono">${prog.have} / ${prog.need}</span></div>
                  <div class="bar ${prog.allDone ? 'is-done' : ''}" style="--p:${prog.ratio}"><span class="bar__fill"></span></div>
+                 <p class="level__help">Your storage is shared by every station. Set items aside here so they are not counted twice. Building uses them up.</p>
                </div>`
         }
 

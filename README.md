@@ -20,8 +20,11 @@ second monitor while you play. Two open tabs stay in sync.
 - All 3 rooms, 15 stations and 36 upgrade levels
 - Every station card says where to start: "ready to start", or what is still needed
   (a room capability like Heat Control 1, or power) and which station to build for it
-- Have / need counter for every item, with + and − buttons
-- Shopping list that adds up everything still needed
+- Shared storage like the game: one count per item (type it in the Shopping List or a
+  station). Set items aside for a level so the same item is never counted twice;
+  building a level uses them up, Undo build gives them back
+- Shopping list per item: Total, Used (by levels you built), Still need, Have (a − / +
+  storage stepper) and Left to find; a table on laptops, cards on tablets and phones
 - Build Now page: every level whose requirements are met, ready ones first, then the
   ones closest to having all their items
 - Find an item from any page (Find button or the / key): how many you still need,
@@ -55,7 +58,7 @@ src/
   js/
     main.js              routing, events, start up
     data.js              loads the JSON, adds ids and icons
-    state.js             saved progress (localStorage) + tab sync + backup
+    state.js             saved progress (storage, set-asides, builds) + tab sync + backup
     calc.js              progress math and shopping list
     fx.js                3D tilt, parallax, toasts
     icons.js             SVG icons and small helpers

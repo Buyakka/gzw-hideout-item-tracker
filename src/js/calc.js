@@ -5,23 +5,44 @@
 import { STATIONS, TOTAL_LEVELS } from './data.js';
 import { store, itemKey } from './state.js';
 
-// Items for one level, with need / have / done for each
+// Items for one level, with need / have / done for each.
+// "have" is what is set aside for this level from the shared storage.
 export function levelItems(station, levelIndex) {
   const level = station.levels[levelIndex];
   return level.items.map((it) => {
     const key = itemKey(station.id, levelIndex, it.item);
     const need = store.need(key, it.qty);
-    const have = store.have(key);
+    const have = Math.min(store.assigned(key), need);
     return {
       key,
       name: it.item,
       base: it.qty,
       need,
       have,
+      storage: store.storage(it.item),
+      free: store.free(it.item),
       edited: store.isEdited(key),
       done: have >= need,
     };
   });
+}
+
+// Other levels not built yet that also need this item, with what is
+// set aside for each (so the player sees the competition)
+export function otherNeeds(item, exceptKey) {
+  const out = [];
+  for (const s of STATIONS) {
+    const b = store.builtCount(s.id);
+    s.levels.forEach((lvl, i) => {
+      if (i < b) return;
+      const it = lvl.items.find((x) => x.item === item);
+      if (!it) return;
+      const key = itemKey(s.id, i, item);
+      if (key === exceptKey) return;
+      out.push({ station: s, step: lvl.step, need: store.need(key, it.qty), have: store.assigned(key) });
+    });
+  }
+  return out;
 }
 
 export function levelProgress(station, levelIndex) {
@@ -68,6 +89,7 @@ export function overall(stations = STATIONS) {
   let cash = 0;
   let itemsNeed = 0;
   let itemsHave = 0;
+  const needByItem = {};
 
   for (const s of stations) {
     const b = store.builtCount(s.id);
@@ -78,9 +100,17 @@ export function overall(stations = STATIONS) {
       cash += lvl.cash || 0;
       for (const it of levelItems(s, i)) {
         itemsNeed += it.need;
-        itemsHave += Math.min(it.have, it.need);
+        itemsHave += it.have;
+        needByItem[it.name] = (needByItem[it.name] || 0) + it.need;
       }
     });
+  }
+
+  // Whole hideout: count what is in storage (each item once), so items
+  // not set aside yet still count. A single room counts what is set
+  // aside for its own levels.
+  if (stations === STATIONS) {
+    itemsHave = Object.entries(needByItem).reduce((n, [item, need]) => n + Math.min(store.storage(item), need), 0);
   }
 
   return {
@@ -123,20 +153,34 @@ export function power() {
 // Is there enough free power to build this level?
 export const hasPower = (level, free = power().free) => !level.kw || free >= level.kw;
 
-// Every material still needed across all levels not yet built
+// Every material in the hideout, against the shared storage:
+//   total  all levels together
+//   used   what built levels already took (those items are gone)
+//   need   still needed = total - used (levels not built yet)
+//   have   what is in storage, counted up to "need"
+//   left   still to find = need - storage
+// "uses" lists only the levels not built yet.
 export function shoppingList() {
   const map = new Map();
+  const row = (name) => {
+    if (!map.has(name)) map.set(name, { name, total: 0, used: 0, need: 0, assigned: 0, uses: [] });
+    return map.get(name);
+  };
   for (const s of STATIONS) {
     const b = store.builtCount(s.id);
     s.levels.forEach((lvl, i) => {
-      if (i < b) return;
       for (const it of levelItems(s, i)) {
-        if (!map.has(it.name)) map.set(it.name, { name: it.name, need: 0, have: 0, uses: [] });
-        const row = map.get(it.name);
-        row.need += it.need;
-        row.have += Math.min(it.have, it.need);
-        row.uses.push({
+        const r = row(it.name);
+        r.total += it.need;
+        if (i < b) {
+          r.used += it.need;
+          continue;
+        }
+        r.need += it.need;
+        r.assigned += it.have;
+        r.uses.push({
           stationId: s.id,
+          have: it.have,
           roomId: s.roomId,
           station: s.name,
           step: lvl.step,
@@ -147,8 +191,11 @@ export function shoppingList() {
     });
   }
   return [...map.values()]
-    .map((r) => ({ ...r, left: Math.max(0, r.need - r.have) }))
-    .sort((a, b) => b.left - a.left || a.name.localeCompare(b.name));
+    .map((r) => {
+      const storage = store.storage(r.name);
+      return { ...r, storage, have: Math.min(storage, r.need), left: Math.max(0, r.need - storage) };
+    })
+    .sort((x, y) => y.left - x.left || y.need - x.need || x.name.localeCompare(y.name));
 }
 
 // ---------- Requirements ----------
@@ -227,7 +274,9 @@ export function buildNow() {
     const b = store.builtCount(s.id);
     if (b >= s.levels.length || missingFor(s, b, free).length) continue;
     const p = levelProgress(s, b);
-    const entry = { station: s, index: b, level: s.levels[b], left: p.need - p.have, need: p.need, ratio: p.ratio };
+    // Free storage would cover the rest: only setting aside is left to do
+    const coverable = p.items.every((i) => i.have + i.free >= i.need);
+    const entry = { station: s, index: b, level: s.levels[b], left: p.need - p.have, need: p.need, ratio: p.ratio, coverable };
     (p.allDone ? ready : startable).push(entry);
   }
   startable.sort((a, b) => a.left - b.left || b.ratio - a.ratio);

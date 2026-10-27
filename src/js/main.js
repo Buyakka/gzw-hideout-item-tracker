@@ -44,6 +44,7 @@ const els = {
 };
 
 let room = 'home';
+const itemName = (key) => key.slice(key.lastIndexOf('|') + 1);
 const PAGES = ['home', 'build', 'shopping', 'disassembly'];
 
 // ---------- Routing ----------
@@ -82,6 +83,9 @@ function renderAll(isStatic = false) {
   // Keep the search box focus on the shopping list
   const search = document.activeElement?.matches?.('.search') ? document.activeElement : null;
   const caret = search?.selectionStart;
+  // Keep focus on a Shopping List stepper button after it redraws
+  const active = document.activeElement;
+  const stepFocus = active?.dataset?.item && active.dataset.action ? [active.dataset.action, active.dataset.item] : null;
 
   if (room === 'home') {
     renderHome(els.main);
@@ -99,6 +103,10 @@ function renderAll(isStatic = false) {
     const s = els.main.querySelector('.search');
     s?.focus({ preventScroll: true });
     s?.setSelectionRange(caret, caret);
+  }
+  if (stepFocus) {
+    const [action, item] = stepFocus;
+    els.main.querySelector(`[data-action="${action}"][data-item="${CSS.escape(item)}"]`)?.focus({ preventScroll: true });
   }
 }
 
@@ -119,31 +127,55 @@ const actions = {
   level(el) {
     showLevel(Number(el.dataset.index));
   },
+  // + takes one from free storage; if none is free it means "I found
+  // one more", so it is added to storage too
   inc(el) {
-    store.setHave(el.dataset.key, store.have(el.dataset.key) + 1);
+    const key = el.dataset.key;
+    const added = store.setAssigned(key, store.assigned(key) + 1, { grow: true });
+    if (added) toast(`Added ${added} ${itemName(key)} to storage`);
   },
+  // − puts one back into free storage (it is not thrown away)
   dec(el) {
-    store.setHave(el.dataset.key, store.have(el.dataset.key) - 1);
+    store.setAssigned(el.dataset.key, store.assigned(el.dataset.key) - 1);
+  },
+  // Shopping List storage stepper
+  'store-inc'(el) {
+    store.setStorage(el.dataset.item, store.storage(el.dataset.item) + 1);
+  },
+  'store-dec'(el) {
+    store.setStorage(el.dataset.item, store.storage(el.dataset.item) - 1);
+  },
+  'edit-storage'(el) {
+    toggleEdit(`store:${el.dataset.item}`);
   },
   'edit-need'(el) {
     toggleEdit(el.dataset.key);
   },
+  // Set aside everything this level needs, as far as free storage allows
   'fill-level'() {
     const s = STATION_BY_ID[currentStation()];
-    store.setHaveMany(levelItems(s, panelLevel()).map((i) => [i.key, i.need]));
-    toast('Marked every item as found');
+    store.assignMany(levelItems(s, panelLevel()).map((i) => [i.key, i.need]));
+    const short = levelItems(s, panelLevel()).filter((i) => !i.done);
+    if (short.length) {
+      toast(`Set aside what you have. Still short: ${short.map((i) => `${i.name} ${i.need - i.have}`).join(', ')}`, 'warn');
+    } else {
+      toast('Everything for this level is set aside');
+    }
   },
+  // Put this level's items back into free storage
   'clear-level'() {
     const s = STATION_BY_ID[currentStation()];
-    store.setHaveMany(levelItems(s, panelLevel()).map((i) => [i.key, 0]));
-    toast('Cleared this level', 'warn');
+    store.assignMany(levelItems(s, panelLevel()).map((i) => [i.key, 0]));
+    toast('Items put back into storage', 'warn');
   },
   build() {
     const s = STATION_BY_ID[currentStation()];
     const built = store.builtCount(s.id);
     const lvl = s.levels[built];
-    store.setBuilt(s.id, built + 1);
-    toast(`${s.name} L${lvl.step} built: ${lvl.device}`);
+    // Building uses up what was set aside for this level
+    const took = store.build(s.id, built, levelItems(s, built));
+    const used = Object.values(took).reduce((n, v) => n + v, 0);
+    toast(`${s.name} L${lvl.step} built: ${lvl.device}${used ? ` · ${used} items used from storage` : ''}`);
     // Jump to the next level if there is one
     if (built + 1 < s.levels.length) showLevel(built + 1);
     els.panel.classList.add('just-built');
@@ -151,8 +183,8 @@ const actions = {
   },
   unbuild() {
     const s = STATION_BY_ID[currentStation()];
-    store.setBuilt(s.id, store.builtCount(s.id) - 1);
-    toast(`${s.name} level undone`, 'warn');
+    store.unbuild(s.id);
+    toast(`${s.name} level undone · its items are back in storage`, 'warn');
   },
   export() {
     const blob = new Blob([store.export()], { type: 'application/json' });
@@ -199,7 +231,15 @@ document.addEventListener('click', (e) => {
 // Typed numbers save when you press Enter or leave the box
 document.addEventListener('change', (e) => {
   const t = e.target;
-  if (t.matches('.stepper__input')) store.setHave(t.dataset.key, t.value);
+  if (t.matches('.stepper__input')) {
+    const added = store.setAssigned(t.dataset.key, t.value, { grow: true });
+    if (added) toast(`Added ${added} ${itemName(t.dataset.key)} to storage`);
+  }
+  if (t.matches('.item__store-input')) {
+    store.setStorage(t.dataset.storeItem, t.value);
+    toggleEdit(`store:${t.dataset.storeItem}`);
+  }
+  if (t.matches('.shop__have-input')) store.setStorage(t.dataset.item, t.value);
   if (t.matches('.item__need-input')) {
     store.setNeed(t.dataset.needKey, t.value, Number(t.dataset.base));
     toggleEdit(t.dataset.needKey);
@@ -211,13 +251,13 @@ document.addEventListener('change', (e) => {
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && e.target.matches('.stepper__input, .item__need-input')) e.target.blur();
+  if (e.key === 'Enter' && e.target.matches('.stepper__input, .item__need-input, .item__store-input, .shop__have-input')) e.target.blur();
   if (e.key === 'Escape' && isOpen()) closeAndClearHash();
 });
 
 // Pick all text when clicking into a number, so typing replaces it
 document.addEventListener('focusin', (e) => {
-  if (e.target.matches('.stepper__input, .item__need-input')) e.target.select();
+  if (e.target.matches('.stepper__input, .item__need-input, .item__store-input, .shop__have-input')) e.target.select();
 });
 
 document.addEventListener('input', (e) => {

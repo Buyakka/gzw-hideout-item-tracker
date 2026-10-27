@@ -1,6 +1,8 @@
 // =============================================================
 // SHOPPING LIST
-// Table on desktop, stacked cards on phones.
+// Laptop and up (lg): a table with Total, Used, Still need, Have
+// (a storage stepper) and Left. Below that every item is a card:
+// 2 cards per row on tablets, 1 on phones.
 // =============================================================
 @use '../abstracts' as *;
 
@@ -93,6 +95,26 @@
     font-weight: 600;
   }
 
+  // Numbers that are less important than "Left"
+  &__total,
+  &__usedn {
+    color: color('text-dim');
+  }
+
+  &__need {
+    font-weight: 700;
+  }
+
+  // Have = storage, set with the same − / + stepper as the stations
+  &__have .stepper {
+    margin-left: auto;
+  }
+
+  &__all-built {
+    font-size: fs('sm');
+    color: color('ok');
+  }
+
   &__left {
     color: color('warn');
     font-weight: 700;
@@ -142,34 +164,91 @@
     border-left: 1px solid color-mix(in srgb, var(--room) 35%, transparent);
   }
 
-  // Phone layout: each row becomes a small card
-  @include down('md') {
+  // Tablet and phone: each item becomes a card
+  @include down('lg') {
+    display: block;
+
     thead {
       @include visually-hidden;
     }
 
+    tbody {
+      display: grid;
+      gap: space('3');
+
+      @include up('md') {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
     tr {
       display: grid;
-      grid-template-columns: 1fr auto auto auto;
-      gap: space('1') space('3');
-      padding: space('3') 0;
-      border-bottom: 1px solid color('line');
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-areas:
+        'name  name  name  name'
+        'total used  need  left'
+        'have  have  have  have'
+        'tags  tags  tags  tags';
+      align-content: start;
+      gap: space('3') space('2');
+      padding: space('3') space('4');
+      background: tint('panel', 0.88);
+      border: 1px solid color('line');
+      border-right: 3px solid var(--room);
     }
 
     td {
       padding: 0;
       border: 0;
+      min-width: 0;
     }
 
+    .num {
+      text-align: left;
+      font-size: fs('md');
+      font-weight: 700;
+      // Numbers line up even when a label wraps ("Still need")
+      align-self: end;
+    }
+
+    // Small label above each number
     td[data-label]::before {
       content: attr(data-label);
       display: block;
+      margin-bottom: 2px;
       @include label-text;
       font-size: fs('xxs');
+      font-weight: 700;
+    }
+
+    .shop__name {
+      grid-area: name;
+      font-size: fs('md');
+      font-weight: 800;
+    }
+
+    .shop__total { grid-area: total; }
+    .shop__usedn { grid-area: used; }
+    .shop__need  { grid-area: need; }
+    .shop__left  { grid-area: left; }
+
+    // "HAVE" label on the left, stepper on the right
+    .shop__have {
+      grid-area: have;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: space('3');
+      padding-top: space('2');
+      border-top: 1px solid color('line');
+
+      &::before {
+        margin: 0;
+      }
     }
 
     .shop__used-cell {
-      grid-column: 1 / -1;
+      grid-area: tags;
     }
   }
 }

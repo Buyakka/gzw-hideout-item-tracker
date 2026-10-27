@@ -258,6 +258,12 @@
     }
   }
 
+  // One line explaining the shared storage
+  &__help {
+    font-size: fs('xs');
+    color: color('text-dim');
+  }
+
   &__progress {
     display: grid;
     gap: space('2');
