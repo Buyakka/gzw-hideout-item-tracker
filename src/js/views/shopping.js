@@ -57,6 +57,7 @@ export function setShopHide(v) {
 
 // One tag per station, with each level that needs the item inside,
 // e.g. "Heat Source · L1 ×3 · L2 ×4", so long rows stay readable.
+// Levels already built stay in the tag, in green with a check.
 export function usedTags(uses) {
   const byStation = new Map();
   for (const u of uses) {
@@ -65,9 +66,11 @@ export function usedTags(uses) {
   }
   return [...byStation.values()]
     .map((s) => {
-      const parts = s.levels.map((l) => `<span class="shop__lvl">L${l.step} ×${l.qty}</span>`).join('');
+      const parts = s.levels
+        .map((l) => (l.built ? `<span class="shop__lvl is-built">✓ L${l.step} ×${l.qty}</span>` : `<span class="shop__lvl">L${l.step} ×${l.qty}</span>`))
+        .join('');
       const name = stationLabel(s);
-      const title = s.levels.map((l) => `level ${l.step}: ${l.qty}`).join(', ');
+      const title = s.levels.map((l) => `level ${l.step}: ${l.qty}${l.built ? ' (built)' : ''}`).join(', ');
       return `<a class="shop__tag u-room-${s.roomId}" href="#${s.stationId}" title="${esc(name)} needs ${title}">
                 <span class="shop__station">${esc(name)}</span>${parts}
               </a>`;
@@ -125,7 +128,7 @@ function row(r, i) {
       </td>
       <td class="num shop__left" data-label="Left">${r.left === 0 ? '✓' : r.left}</td>
       <td class="shop__used-cell">
-        ${r.uses.length ? `<div class="shop__used">${usedTags(r.uses)}</div>` : '<span class="shop__all-built">All levels that need it are built</span>'}
+        <div class="shop__used">${usedTags(r.uses)}</div>
       </td>
     </tr>`;
 }

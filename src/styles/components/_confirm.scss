@@ -1,0 +1,89 @@
+// =============================================================
+// CONFIRM (js/confirm.js)
+// Yes / No warning box before a reset. Red edge so it reads as
+// a warning, big buttons that are easy to hit on a phone.
+// =============================================================
+@use '../abstracts' as *;
+
+.confirm {
+  position: fixed;
+  inset: 0;
+  z-index: z('toast') + 5;
+  display: grid;
+  place-items: center;
+  padding: space('4');
+
+  &__scrim {
+    position: absolute;
+    inset: 0;
+    background: tint('bg', 0.8);
+    backdrop-filter: blur(4px);
+  }
+
+  &__box {
+    position: relative;
+    display: grid;
+    gap: space('3');
+    width: min(100%, 480px);
+    max-height: calc(100dvh - #{space('6')});
+    overflow-y: auto;
+    padding: space('5');
+    @include game-panel;
+    background: tint('bg', 0.96);
+    border-top: 3px solid color('danger');
+
+    @include motion {
+      animation: view-in dur('base') var(--t-ease) both;
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: space('2');
+    font-size: fs('xl');
+
+    svg {
+      flex: none;
+      width: 24px;
+      height: 24px;
+      color: color('danger');
+    }
+  }
+
+  &__text {
+    font-size: fs('md');
+    line-height: 1.5;
+  }
+
+  &__ask {
+    font-weight: 700;
+  }
+
+  &__btns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: space('3');
+    margin-top: space('2');
+
+    .btn {
+      min-height: 44px;
+      flex: 1 1 160px;
+    }
+  }
+
+  // Yes is filled dark red so it never looks like the safe choice
+  // (white on #b91c1c is 6.5:1, easy to read)
+  &__yes {
+    color: #fff;
+    background: #b91c1c;
+    border-color: #b91c1c;
+
+    @include hover {
+      color: #fff;
+      background: #991b1b;
+      border-color: #991b1b;
+    }
+  }
+}

@@ -159,7 +159,8 @@ export const hasPower = (level, free = power().free) => !level.kw || free >= lev
 //   need   still needed = total - used (levels not built yet)
 //   have   what is in storage, counted up to "need"
 //   left   still to find = need - storage
-// "uses" lists only the levels not built yet.
+// "uses" lists every level that needs the item, built ones too
+// (marked built), so the player always sees what it is for.
 export function shoppingList() {
   const map = new Map();
   const row = (name) => {
@@ -171,14 +172,16 @@ export function shoppingList() {
     s.levels.forEach((lvl, i) => {
       for (const it of levelItems(s, i)) {
         const r = row(it.name);
+        const built = i < b;
         r.total += it.need;
-        if (i < b) {
+        if (built) {
           r.used += it.need;
-          continue;
+        } else {
+          r.need += it.need;
+          r.assigned += it.have;
         }
-        r.need += it.need;
-        r.assigned += it.have;
         r.uses.push({
+          built,
           stationId: s.id,
           have: it.have,
           roomId: s.roomId,

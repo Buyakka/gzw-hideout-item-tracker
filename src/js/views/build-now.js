@@ -1,5 +1,5 @@
 // =============================================================
-// BUILD NOW VIEW
+// NEXT UPGRADES VIEW (#build)
 // Every level the player can work on right now (its requirements
 // are met). Levels with all items found come first, then the ones
 // still collecting, closest to done first.
@@ -45,12 +45,12 @@ export function renderBuildNow(el) {
       <header class="room-banner">
         <div>
           <p class="room-banner__eyebrow">// Next moves</p>
-          <h1 class="room-banner__title">Build Now</h1>
-          <p class="room-banner__desc">Every level you can work on right now: its requirements and power are met. Levels with all their items set aside are at the top.</p>
+          <h1 class="room-banner__title">Next Upgrades</h1>
+          <p class="room-banner__desc">The next level of each station that is unlocked: the stations and power it needs are already built. You still need its items. Levels with every item set aside are at the top.</p>
         </div>
         <div class="room-banner__meta">
           <span class="chip">Ready <b>${ready.length}</b></span>
-          <span class="chip">Can start <b>${startable.length}</b></span>
+          <span class="chip">Unlocked <b>${startable.length}</b></span>
         </div>
       </header>
 

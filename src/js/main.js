@@ -21,6 +21,7 @@ import { renderDisassembly, refreshDisassemblyBody, setDisQuery } from './views/
 import { renderHome, rememberRoom } from './views/home.js';
 import { renderBuildNow } from './views/build-now.js';
 import { initLookup, openLookup } from './lookup.js';
+import { askConfirm } from './confirm.js';
 import { mountLogos } from './logo.js';
 import { initScenes, showScene } from './scenes.js';
 import {
@@ -205,11 +206,29 @@ const actions = {
     const size = cycleTextSize();
     toast(`Text size: ${size.name}`);
   },
-  reset() {
-    if (confirm('Erase all your hideout progress? Save a backup first if you are not sure.')) {
-      store.reset();
-      toast('Progress erased', 'warn');
-    }
+  // Start one station over (button at the bottom of each station)
+  async 'reset-station'() {
+    const s = STATION_BY_ID[currentStation()];
+    const ok = await askConfirm({
+      title: `Reset ${s.name}?`,
+      text: `This resets all progress for ${s.name}: built levels, items set aside and fixed amounts. Items set aside go back to your storage. Other stations are not changed.`,
+      yes: 'Yes, reset station',
+    });
+    if (!ok) return;
+    store.resetStation(s.id);
+    showLevel(0);
+    toast(`${s.name} was reset`, 'warn');
+  },
+  // Start everything over (header button), for example after a game update
+  async reset() {
+    const ok = await askConfirm({
+      title: 'Reset all progress?',
+      text: 'This resets all your progress in every station: built levels, items set aside, your storage and fixed amounts. This cannot be undone. Save a backup first if you are not sure.',
+      yes: 'Yes, reset all',
+    });
+    if (!ok) return;
+    store.reset();
+    toast('All progress was reset', 'warn');
   },
 };
 

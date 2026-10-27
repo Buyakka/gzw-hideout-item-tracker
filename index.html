@@ -80,9 +80,9 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9M7 14l5-5 5 5M4 3h16"/></svg>
             <span class="btn__text--md">Load</span>
           </button>
-          <button class="btn btn--sm btn--danger" data-action="reset" title="Erase all progress">
+          <button class="btn btn--sm btn--danger" data-action="reset" title="Reset all stations" aria-label="Reset all stations">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
-            <span class="btn__text--md">Reset</span>
+            <span class="btn__text--md">Reset all</span>
           </button>
           <input type="file" id="import-file" accept="application/json,.json" hidden />
         </div>
@@ -95,7 +95,8 @@
       <footer class="footer">
         <p>
           Fan made tool. Not made by or linked to MADFINGER Games. Station data checked Oct 27, 2026.
-          Your progress is saved in this browser only. Use Backup to move it to another device.
+          <!-- Hidden on the landing page, which already says it -->
+          <span class="footer__save">Your progress is saved in this browser only. Use Backup to move it to another device.</span>
         </p>
         <p class="footer__copy">&copy; 2026 <b>Buyaka</b>. All rights reserved.</p>
       </footer>

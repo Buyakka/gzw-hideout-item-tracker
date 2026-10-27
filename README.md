@@ -25,7 +25,7 @@ second monitor while you play. Two open tabs stay in sync.
   building a level uses them up, Undo build gives them back
 - Shopping list per item: Total, Used (by levels you built), Still need, Have (a − / +
   storage stepper) and Left to find; a table on laptops, cards on tablets and phones
-- Build Now page: every level whose requirements are met, ready ones first, then the
+- Next Upgrades page: every unlocked level (its stations and power are built), ready ones first, then the
   ones closest to having all their items
 - Find an item from any page (Find button or the / key): how many you still need,
   which stations use it, and which disassembly gives it

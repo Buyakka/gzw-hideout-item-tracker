@@ -1,7 +1,9 @@
 // =============================================================
 // HOME (landing page)
-// Laid out like the game's main menu: one column on the left,
-// the hideout photo stronger behind it, everything slides in.
+// Laid out like the game's main menu, over the hideout photo.
+// The whole page fits on one screen with no scrolling: rooms in
+// a 2 x 2 grid, and two columns (rooms | tools) from tablets up.
+// Only a very small screen or the biggest text size scrolls.
 // =============================================================
 @use '../abstracts' as *;
 
@@ -10,6 +12,35 @@
   .hud,
   .room-tabs {
     display: none;
+  }
+
+  .main {
+    display: flex;
+    padding-block: space('2');
+
+    @include up('md') {
+      padding-block: space('3');
+    }
+  }
+
+  // Short footer on the landing page so it fits on the screen,
+  // centered like on every other page.
+  .footer {
+    padding-block: space('2') calc(#{space('2')} + var(--corner-badge));
+
+    &__copy {
+      margin-top: space('1');
+    }
+
+    &__save {
+      display: none;
+    }
+
+    @include up('md') {
+      // Same space on both sides keeps the text centered and clear
+      // of the badge
+      padding: space('3') calc(var(--corner-badge) * 3);
+    }
   }
 
   // (its stronger opacity is set in effects/_background.scss,
@@ -22,10 +53,9 @@
 }
 
 .home {
+  flex: 1;
   display: flex;
   align-items: center;
-  min-height: calc(100dvh - 90px);
-  padding-block: space('5');
 
   // Dark fade on the left so the menu reads well over the photo
   &::before {
@@ -39,12 +69,25 @@
 
   &__menu {
     display: grid;
-    gap: space('3');
+    gap: space('2');
     width: min(100%, 470px);
+
+    @include up('md') {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      align-items: end;
+      gap: space('6');
+      width: min(100%, 900px);
+    }
 
     @include up('lg') {
       margin-left: space('7');
     }
+  }
+
+  &__col {
+    display: grid;
+    gap: space('2');
+    align-content: end;
   }
 
   // Everything with --i slides in one after another
@@ -55,37 +98,70 @@
     }
   }
 
-  &__brand {
-    margin-bottom: space('2');
-  }
-
+  // GRAY <mark> ZONE, with WARFARE centered under it
   &__title {
-    font-size: clamp(3.6rem, 2.4rem + 4.6vw, 5.6rem);
-    letter-spacing: 0.04em;
+    display: grid;
+    justify-items: center;
+    width: max-content;
+    max-width: 100%;
+    font-size: clamp(3.2rem, 2.4rem + 3.8vw, 5.4rem);
+    line-height: 0.9;
     color: #d4d4d4;
-    // Room for the crown above the first letter
-    padding-top: 0.26em;
   }
 
-  // The logo B as a letter. Its B part is sized to the font's cap
-  // height (0.7em in Bebas Neue); the crown rises above the line.
-  &__b {
-    display: inline-block;
-    width: 0.61em;
-    height: 0.98em;
-    margin-right: 0.03em;
-    vertical-align: baseline;
+  &__game {
+    display: flex;
+    align-items: center;
+    gap: 0.06em;
+    letter-spacing: 0.03em;
+  }
 
-    .logo {
-      display: block;
+  // Small yellow triangle, close to the words, like the game logo
+  &__mark {
+    flex: none;
+    width: 0.46em;
+    height: 0.46em;
+    margin-top: -0.12em;
+    color: color('accent');
+
+    @include motion {
+      animation: mark-in 800ms var(--t-spring) 500ms both;
+    }
+  }
+
+  // WARFARE between two thin lines, spread out
+  &__warfare {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    width: 100%;
+    margin-top: 0.12em;
+    font-size: 0.34em;
+    letter-spacing: 0.42em;
+    // The letter spacing adds space after the last letter too
+    padding-left: 0.42em;
+    color: color('text-dim');
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: tint('accent', 0.55);
     }
   }
 
   &__sub {
+    margin-top: space('1');
+
+    @include up('md') {
+      margin-top: space('2');
+    }
+
     font-family: font('display');
     font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.5rem);
     letter-spacing: 0.32em;
-    color: #d4d4d4;
+    color: color('accent');
   }
 
   // Yellow warning line, like the notes on the game menu
@@ -110,7 +186,7 @@
 
   &__label {
     @include label-text;
-    margin-top: space('2');
+    margin-top: space('1');
   }
 
   &__rooms,
@@ -119,13 +195,31 @@
     gap: space('2');
   }
 
+  // Rooms always 2 x 2
+  &__rooms {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  // Tools 2 per row on phones, one list next to the rooms from tablets up
+  &__tools {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    @include up('md') {
+      grid-template-columns: 1fr;
+    }
+  }
+
   // Big yellow button, like PLAY
   &__play {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    min-height: 76px;
-    margin-top: space('3');
+    min-height: 56px;
+    margin-top: space('2');
+
+    @include up('md') {
+      min-height: 64px;
+    }
     padding: 0 space('5');
     font-family: font('ui');
     font-size: fs('xl');
@@ -161,10 +255,22 @@
     display: flex;
     align-items: center;
     gap: space('3');
-    min-height: 52px;
-    padding: 0 space('4');
+    min-height: 46px;
+    padding: space('2') space('4');
     font-family: font('ui');
     font-size: fs('sm');
+    line-height: 1.15;
+    text-align: left;
+
+    // On phones two buttons share a row: no arrow, less padding
+    @include down('md') {
+      gap: space('2');
+      padding-inline: space('3');
+
+      svg:last-child {
+        display: none;
+      }
+    }
     font-weight: 700;
     text-transform: uppercase;
     color: color('text');
@@ -194,11 +300,12 @@
     }
   }
 
+  // Three numbers in one row
   &__stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: space('2') space('5');
-    margin-top: space('3');
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    gap: space('2') space('4');
+    margin-top: space('2');
 
     dt {
       @include label-text;
@@ -215,13 +322,18 @@
 // One room in the list
 .home-room {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr);
   grid-template-areas:
-    'icon name count'
-    'bar  bar  bar';
+    'icon name'
+    'icon count'
+    'bar  bar';
   align-items: center;
-  gap: space('2') space('3');
-  padding: space('3') space('4');
+  gap: space('1') space('3');
+  padding: space('2') space('3');
+
+  @include up('md') {
+    padding-block: space('3');
+  }
   @include game-panel;
   transition: transform dur('fast') var(--t-ease), border-color dur('fast') ease;
   @include focus-ring;
@@ -240,8 +352,16 @@
   &__name {
     grid-area: name;
     font-family: font('ui');
+    font-size: fs('sm');
     font-weight: 800;
     text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    @include up('md') {
+      font-size: fs('md');
+    }
   }
 
   &__count {
@@ -261,7 +381,10 @@
   }
 
   &.is-locked {
-    grid-template-areas: 'icon name count';
+    grid-template-areas:
+      'icon name'
+      'icon count';
+    align-content: start;
     color: color('text-faint');
     border-right-color: color('line-strong');
     cursor: not-allowed;

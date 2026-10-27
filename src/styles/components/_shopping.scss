@@ -112,11 +112,6 @@
     margin-inline: auto;
   }
 
-  &__all-built {
-    font-size: fs('sm');
-    color: color('ok');
-  }
-
   &__left {
     color: color('warn');
     font-weight: 700;
@@ -164,6 +159,11 @@
     white-space: nowrap;
     padding-left: 0.5rem;
     border-left: 1px solid color-mix(in srgb, var(--room) 35%, transparent);
+
+    // A level you already built: still listed, in green
+    &.is-built {
+      color: color('ok');
+    }
   }
 
   // Tablet and phone: each item becomes a card

@@ -45,6 +45,12 @@
   to   { opacity: 1; transform: none; }
 }
 
+// The triangle between GRAY and ZONE turns into place
+@keyframes mark-in {
+  from { opacity: 0; transform: rotate(-135deg) scale(0.3); }
+  to   { opacity: 1; transform: none; }
+}
+
 // Uses "scale" so it does not fight the parallax transform
 @keyframes slow-zoom {
   from { scale: 1.08; }

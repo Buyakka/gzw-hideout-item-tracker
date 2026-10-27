@@ -20,6 +20,12 @@
   border-bottom: 1px solid color('line');
   backdrop-filter: blur(10px);
 
+  // Small phones: tighter so "Buyaka" is never cut off
+  @include down('sm') {
+    column-gap: space('2');
+    padding-inline: space('3');
+  }
+
   @include up('lg') {
     grid-template-columns: auto 1fr auto auto;
     grid-template-areas: 'brand stats radar actions';
@@ -51,6 +57,10 @@
     gap: space('3');
     min-width: 0;
     overflow: hidden;
+
+    @include down('sm') {
+      gap: space('2');
+    }
     @include focus-ring;
 
     > div {
@@ -58,10 +68,29 @@
     }
   }
 
+  // The crown makes the B look low next to the name, so the logo is
+  // lifted a little. A thin line keeps it apart from the name.
   &__logo {
     flex: none;
+    box-sizing: content-box;
     width: 38px;
     height: 38px;
+    padding-right: space('3');
+    margin-right: space('1');
+    border-right: 1px solid color('line-strong');
+
+    // Small phones: no line, so "Buyaka" still fits
+    @include down('sm') {
+      width: 32px;
+      height: 32px;
+      padding-right: 0;
+      margin-right: 0;
+      border-right: 0;
+    }
+
+    .logo {
+      transform: translateY(-4px);
+    }
   }
 
   &__title {
@@ -132,7 +161,7 @@
       gap: space('1');
 
       .btn--sm {
-        padding: 0 space('2');
+        padding: 0 6px;
       }
     }
 

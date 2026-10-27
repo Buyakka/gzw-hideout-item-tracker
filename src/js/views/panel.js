@@ -124,7 +124,7 @@ function storeLine(it) {
   return `
     <p class="item__store">
       <span>Storage ${count}</span>
-      <span class="${it.free ? 'item__free' : 'item__free is-none'}">${it.free} free</span>
+      <span class="${it.free ? 'item__free' : 'item__free is-none'}">${it.free} available</span>
       ${also}
     </p>`;
 }
@@ -166,7 +166,7 @@ function render(flip) {
     : level.kw
       ? readOnly
         ? `Uses ${level.kw} kW`
-        : `Uses ${level.kw} kW · ${kw} kW free`
+        : `Uses ${level.kw} kW · ${kw} kW available`
       : 'Not needed';
   const noPower = !readOnly && !hasPower(level, kw);
   // Capabilities this level still needs (power has its own message)
@@ -200,7 +200,7 @@ function render(flip) {
                    value="${readOnly ? it.need : it.have}" data-key="${esc(it.key)}" ${readOnly ? 'disabled' : ''}
                    aria-label="How many ${esc(it.name)} are set aside for this level">
             <button class="stepper__btn" data-action="inc" data-key="${esc(it.key)}" ${readOnly ? 'disabled' : ''}
-                    aria-label="Set aside one more ${esc(it.name)}" title="${it.free ? 'Take one from storage' : 'None free in storage: adds one you found'}">+</button>
+                    aria-label="Set aside one more ${esc(it.name)}" title="${it.free ? 'Take one from storage' : 'None available in storage: adds one you found'}">+</button>
           </div>
           <div class="item__need">
             ${needCell}
@@ -251,7 +251,7 @@ function render(flip) {
 
         ${
           noPower
-            ? `<p class="level__warn">${icon('bolt')}<span><b>Not enough power.</b> This level uses ${level.kw} kW and you have ${kw} kW free. ${fixPower}</span></p>`
+            ? `<p class="level__warn">${icon('bolt')}<span><b>Not enough power.</b> This level uses ${level.kw} kW and you have ${kw} kW available. ${fixPower}</span></p>`
             : ''
         }
 
@@ -277,6 +277,13 @@ function render(flip) {
              <button class="btn btn--sm" data-action="clear-level">${icon('reset')}<span>Clear</span></button>`
       }
       ${canUndo ? `<button class="btn btn--sm btn--danger" data-action="unbuild">${icon('reset')}<span>Undo build</span></button>` : ''}
+      ${
+        // Shows up as soon as the station has any progress, always in view
+        store.hasProgress(station.id)
+          ? `<button class="btn btn--sm btn--danger" type="button" data-action="reset-station"
+                     title="Start this station over, for example after a game update">${icon('reset')}<span>Reset station</span></button>`
+          : ''
+      }
       ${
         canBuild
           ? `<button class="btn btn--primary" data-action="build">${icon('check')}<span>Mark L${level.step} built</span></button>`

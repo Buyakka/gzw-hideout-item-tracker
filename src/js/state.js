@@ -228,6 +228,24 @@ export const store = {
     emit('built');
   },
 
+  // Start one station over: no levels built, nothing set aside, no
+  // fixed amounts. Its set-aside items go back to free storage. Items
+  // that builds used are not given back (the game used them up).
+  resetStation(stationId) {
+    const mine = (key) => key.startsWith(`${stationId}|`);
+    delete state.built[stationId];
+    for (const part of ['assigned', 'used', 'need']) {
+      for (const key of Object.keys(state[part])) if (mine(key)) delete state[part][key];
+    }
+    persist();
+    emit('reset-station');
+  },
+
+  // Does this station have anything to reset?
+  hasProgress: (stationId) =>
+    !!state.built[stationId] ||
+    ['assigned', 'need'].some((part) => Object.keys(state[part]).some((k) => k.startsWith(`${stationId}|`))),
+
   reset() {
     state = empty();
     persist();
