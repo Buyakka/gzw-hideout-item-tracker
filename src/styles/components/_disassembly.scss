@@ -38,7 +38,7 @@
 
   &__label {
     @include label-text;
-    font-size: 0.62rem;
+    font-size: fs('xxs');
   }
 
   &__item {
@@ -65,12 +65,14 @@
   &__out {
     display: flex;
     flex-wrap: wrap;
-    gap: space('1');
+    gap: space('2');
 
     li {
-      padding: 2px space('2');
+      padding: 0.3rem 0.6rem;
       font-family: font('ui');
-      font-size: fs('xs');
+      font-size: fs('sm');
+      font-weight: 600;
+      line-height: 1.3;
       color: var(--room);
       border: 1px solid color-mix(in srgb, var(--room) 40%, transparent);
       background: color-mix(in srgb, var(--room) 8%, transparent);

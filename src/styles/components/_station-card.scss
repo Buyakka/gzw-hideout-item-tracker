@@ -115,7 +115,7 @@
 
   &__next {
     @include label-text;
-    font-size: 0.66rem;
+    font-size: fs('xxs');
   }
 
   &__device {

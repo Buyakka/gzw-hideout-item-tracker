@@ -20,7 +20,7 @@ $colors: (
   // Text
   'text':          #ffffff,
   'text-dim':      #99a1af,
-  'text-faint':    #6b7280,
+  'text-faint':    #8b929e,   // 5:1 on the dark panels
 
   // Signals
   'accent':        #ffa800,   // GZW yellow (PLAY button)
@@ -45,7 +45,9 @@ $fonts: (
 // Fluid type scale: clamp(min, preferred, max). Kept as strings
 // so Sass does not try to do the math.
 $type: (
-  'xs':  'clamp(0.72rem, 0.68rem + 0.15vw, 0.8rem)',
+  // 'xxs' is the smallest text on the site (12px), for tiny labels
+  'xxs': '0.75rem',
+  'xs':  'clamp(0.8rem, 0.76rem + 0.15vw, 0.875rem)',
   'sm':  'clamp(0.85rem, 0.8rem + 0.2vw, 0.95rem)',
   'md':  'clamp(1rem, 0.95rem + 0.25vw, 1.12rem)',
   'lg':  'clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem)',

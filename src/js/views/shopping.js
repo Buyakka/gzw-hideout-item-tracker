@@ -4,6 +4,14 @@
 // =============================================================
 import { shoppingList, overall } from '../calc.js';
 import { esc, money } from '../icons.js';
+import { STATIONS, ROOM_BY_ID } from '../data.js';
+
+// Station names used in more than one room (Storage Equipment)
+// get the room added, so the tags are never ambiguous
+const SHARED = new Set(
+  STATIONS.map((s) => s.name).filter((n, i, all) => all.indexOf(n) !== i)
+);
+const stationLabel = (u) => (SHARED.has(u.station) ? `${u.station} (${ROOM_BY_ID[u.roomId].short})` : u.station);
 
 const ui = { query: '', hideDone: false };
 
@@ -47,6 +55,26 @@ export function setShopHide(v) {
   ui.hideDone = v;
 }
 
+// One tag per station, with each level that needs the item inside,
+// e.g. "Heat Source · L1 ×3 · L2 ×4", so long rows stay readable.
+function usedTags(uses) {
+  const byStation = new Map();
+  for (const u of uses) {
+    if (!byStation.has(u.stationId)) byStation.set(u.stationId, { ...u, levels: [] });
+    byStation.get(u.stationId).levels.push(u);
+  }
+  return [...byStation.values()]
+    .map((s) => {
+      const parts = s.levels.map((l) => `<span class="shop__lvl">L${l.step} ×${l.qty}</span>`).join('');
+      const name = stationLabel(s);
+      const title = s.levels.map((l) => `level ${l.step}: ${l.qty}`).join(', ');
+      return `<a class="shop__tag u-room-${s.roomId}" href="#${s.stationId}" title="${esc(name)} needs ${title}">
+                <span class="shop__station">${esc(name)}</span>${parts}
+              </a>`;
+    })
+    .join('');
+}
+
 function body() {
   const q = ui.query.trim().toLowerCase();
   const rows = shoppingList().filter(
@@ -78,14 +106,7 @@ function body() {
             <td class="num" data-label="Have">${r.have}</td>
             <td class="num shop__left" data-label="Left">${r.left === 0 ? '✓' : r.left}</td>
             <td class="shop__used-cell">
-              <div class="shop__used">
-                ${r.uses
-                  .map(
-                    (u) =>
-                      `<a class="shop__tag u-room-${u.roomId}" href="#${u.stationId}" title="Needs ${u.qty}">${esc(u.label)} ×${u.qty}</a>`
-                  )
-                  .join('')}
-              </div>
+              <div class="shop__used">${usedTags(r.uses)}</div>
             </td>
           </tr>`
           )

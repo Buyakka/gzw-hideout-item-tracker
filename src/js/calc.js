@@ -131,6 +131,8 @@ export function shoppingList() {
         row.uses.push({
           stationId: s.id,
           roomId: s.roomId,
+          station: s.name,
+          step: lvl.step,
           label: `${s.name} L${lvl.step}`,
           qty: it.need,
         });

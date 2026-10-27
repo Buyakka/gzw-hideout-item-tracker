@@ -128,7 +128,7 @@
 
   &__state {
     font-family: font('ui');
-    font-size: 0.64rem;
+    font-size: fs('xxs');
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: color('text-faint');
@@ -226,7 +226,7 @@
 
     dt {
       @include label-text;
-      font-size: 0.62rem;
+      font-size: fs('xxs');
     }
 
     dd {

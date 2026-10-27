@@ -63,7 +63,7 @@
 
   &__sub {
     @include label-text;
-    font-size: 0.66rem;
+    font-size: fs('xxs');
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -121,7 +121,7 @@
 
   &__label {
     @include label-text;
-    font-size: 0.62rem;
+    font-size: fs('xxs');
     display: block;
   }
 

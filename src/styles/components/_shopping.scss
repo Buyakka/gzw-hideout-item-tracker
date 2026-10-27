@@ -53,7 +53,7 @@
 
   th {
     @include label-text;
-    font-size: 0.64rem;
+    font-size: fs('xxs');
     text-align: left;
     padding: space('2') space('3');
     border-bottom: 1px solid color('line-strong');
@@ -102,19 +102,40 @@
     color: color('ok');
   }
 
+  // Stations that need this item: readable chips with room to breathe
   &__used {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: space('2');
   }
 
   &__tag {
     font-family: font('ui');
-    font-size: 0.66rem;
-    padding: 1px 6px;
+    font-size: fs('sm');
+    font-weight: 600;
+    line-height: 1.3;
+    padding: 0.3rem 0.6rem;
     color: var(--room);
-    border: 1px solid color-mix(in srgb, var(--room) 40%, transparent);
+    background: color-mix(in srgb, var(--room) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--room) 45%, transparent);
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    @include hover {
+      background: color-mix(in srgb, var(--room) 18%, transparent);
+    }
+  }
+
+  // Station name in white, its levels in the room colour after it
+  &__station {
+    color: color('text');
+  }
+
+  &__lvl {
+    padding-left: 0.5rem;
+    border-left: 1px solid color-mix(in srgb, var(--room) 35%, transparent);
   }
 
   // Phone layout: each row becomes a small card
@@ -140,7 +161,7 @@
       content: attr(data-label);
       display: block;
       @include label-text;
-      font-size: 0.56rem;
+      font-size: fs('xxs');
     }
 
     .shop__used-cell {
