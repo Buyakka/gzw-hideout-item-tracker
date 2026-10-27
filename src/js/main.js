@@ -2,6 +2,7 @@
 // MAIN
 // Wires the pages, the panel, saving and the effects together.
 // Address bar decides what is shown:
+//   (empty) or #home            landing page
 //   #laboratory                 room view
 //   #laboratory/heat-source     room view + station panel
 //   #shopping                   shopping list
@@ -16,6 +17,8 @@ import { renderStats, renderTabs } from './views/hud.js';
 import { renderRoom } from './views/room.js';
 import { renderShopping, refreshShoppingBody, setShopQuery, setShopHide } from './views/shopping.js';
 import { renderDisassembly, refreshDisassemblyBody, setDisQuery } from './views/disassembly.js';
+import { renderHome, rememberRoom } from './views/home.js';
+import { mountLogos } from './logo.js';
 import {
   initPanel, openPanel, closePanel, showLevel, toggleEdit,
   refreshPanel, isOpen, currentStation, panelLevel,
@@ -34,13 +37,13 @@ const els = {
   file: $('#import-file'),
 };
 
-let room = 'utility';
-const PAGES = ['shopping', 'disassembly'];
+let room = 'home';
+const PAGES = ['home', 'shopping', 'disassembly'];
 
 // ---------- Routing ----------
 function parseHash() {
   const [r, s] = location.hash.replace(/^#/, '').split('/');
-  const roomId = ROOM_BY_ID[r] || PAGES.includes(r) ? r : 'utility';
+  const roomId = ROOM_BY_ID[r] || PAGES.includes(r) ? r : 'home';
   const stationId = s ? `${roomId}/${s}` : null;
   return { roomId, stationId: STATION_BY_ID[stationId] ? stationId : null };
 }
@@ -49,6 +52,7 @@ function route() {
   const { roomId, stationId } = parseHash();
   const roomChanged = roomId !== room;
   room = roomId;
+  if (room !== 'home') rememberRoom(room);
   renderAll(!roomChanged && els.main.childElementCount > 0);
   if (stationId) {
     if (currentStation() !== stationId) openPanel(stationId);
@@ -60,6 +64,7 @@ function route() {
 // ---------- Drawing ----------
 function renderAll(isStatic = false) {
   document.body.dataset.room = room;
+  document.body.classList.toggle('is-home', room === 'home');
   els.bg.dataset.room = room;
   renderStats(els.stats);
   renderTabs(els.tabs, room);
@@ -70,7 +75,8 @@ function renderAll(isStatic = false) {
   const search = document.activeElement?.matches?.('.search') ? document.activeElement : null;
   const caret = search?.selectionStart;
 
-  if (room === 'shopping') renderShopping(els.main);
+  if (room === 'home') renderHome(els.main);
+  else if (room === 'shopping') renderShopping(els.main);
   else if (room === 'disassembly') renderDisassembly(els.main);
   else renderRoom(els.main, room);
 
@@ -226,6 +232,7 @@ new ResizeObserver(() => {
 }).observe(els.hud);
 
 // ---------- Start ----------
+mountLogos();
 initPanel(els.panel, els.scrim);
 initTilt(els.main);
 initParallax(els.bg);

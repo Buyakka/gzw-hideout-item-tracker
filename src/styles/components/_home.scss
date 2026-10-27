@@ -1,0 +1,270 @@
+// =============================================================
+// HOME (landing page)
+// Laid out like the game's main menu: one column on the left,
+// the hideout photo stronger behind it, everything slides in.
+// =============================================================
+@use '../abstracts' as *;
+
+// The header and tabs hide on the landing page
+.is-home {
+  .hud,
+  .room-tabs {
+    display: none;
+  }
+
+  .bg-fx__photo {
+    --photo-opacity: 0.6;
+
+    @include motion {
+      animation: slow-zoom 14s ease-out both;
+    }
+  }
+}
+
+.home {
+  display: flex;
+  align-items: center;
+  min-height: calc(100dvh - 90px);
+  padding-block: space('5');
+
+  // Dark fade on the left so the menu reads well over the photo
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(90deg, tint('bg', 0.88) 0%, tint('bg', 0.6) 45%, transparent 80%);
+  }
+
+  &__menu {
+    display: grid;
+    gap: space('3');
+    width: min(100%, 470px);
+
+    @include up('lg') {
+      margin-left: space('7');
+    }
+  }
+
+  // Everything with --i slides in one after another
+  [style*='--i'] {
+    @include motion {
+      animation: home-in 600ms var(--t-ease) backwards;
+      animation-delay: calc(var(--i) * 70ms + 250ms);
+    }
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: space('4');
+    margin-bottom: space('2');
+  }
+
+  &__logo {
+    flex: none;
+    width: clamp(64px, 14vw, 92px);
+    height: clamp(64px, 14vw, 92px);
+  }
+
+  &__title {
+    font-size: clamp(3rem, 2rem + 4vw, 4.8rem);
+    letter-spacing: 0.04em;
+    color: #d4d4d4;
+  }
+
+  &__sub {
+    font-family: font('display');
+    font-size: clamp(1.1rem, 0.9rem + 0.8vw, 1.5rem);
+    letter-spacing: 0.32em;
+    color: #d4d4d4;
+  }
+
+  // Yellow warning line, like the notes on the game menu
+  &__note {
+    display: flex;
+    gap: space('3');
+    font-size: fs('sm');
+    font-weight: 600;
+    color: color('accent');
+
+    svg {
+      flex: none;
+      width: 26px;
+      height: 26px;
+    }
+
+    b {
+      display: block;
+      color: color('text');
+    }
+  }
+
+  &__label {
+    @include label-text;
+    margin-top: space('2');
+  }
+
+  &__rooms,
+  &__tools {
+    display: grid;
+    gap: space('2');
+  }
+
+  // Big yellow button, like PLAY
+  &__play {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 76px;
+    margin-top: space('3');
+    padding: 0 space('5');
+    font-family: font('ui');
+    font-size: fs('xl');
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    background: color('accent');
+    transition: filter dur('fast') ease;
+    @include focus-ring;
+
+    small {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      opacity: 0.7;
+    }
+
+    svg {
+      flex: none;
+      width: 24px;
+      height: 24px;
+    }
+
+    @include hover {
+      filter: brightness(1.1);
+    }
+  }
+
+  // Gray buttons, like CHANGE OPERATOR
+  &__tool {
+    display: flex;
+    align-items: center;
+    gap: space('3');
+    min-height: 52px;
+    padding: 0 space('4');
+    font-family: font('ui');
+    font-size: fs('sm');
+    font-weight: 700;
+    text-transform: uppercase;
+    color: color('text');
+    background: tint('panel-2', 0.92);
+    transition: background dur('fast') ease;
+    @include focus-ring;
+
+    svg {
+      flex: none;
+      width: 18px;
+      height: 18px;
+    }
+
+    svg:last-child {
+      margin-left: auto;
+    }
+
+    @include hover {
+      background: #3a3a3e;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: space('2') space('5');
+    margin-top: space('3');
+
+    dt {
+      @include label-text;
+      font-size: 0.62rem;
+    }
+
+    dd {
+      font-family: font('ui');
+      font-weight: 700;
+    }
+  }
+}
+
+// One room in the list
+.home-room {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    'icon name count'
+    'bar  bar  bar';
+  align-items: center;
+  gap: space('2') space('3');
+  padding: space('3') space('4');
+  @include game-panel;
+  transition: transform dur('fast') var(--t-ease), border-color dur('fast') ease;
+  @include focus-ring;
+
+  &__icon {
+    grid-area: icon;
+    display: grid;
+    color: var(--room);
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  &__name {
+    grid-area: name;
+    font-family: font('ui');
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  &__count {
+    grid-area: count;
+    font-size: fs('xs');
+    color: color('text-dim');
+  }
+
+  .bar {
+    grid-area: bar;
+  }
+
+  @include hover {
+    transform: translateX(6px);
+    border-color: color('text-faint');
+    border-right-color: var(--room);
+  }
+
+  &.is-locked {
+    grid-template-areas: 'icon name count';
+    color: color('text-faint');
+    border-right-color: color('line-strong');
+    cursor: not-allowed;
+
+    .home-room__icon {
+      color: color('text-faint');
+    }
+
+    @include hover {
+      transform: none;
+      border-color: color('line-strong');
+    }
+  }
+}
+
+// Redraws after a save should not replay the slide-in
+.is-static .home [style*='--i'],
+.is-static.home [style*='--i'] {
+  animation: none;
+}

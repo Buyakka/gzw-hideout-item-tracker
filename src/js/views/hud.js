@@ -38,20 +38,27 @@ export function renderTabs(el, active) {
   const tabs = ROOMS.map((r) => {
     const built = r.stations.reduce((n, s) => n + Math.min(store.builtCount(s.id), s.levels.length), 0);
     const total = r.stations.reduce((n, s) => n + s.levels.length, 0);
-    return { id: r.id, label: r.short, icon: r.icon, count: `${built}/${total}` };
+    return { id: r.id, label: r.tab, count: `${built}/${total}` };
   });
-  tabs.push({ id: 'shopping', label: 'Shopping List', icon: 'list', count: '' });
-  tabs.push({ id: 'disassembly', label: 'Disassembly', icon: 'split', count: '' });
+  const tools = [
+    { id: 'shopping', label: 'Shopping List', icon: 'list' },
+    { id: 'disassembly', label: 'Disassembly', icon: 'split' },
+  ];
 
-  el.innerHTML = tabs
-    .map(
-      (t) => `
+  const tab = (t) => `
       <a class="room-tab u-room-${t.id}" href="#${t.id}" role="tab"
          aria-selected="${t.id === active}" data-room="${t.id}">
-        ${icon(t.icon)}
+        ${t.icon ? icon(t.icon) : ''}
         <span>${t.label}</span>
         ${t.count ? `<span class="room-tab__count">${t.count}</span>` : ''}
-      </a>`
-    )
-    .join('');
+      </a>`;
+
+  // Room tabs match the game, including the locked Personal room
+  el.innerHTML = `
+    ${tabs.map(tab).join('')}
+    <span class="room-tab is-locked" role="tab" aria-disabled="true" title="Locked in the game for now">
+      ${icon('lock')}<span>Personal</span>
+    </span>
+    <span class="room-tabs__sep" aria-hidden="true"></span>
+    ${tools.map(tab).join('')}`;
 }

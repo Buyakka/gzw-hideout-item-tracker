@@ -9,18 +9,21 @@ const ROOM_INFO = {
   'Utility Room': {
     id: 'utility',
     short: 'Utility',
+    tab: 'Utility Room',
     icon: 'bolt',
     desc: 'Power for the whole hideout. Build the generator first. Most other stations need kW to run.',
   },
   Laboratory: {
     id: 'laboratory',
     short: 'Lab',
+    tab: 'Laboratory',
     icon: 'flask',
     desc: 'Turns raw chemicals into medical products and contraband. Your main money maker.',
   },
   'Electronics Workshop': {
     id: 'workshop',
     short: 'Workshop',
+    tab: 'Workshop',
     icon: 'chip',
     desc: 'Strips and rebuilds military electronics. Makes hacking tools and tracking tags.',
   },
@@ -46,6 +49,9 @@ const STATION_ICONS = {
 export const slug = (s) =>
   s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
+// Same order as the room tabs in the game
+const ROOM_ORDER = ['laboratory', 'workshop', 'utility'];
+
 export const ROOMS = raw.rooms.map((r) => {
   const info = ROOM_INFO[r.room];
   return {
@@ -65,7 +71,7 @@ export const ROOMS = raw.rooms.map((r) => {
       })),
     })),
   };
-});
+}).sort((a, b) => ROOM_ORDER.indexOf(a.id) - ROOM_ORDER.indexOf(b.id));
 
 export const STATIONS = ROOMS.flatMap((r) => r.stations);
 export const STATION_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));

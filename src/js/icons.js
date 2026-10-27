@@ -31,6 +31,8 @@ const P = {
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   split: '<rect x="3" y="9" width="6" height="6" rx="1"/><path d="M9 12h4M13 12l3-5h3M13 12l3 5h3"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  chevron: '<path d="m9 5 7 7-7 7"/>',
+  play: '<path d="M7 4v16l13-8L7 4z" fill="currentColor"/>',
 };
 
 export function icon(name, cls = '') {
