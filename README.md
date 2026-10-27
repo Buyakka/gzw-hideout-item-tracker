@@ -1,4 +1,4 @@
-# Buyaka // GZW Hideout Tracker
+# Buyaka // GZW Hideout Item Tracker
 
 An interactive tracker for the **Gray Zone Warfare** hideout (Update 0.5 Rogue Ops).
 
