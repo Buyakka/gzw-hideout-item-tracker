@@ -34,6 +34,7 @@ const P = {
   chevron: '<path d="m9 5 7 7-7 7"/>',
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
   text: '<path d="M4 19 9 5l5 14M5.8 14h6.4M15 19l3.5-9 3.5 9M16.2 16h4.6"/>',
+  book: '<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v15H5.5A1.5 1.5 0 0 0 4 19.5v-15z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/><path d="M8 7h8M8 11h6"/>',
   play: '<path d="M7 4v16l13-8L7 4z" fill="currentColor"/>',
 };
 

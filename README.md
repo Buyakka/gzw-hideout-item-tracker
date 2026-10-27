@@ -34,6 +34,9 @@ second monitor while you play. Two open tabs stay in sync.
 - Disassembly page: all 15 recipes (12 hours each) with search
 - Edit button to fix a recipe amount if the game shows a different number
 - Backup and load your progress as a file
+- Guide page (#guide, "How it works" on the landing page) with real screenshots.
+  To retake them after a design change: run `npm run dev`, then `npm run guide:shots`
+  (uses Edge or Chrome in headless mode, saves to public/guide/)
 - 3D tilt cards, 3D level flips, radar and HUD effects
 - Works on phones, tablets and wide screens
 - Text size button (A / A+ / A++) in the header and on the landing page, remembered

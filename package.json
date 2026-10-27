@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "guide:shots": "node scripts/capture-guide.mjs"
   },
   "devDependencies": {
     "sass": "^1.93.0",

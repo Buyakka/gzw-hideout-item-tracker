@@ -1,13 +1,13 @@
 // =============================================================
 // BACK TO TOP
 // Small button in the bottom-right corner on the long pages
-// (Shopping List, Disassembly). It shows once you have scrolled
+// (Shopping List, Disassembly, Guide). It shows once you have scrolled
 // halfway down the page, and scrolls back up when clicked.
 // When the footer scrolls into view the button rises with it, so
 // it never covers the footer text.
 // =============================================================
 
-const PAGES = ['build', 'shopping', 'disassembly'];
+const PAGES = ['build', 'shopping', 'disassembly', 'guide'];
 
 const state = { btn: null, page: '', footer: null };
 

@@ -8,6 +8,7 @@
 //   #build                      levels you can work on now
 //   #shopping                   shopping list
 //   #disassembly                disassembly recipes
+//   #guide                      how the site works
 // =============================================================
 import '../styles/main.scss';
 
@@ -20,6 +21,7 @@ import { renderShopping, refreshShoppingBody, setShopQuery, setShopHide, setShop
 import { renderDisassembly, refreshDisassemblyBody, setDisQuery } from './views/disassembly.js';
 import { renderHome, rememberRoom } from './views/home.js';
 import { renderBuildNow } from './views/build-now.js';
+import { renderGuide } from './views/guide.js';
 import { initLookup, openLookup } from './lookup.js';
 import { askConfirm } from './confirm.js';
 import { mountLogos } from './logo.js';
@@ -46,7 +48,7 @@ const els = {
 
 let room = 'home';
 const itemName = (key) => key.slice(key.lastIndexOf('|') + 1);
-const PAGES = ['home', 'build', 'shopping', 'disassembly'];
+const PAGES = ['home', 'build', 'shopping', 'disassembly', 'guide'];
 
 // ---------- Routing ----------
 function parseHash() {
@@ -60,7 +62,8 @@ function route() {
   const { roomId, stationId } = parseHash();
   const roomChanged = roomId !== room;
   room = roomId;
-  if (room !== 'home') rememberRoom(room);
+  // The guide is not a place to "continue" from, so it is not remembered
+  if (room !== 'home' && room !== 'guide') rememberRoom(room);
   renderAll(!roomChanged && els.main.childElementCount > 0);
   if (stationId) {
     if (currentStation() !== stationId) openPanel(stationId);
@@ -95,6 +98,7 @@ function renderAll(isStatic = false) {
   else if (room === 'shopping') renderShopping(els.main);
   else if (room === 'disassembly') renderDisassembly(els.main);
   else if (room === 'build') renderBuildNow(els.main);
+  else if (room === 'guide') renderGuide(els.main);
   else renderRoom(els.main, room);
 
   const view = els.main.firstElementChild;
@@ -201,6 +205,14 @@ const actions = {
   },
   lookup() {
     openLookup();
+  },
+  // Guide: jump to a topic inside the page (the hash is used for pages)
+  'guide-jump'(el) {
+    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const target = document.getElementById(el.dataset.jump);
+    target?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+    // Move keyboard focus there too, so Tab carries on from the topic
+    target?.focus({ preventScroll: true });
   },
   // Shopping List: show only one group of items
   'shop-group'(el) {

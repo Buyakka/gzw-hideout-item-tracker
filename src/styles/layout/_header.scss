@@ -172,12 +172,11 @@
       }
     }
 
-    // Stats share the row with the buttons here, so show icons only
-    @include up('lg') {
-      @include down('xl') {
-        .btn__text--md {
-          @include visually-hidden;
-        }
+    // Icons only until the screen is really wide, so the name next to
+    // the logo is never cut off (screen readers still get the words)
+    @include down('xl') {
+      .btn__text--md {
+        @include visually-hidden;
       }
     }
   }

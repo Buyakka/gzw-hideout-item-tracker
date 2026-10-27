@@ -48,6 +48,7 @@ export function renderTabs(el, active) {
     { id: 'build', label: 'Next Upgrades', icon: 'arrow' },
     { id: 'shopping', label: 'Shopping List', icon: 'list' },
     { id: 'disassembly', label: 'Disassembly', icon: 'split' },
+    { id: 'guide', label: 'Guide', icon: 'book' },
   ];
 
   const tab = (t) => `

@@ -110,6 +110,7 @@ export function renderHome(el) {
           <button class="home__tool" type="button" data-action="lookup" ${step()}>
             ${icon('search')}<span>Find an item</span><kbd class="home__tool-value">/</kbd>
           </button>
+          <a class="home__tool" href="#guide" ${step()}>${icon('book')}<span>How it works</span>${icon('chevron')}</a>
           <button class="home__tool" type="button" data-action="text-size" ${step()}>
             ${icon('text')}<span>Text size</span><span class="home__tool-value" data-text-label>A</span>
           </button>
