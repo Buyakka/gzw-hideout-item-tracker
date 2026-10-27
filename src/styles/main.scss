@@ -1,0 +1,39 @@
+// =============================================================
+// MAIN STYLESHEET
+//
+// Folder map:
+//   abstracts/   tokens, functions, mixins (no CSS output)
+//   base/        root variables, reset, typography
+//   layout/      page shell and header
+//   components/  one file per UI piece
+//   effects/     background, keyframes, motion
+//
+// CSS cascade layers set the order. A later layer always wins
+// over an earlier one, no matter how specific the selector is.
+// So "utilities" beats "components", which beats "base".
+// =============================================================
+@use 'sass:meta';
+
+@layer base, layout, components, effects, utilities;
+
+@layer base {
+  @include meta.load-css('base');
+}
+
+@layer layout {
+  @include meta.load-css('layout');
+}
+
+@layer components {
+  @include meta.load-css('components');
+}
+
+@layer effects {
+  @include meta.load-css('effects');
+}
+
+@layer utilities {
+  .u-room-utility { --room: var(--c-utility); }
+  .u-room-laboratory { --room: var(--c-laboratory); }
+  .u-room-workshop { --room: var(--c-workshop); }
+}

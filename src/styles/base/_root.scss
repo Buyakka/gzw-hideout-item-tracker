@@ -1,0 +1,37 @@
+// =============================================================
+// ROOT
+// Turns every Sass token map into CSS custom properties.
+// =============================================================
+@use '../abstracts' as *;
+
+:root {
+  color-scheme: dark;
+
+  @each $name, $value in $colors {
+    --c-#{$name}: #{$value};
+  }
+  @each $name, $value in $fonts {
+    --f-#{$name}: #{$value};
+  }
+  @each $name, $value in $type {
+    --fs-#{$name}: #{$value};
+  }
+  @each $name, $value in $space {
+    --s-#{$name}: #{$value};
+  }
+  @each $name, $value in $radius {
+    --r-#{$name}: #{$value};
+  }
+  @each $name, $value in $timing {
+    --t-#{$name}: #{$value};
+  }
+
+  --header-h: 0px;
+  --panel-w: min(600px, 46vw);
+}
+
+// Each room sets one variable, and every child uses it
+[data-room='utility']    { --room: var(--c-utility); }
+[data-room='laboratory'] { --room: var(--c-laboratory); }
+[data-room='workshop']   { --room: var(--c-workshop); }
+[data-room='shopping']   { --room: var(--c-accent); }

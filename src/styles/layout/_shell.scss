@@ -1,0 +1,101 @@
+// =============================================================
+// SHELL
+// Page width, main area and the room banner.
+// =============================================================
+@use '../abstracts' as *;
+
+.app {
+  position: relative;
+  z-index: z('base');
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding: space('4') space('4') space('8');
+
+  @include up('lg') {
+    padding: space('5') space('6') space('8');
+  }
+}
+
+.room-banner {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: space('3');
+  margin-bottom: space('5');
+  padding-bottom: space('3');
+  border-bottom: 1px solid color('line');
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 120px;
+    height: 2px;
+    background: var(--room);
+    box-shadow: 0 0 12px var(--room);
+  }
+
+  &__eyebrow {
+    @include label-text;
+    color: var(--room);
+  }
+
+  &__title {
+    font-size: fs('xxl');
+    text-shadow: 0 0 24px tint('bg', 0.9);
+  }
+
+  &__desc {
+    max-width: 60ch;
+    color: color('text-dim');
+    font-size: fs('sm');
+  }
+
+  &__meta {
+    display: flex;
+    gap: space('2');
+    flex-wrap: wrap;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: space('1');
+  padding: 0.2rem 0.6rem;
+  font-family: font('mono');
+  font-size: fs('xs');
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color('text-dim');
+  border: 1px solid color('line');
+  background: tint('panel', 0.6);
+
+  b {
+    color: var(--room, color('accent'));
+    font-weight: 400;
+  }
+}
+
+.footer {
+  padding: space('5') space('4');
+  text-align: center;
+  font-size: fs('xs');
+  color: color('text-faint');
+  border-top: 1px solid color('line');
+
+  a {
+    color: color('text-dim');
+  }
+}

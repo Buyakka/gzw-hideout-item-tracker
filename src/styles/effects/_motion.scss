@@ -1,0 +1,46 @@
+// =============================================================
+// MOTION
+// Entry animations for whole views and cards.
+// =============================================================
+@use '../abstracts' as *;
+
+.view {
+  perspective: 1400px;
+
+  @include motion {
+    animation: view-in dur('slow') var(--t-ease) both;
+  }
+}
+
+.station-grid > * {
+  @include motion {
+    animation: card-in 700ms var(--t-ease) backwards; // "backwards" so the tilt transform still works after
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+}
+
+// Glitch the room title once when it appears
+.room-banner__title {
+  @include motion {
+    animation: glitch 420ms steps(4) 1;
+  }
+}
+
+// Ring pulse when a level is built
+.just-built {
+  @include motion {
+    animation: built-flash 700ms ease-out;
+  }
+}
+
+// Redraws after a save should not replay the entry animations
+.is-static {
+  &.view,
+  .station-grid > *,
+  .room-banner__title,
+  tbody tr,
+  .item,
+  .level {
+    animation: none;
+  }
+}

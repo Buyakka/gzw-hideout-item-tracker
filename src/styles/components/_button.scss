@@ -1,0 +1,94 @@
+// =============================================================
+// BUTTONS
+// .btn               default
+// .btn--primary      filled with the room color
+// .btn--ghost        no border
+// .btn--icon         square icon button
+// .btn--danger       red
+// =============================================================
+@use '../abstracts' as *;
+
+.btn {
+  --btn-c: var(--room, #{color('accent')});
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: space('2');
+  min-height: 40px;
+  padding: 0 space('4');
+  font-family: font('display');
+  font-size: fs('sm');
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color('text');
+  background: tint('panel-2', 0.9);
+  border: 1px solid color('line-strong');
+  @include notch(8px);
+  transition:
+    background dur('fast') ease,
+    color dur('fast') ease,
+    transform dur('fast') ease,
+    box-shadow dur('fast') ease;
+  @include focus-ring;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+  }
+
+  @include hover {
+    color: color('bg');
+    background: var(--btn-c);
+    border-color: var(--btn-c);
+  }
+
+  &:active {
+    transform: translateY(1px) scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  &--primary {
+    color: color('bg');
+    background: var(--btn-c);
+    border-color: var(--btn-c);
+    box-shadow: 0 0 18px -4px var(--btn-c);
+
+    @include hover {
+      filter: brightness(1.12);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  &--icon {
+    width: 40px;
+    padding: 0;
+  }
+
+  &--danger {
+    --btn-c: #{color('danger')};
+  }
+
+  &--sm {
+    min-height: 32px;
+    padding: 0 space('3');
+    font-size: fs('xs');
+  }
+
+  // Hide the text on small screens, keep the icon
+  &__text--md {
+    @include down('md') {
+      @include visually-hidden;
+    }
+  }
+}

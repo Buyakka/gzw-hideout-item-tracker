@@ -1,0 +1,157 @@
+// =============================================================
+// SHOPPING LIST
+// Table on desktop, stacked cards on phones.
+// =============================================================
+@use '../abstracts' as *;
+
+.shop-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: space('2');
+  align-items: center;
+  margin-bottom: space('4');
+}
+
+.search {
+  flex: 1 1 220px;
+  min-height: 40px;
+  padding: 0 space('3');
+  background: color('panel');
+  border: 1px solid color('line-strong');
+  font-family: font('mono');
+  @include focus-ring;
+
+  &::placeholder {
+    color: color('text-faint');
+  }
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: space('2');
+  min-height: 40px;
+  padding: 0 space('3');
+  font-family: font('mono');
+  font-size: fs('xs');
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color('text-dim');
+  border: 1px solid color('line');
+  cursor: pointer;
+
+  input {
+    accent-color: color('accent');
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.shop {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    @include label-text;
+    font-size: 0.64rem;
+    text-align: left;
+    padding: space('2') space('3');
+    border-bottom: 1px solid color('line-strong');
+    white-space: nowrap;
+  }
+
+  td {
+    padding: space('3');
+    border-bottom: 1px solid color('line');
+    vertical-align: middle;
+  }
+
+  .num {
+    font-family: font('mono');
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  th.num {
+    text-align: right;
+  }
+
+  tbody tr {
+    transition: background dur('fast') ease;
+
+    @include motion {
+      animation: row-in dur('slow') var(--t-ease) both;
+      animation-delay: calc(min(var(--i, 0), 20) * 25ms);
+    }
+
+    @include hover {
+      background: tint('panel-2', 0.7);
+    }
+  }
+
+  &__name {
+    font-weight: 600;
+  }
+
+  &__left {
+    color: color('warn');
+    font-weight: 700;
+  }
+
+  tr.is-done &__left {
+    color: color('ok');
+  }
+
+  &__used {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  &__tag {
+    font-family: font('mono');
+    font-size: 0.66rem;
+    padding: 1px 6px;
+    color: var(--room);
+    border: 1px solid color-mix(in srgb, var(--room) 40%, transparent);
+    white-space: nowrap;
+  }
+
+  // Phone layout: each row becomes a small card
+  @include down('md') {
+    thead {
+      @include visually-hidden;
+    }
+
+    tr {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: space('1') space('3');
+      padding: space('3') 0;
+      border-bottom: 1px solid color('line');
+    }
+
+    td {
+      padding: 0;
+      border: 0;
+    }
+
+    td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      @include label-text;
+      font-size: 0.56rem;
+    }
+
+    .shop__used-cell {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+.empty {
+  padding: space('7') space('4');
+  text-align: center;
+  color: color('text-dim');
+  border: 1px dashed color('line-strong');
+}

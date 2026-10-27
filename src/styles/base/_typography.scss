@@ -1,0 +1,41 @@
+// =============================================================
+// TYPOGRAPHY
+// =============================================================
+@use '../abstracts' as *;
+
+body {
+  font-family: font('body');
+  font-size: fs('md');
+  font-weight: 500;
+  color: color('text');
+  background: color('bg');
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: font('display');
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mono {
+  font-family: font('mono');
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  @include label-text;
+}
+
+.sr-only {
+  @include visually-hidden;
+}
+
+::selection {
+  background: color('accent');
+  color: color('bg');
+}

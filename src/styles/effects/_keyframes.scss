@@ -1,0 +1,92 @@
+// =============================================================
+// KEYFRAMES
+// All animations live here so they are easy to find and tune.
+// =============================================================
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cube-spin {
+  from { transform: rotateX(-24deg) rotateY(0deg); }
+  to   { transform: rotateX(-24deg) rotateY(360deg); }
+}
+
+@keyframes floor-move {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 0 64px, 0 0; }
+}
+
+@keyframes dust {
+  from { background-position: 0 0; }
+  to   { background-position: 600px -600px; }
+}
+
+@keyframes sweep {
+  from { transform: translateY(-160px); }
+  to   { transform: translateY(110vh); }
+}
+
+@keyframes blip {
+  0%, 12% { opacity: 0; transform: scale(0.4); }
+  18%     { opacity: 1; transform: scale(1.4); }
+  60%     { opacity: 0.6; transform: scale(1); }
+  100%    { opacity: 0; }
+}
+
+@keyframes blink {
+  50% { opacity: 0.35; }
+}
+
+@keyframes bar-stripes {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 17px 0, 0 0; }
+}
+
+@keyframes bump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); color: var(--room); }
+  100% { transform: scale(1); }
+}
+
+@keyframes row-in {
+  from { opacity: 0; transform: translateY(8px) rotateX(-20deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(40px) rotateX(-35deg) scale(0.94); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes flip-in-right {
+  from { opacity: 0; transform: rotateY(-55deg) translateX(40px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes flip-in-left {
+  from { opacity: 0; transform: rotateY(55deg) translateX(-40px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes view-in {
+  from { opacity: 0; transform: translateZ(-120px) rotateX(8deg); filter: blur(4px); }
+  to   { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes glitch {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: none; }
+  20% { clip-path: inset(10% 0 60% 0); transform: translateX(-3px); }
+  40% { clip-path: inset(60% 0 10% 0); transform: translateX(3px); }
+  60% { clip-path: inset(30% 0 40% 0); transform: translateX(-2px); }
+}
+
+@keyframes built-flash {
+  0%   { box-shadow: 0 0 0 0 var(--room); }
+  100% { box-shadow: 0 0 0 30px transparent; }
+}

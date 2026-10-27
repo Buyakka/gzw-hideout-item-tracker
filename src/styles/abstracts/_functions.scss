@@ -1,0 +1,40 @@
+// =============================================================
+// FUNCTIONS
+// Short helpers so components read tokens the same way.
+//   color('accent')  ->  var(--c-accent)
+//   space('4')       ->  var(--s-4)
+// =============================================================
+@use 'sass:map';
+@use 'tokens' as t;
+
+@function color($name) {
+  @if not map.has-key(t.$colors, $name) {
+    @error 'Unknown color token: #{$name}';
+  }
+  @return var(--c-#{$name});
+}
+
+// Color with transparency, built from the same token
+@function tint($name, $alpha) {
+  @return color-mix(in srgb, var(--c-#{$name}) #{$alpha * 100%}, transparent);
+}
+
+@function space($name) {
+  @return var(--s-#{$name});
+}
+
+@function font($name) {
+  @return var(--f-#{$name});
+}
+
+@function fs($name) {
+  @return var(--fs-#{$name});
+}
+
+@function z($name) {
+  @return map.get(t.$z, $name);
+}
+
+@function dur($name) {
+  @return var(--t-#{$name});
+}

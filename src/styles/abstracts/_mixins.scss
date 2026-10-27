@@ -1,0 +1,92 @@
+// =============================================================
+// MIXINS
+// Reusable chunks of CSS.
+// =============================================================
+@use 'sass:map';
+@use 'tokens' as t;
+@use 'functions' as f;
+
+// Mobile first: @include up('md') { ... }
+@mixin up($bp) {
+  @media (min-width: map.get(t.$breakpoints, $bp)) {
+    @content;
+  }
+}
+
+@mixin down($bp) {
+  @media (max-width: (map.get(t.$breakpoints, $bp) - 1px)) {
+    @content;
+  }
+}
+
+// Only run fancy motion for people who have not asked for less
+@mixin motion {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+// Only use hover effects on devices with a real mouse
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// Cut corner shape (military plate look)
+@mixin notch($size: 12px) {
+  clip-path: polygon(
+    $size 0,
+    100% 0,
+    100% calc(100% - #{$size}),
+    calc(100% - #{$size}) 100%,
+    0 100%,
+    0 $size
+  );
+}
+
+// Thin HUD corner brackets drawn with gradients
+@mixin brackets($color: f.color('line-strong'), $len: 14px, $w: 2px) {
+  background-image:
+    linear-gradient($color, $color), linear-gradient($color, $color),
+    linear-gradient($color, $color), linear-gradient($color, $color),
+    linear-gradient($color, $color), linear-gradient($color, $color),
+    linear-gradient($color, $color), linear-gradient($color, $color);
+  background-repeat: no-repeat;
+  background-size:
+    $len $w, $w $len,
+    $len $w, $w $len,
+    $len $w, $w $len,
+    $len $w, $w $len;
+  background-position:
+    0 0, 0 0,
+    100% 0, 100% 0,
+    0 100%, 0 100%,
+    100% 100%, 100% 100%;
+}
+
+@mixin focus-ring {
+  &:focus-visible {
+    outline: 2px solid f.color('accent');
+    outline-offset: 2px;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@mixin label-text {
+  font-family: f.font('mono');
+  font-size: f.fs('xs');
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: f.color('text-dim');
+}

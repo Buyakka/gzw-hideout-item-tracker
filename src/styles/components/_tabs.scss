@@ -1,0 +1,73 @@
+// =============================================================
+// ROOM TABS
+// =============================================================
+@use '../abstracts' as *;
+
+.room-tabs {
+  position: sticky;
+  top: var(--header-h);
+  z-index: z('header') - 1;
+  display: flex;
+  gap: space('2');
+  padding: space('2') space('4');
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: tint('bg', 0.85);
+  border-bottom: 1px solid color('line');
+  backdrop-filter: blur(8px);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include up('lg') {
+    justify-content: center;
+    padding-inline: space('6');
+  }
+}
+
+.room-tab {
+  --room: #{color('accent')};
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: space('2');
+  min-height: 44px;
+  padding: 0 space('4');
+  font-family: font('display');
+  font-size: fs('sm');
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color('text-dim');
+  border: 1px solid transparent;
+  @include notch(8px);
+  transition: color dur('fast') ease, background dur('fast') ease;
+  @include focus-ring;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &__count {
+    font-family: font('mono');
+    font-size: fs('xs');
+    color: color('text-faint');
+  }
+
+  @include hover {
+    color: color('text');
+    background: tint('panel-2', 0.8);
+  }
+
+  &[aria-selected='true'] {
+    color: color('bg');
+    background: var(--room);
+    box-shadow: 0 0 20px -6px var(--room);
+
+    .room-tab__count {
+      color: tint('bg', 0.7);
+    }
+  }
+}

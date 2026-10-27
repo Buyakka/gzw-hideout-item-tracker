@@ -1,0 +1,70 @@
+// =============================================================
+// PROGRESS BAR + RING
+// Set --p from 0 to 1 on the element.
+// =============================================================
+@use '../abstracts' as *;
+
+.bar {
+  --p: 0;
+  position: relative;
+  height: 6px;
+  background: tint('line', 0.6);
+  overflow: hidden;
+
+  &__fill {
+    position: absolute;
+    inset: 0;
+    transform-origin: left;
+    transform: scaleX(var(--p));
+    background:
+      repeating-linear-gradient(-45deg, transparent 0 6px, tint('bg', 0.25) 6px 12px),
+      var(--room, #{color('accent')});
+    box-shadow: 0 0 12px var(--room, #{color('accent')});
+    transition: transform dur('slow') var(--t-ease);
+
+    @include motion {
+      animation: bar-stripes 1s linear infinite;
+    }
+  }
+
+  &.is-done .bar__fill {
+    background: color('ok');
+    box-shadow: 0 0 12px color('ok');
+  }
+}
+
+.ring {
+  --p: 0;
+  --size: 56px;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  flex: none;
+  border-radius: 50%;
+  background: conic-gradient(var(--room, #{color('accent')}) calc(var(--p) * 360deg), tint('line', 0.6) 0);
+  transition: --p dur('slow') var(--t-ease);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background: color('bg-2');
+  }
+
+  &__value {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: font('mono');
+    font-size: 0.78rem;
+  }
+}
+
+// Lets the ring animate smoothly when --p changes
+@property --p {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}

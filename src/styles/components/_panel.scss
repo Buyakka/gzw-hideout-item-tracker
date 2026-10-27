@@ -1,0 +1,255 @@
+// =============================================================
+// STATION PANEL
+// Side drawer on desktop, full screen on phones.
+// Opens with a 3D swing. Level changes flip in 3D.
+// =============================================================
+@use '../abstracts' as *;
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: z('panel') - 1;
+  background: tint('bg', 0.6);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity dur('base') ease;
+
+  &.is-open {
+    opacity: 1;
+  }
+}
+
+.panel {
+  position: fixed;
+  inset: 0;
+  z-index: z('panel');
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--room) 8%, transparent), transparent 220px),
+    color('bg-2');
+  border-left: 1px solid color('line-strong');
+  perspective: 1600px;
+  transform-origin: right center;
+  transform: translateX(30px) rotateY(-14deg);
+  opacity: 0;
+  transition:
+    transform dur('slow') var(--t-ease),
+    opacity dur('base') ease;
+
+  @include up('md') {
+    left: auto;
+    width: var(--panel-w);
+    min-width: 440px;
+    box-shadow: -30px 0 80px -20px #000;
+  }
+
+  &.is-open {
+    transform: none;
+    opacity: 1;
+  }
+
+  &__head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: space('3');
+    padding: space('4');
+    border-bottom: 1px solid color('line');
+
+    @include up('md') {
+      padding: space('5');
+    }
+  }
+
+  &__eyebrow {
+    @include label-text;
+    color: var(--room);
+  }
+
+  &__title {
+    font-size: fs('xl');
+  }
+
+  &__levels {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: space('2');
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: space('4');
+    perspective: 1400px;
+
+    @include up('md') {
+      padding: space('5');
+    }
+  }
+
+  &__foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: space('2');
+    padding: space('3') space('4');
+    padding-bottom: max(space('3'), env(safe-area-inset-bottom));
+    border-top: 1px solid color('line');
+    background: tint('bg', 0.6);
+
+    .btn--primary {
+      margin-left: auto;
+    }
+
+    @include up('md') {
+      padding-inline: space('5');
+    }
+  }
+}
+
+// Level selector buttons inside the panel
+.level-tab {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  padding: space('2') space('3');
+  text-align: left;
+  border: 1px solid color('line');
+  background: tint('panel', 0.7);
+  @include notch(8px);
+  transition: border-color dur('fast') ease, background dur('fast') ease;
+  @include focus-ring;
+
+  &__num {
+    font-family: font('display');
+    font-weight: 700;
+    font-size: fs('md');
+    letter-spacing: 0.08em;
+  }
+
+  &__state {
+    font-family: font('mono');
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: color('text-faint');
+  }
+
+  &.is-built .level-tab__state {
+    color: color('ok');
+  }
+
+  &.is-locked {
+    opacity: 0.55;
+  }
+
+  &[aria-selected='true'] {
+    border-color: var(--room);
+    background: color-mix(in srgb, var(--room) 14%, transparent);
+    box-shadow: inset 0 -2px 0 var(--room);
+  }
+}
+
+// One level's content (this is the part that flips)
+.level {
+  transform-origin: center top;
+
+  @include motion {
+    &.flip-next {
+      animation: flip-in-right dur('slow') var(--t-ease) both;
+    }
+
+    &.flip-prev {
+      animation: flip-in-left dur('slow') var(--t-ease) both;
+    }
+  }
+
+  &__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: space('3');
+    margin-bottom: space('4');
+  }
+
+  &__device {
+    font-size: fs('xl');
+    color: var(--room);
+    text-shadow: 0 0 20px color-mix(in srgb, var(--room) 40%, transparent);
+  }
+
+  &__badge {
+    font-family: font('mono');
+    font-size: fs('xs');
+    letter-spacing: 0.12em;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid currentColor;
+    text-transform: uppercase;
+
+    &--built {
+      color: color('ok');
+    }
+
+    &--ready {
+      color: color('ok');
+      @include motion {
+        animation: blink 1.4s steps(2) infinite;
+      }
+    }
+
+    &--progress {
+      color: color('warn');
+    }
+
+    &--locked {
+      color: color('text-faint');
+    }
+  }
+
+  &__facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: space('2');
+    margin-bottom: space('4');
+  }
+
+  &__fact {
+    padding: space('2') space('3');
+    background: tint('panel', 0.8);
+    border: 1px solid color('line');
+
+    dt {
+      @include label-text;
+      font-size: 0.62rem;
+    }
+
+    dd {
+      font-size: fs('sm');
+      font-weight: 600;
+    }
+  }
+
+  &__warn {
+    display: flex;
+    gap: space('2');
+    margin-bottom: space('4');
+    padding: space('3');
+    font-size: fs('sm');
+    color: color('warn');
+    background: tint('warn', 0.07);
+    border: 1px dashed tint('warn', 0.5);
+
+    svg {
+      flex: none;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__progress {
+    display: grid;
+    gap: space('2');
+    margin-bottom: space('4');
+  }
+}

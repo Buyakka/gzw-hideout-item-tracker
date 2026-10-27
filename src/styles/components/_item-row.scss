@@ -1,0 +1,175 @@
+// =============================================================
+// ITEM ROW
+// Name | have stepper | need (editable) | status
+// =============================================================
+@use '../abstracts' as *;
+
+.items {
+  display: grid;
+  gap: space('2');
+  list-style: none;
+  padding: 0;
+}
+
+.item {
+  --p: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'name name'
+    'stepper need';
+  align-items: center;
+  gap: space('2') space('3');
+  padding: space('3');
+  background: tint('panel', 0.9);
+  border: 1px solid color('line');
+  overflow: hidden;
+  transition: border-color dur('base') ease, background dur('base') ease;
+
+  @include up('sm') {
+    grid-template-columns: 1fr auto auto;
+    grid-template-areas: 'name stepper need';
+  }
+
+  @include motion {
+    animation: row-in dur('slow') var(--t-ease) both;
+    animation-delay: calc(var(--i, 0) * 45ms);
+  }
+
+  // Fill bar behind the row
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    transform-origin: left;
+    transform: scaleX(var(--p));
+    background: var(--room);
+    transition: transform dur('slow') var(--t-ease), background dur('base') ease;
+  }
+
+  &__name {
+    grid-area: name;
+    display: flex;
+    align-items: center;
+    gap: space('2');
+    min-width: 0;
+    font-weight: 600;
+  }
+
+  &__check {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border: 1px solid color('line-strong');
+    color: transparent;
+    transition: all dur('base') var(--t-spring);
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &__edited {
+    font-family: font('mono');
+    font-size: 0.6rem;
+    color: color('info');
+    border: 1px solid tint('info', 0.5);
+    padding: 0 4px;
+    letter-spacing: 0.08em;
+  }
+
+  &__need {
+    grid-area: need;
+    display: flex;
+    align-items: center;
+    gap: space('1');
+    font-family: font('mono');
+    color: color('text-dim');
+    white-space: nowrap;
+  }
+
+  &__need-input {
+    width: 3.2rem;
+    min-height: 32px;
+    text-align: center;
+    background: color('bg');
+    border: 1px solid color('info');
+    font-family: font('mono');
+  }
+
+  &.is-done {
+    border-color: tint('ok', 0.45);
+    background: tint('ok', 0.05);
+
+    &::before {
+      background: color('ok');
+    }
+
+    .item__check {
+      color: color('bg');
+      background: color('ok');
+      border-color: color('ok');
+      box-shadow: 0 0 10px color('ok');
+    }
+  }
+
+  &.is-locked {
+    opacity: 0.6;
+  }
+}
+
+// - [ 3 ] +
+.stepper {
+  grid-area: stepper;
+  justify-self: start;
+  display: flex;
+  align-items: stretch;
+  border: 1px solid color('line-strong');
+  background: color('bg');
+
+  &__btn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    min-height: 40px;
+    font-family: font('mono');
+    font-size: 1.1rem;
+    color: color('text-dim');
+    transition: background dur('fast') ease, color dur('fast') ease;
+    @include focus-ring;
+
+    @include hover {
+      color: color('bg');
+      background: var(--room);
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+  }
+
+  &__input {
+    width: 3.2rem;
+    text-align: center;
+    background: transparent;
+    border: 0;
+    border-inline: 1px solid color('line');
+    font-family: font('mono');
+    font-size: fs('md');
+    @include focus-ring;
+  }
+}
+
+// Number pop when a value changes
+.bump {
+  @include motion {
+    animation: bump dur('base') var(--t-spring);
+  }
+}
