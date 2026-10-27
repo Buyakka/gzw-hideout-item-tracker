@@ -1,0 +1,16 @@
+{
+  "name": "buyaka-gzw-hideout-tracker",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Interactive hideout upgrade tracker for Gray Zone Warfare (Update 0.5 Rogue Ops).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "sass": "^1.93.0",
+    "vite": "^7.1.0"
+  }
+}
