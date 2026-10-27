@@ -18,6 +18,8 @@ second monitor while you play. Two open tabs stay in sync.
 - Animated main hideout background on the landing page, Shopping List and Disassembly
   (fan, smoke, fridge and screen flicker, whiter hanging lamps, dust), moves with the mouse
 - All 3 rooms, 15 stations and 36 upgrade levels
+- Every station card says where to start: "ready to start", or what is still needed
+  (a room capability like Heat Control 1, or power) and which station to build for it
 - Have / need counter for every item, with + and − buttons
 - Shopping list that adds up everything still needed
 - Power meter like the game: available kW = generator kW minus what built stations use,

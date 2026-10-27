@@ -4,7 +4,7 @@
 // how many you have and how many you need.
 // =============================================================
 import { STATION_BY_ID, ROOM_BY_ID } from '../data.js';
-import { levelProgress, levelState, power, hasPower } from '../calc.js';
+import { levelProgress, levelState, power, hasPower, missingFor, missingLabel, missingFix, requiresText } from '../calc.js';
 import { store } from '../state.js';
 import { icon, esc, money } from '../icons.js';
 
@@ -145,6 +145,8 @@ function render(flip) {
         : `Uses ${level.kw} kW · ${kw} kW free`
       : 'Not needed';
   const noPower = !readOnly && !hasPower(level, kw);
+  // Capabilities this level still needs (power has its own message)
+  const missingCaps = readOnly ? [] : missingFor(station, i, kw).filter((m) => m.kind === 'cap');
   const fixPower = !pw.total
     ? `<a href="#utility/generator">Build the generator</a> first.`
     : pw.total < pw.max
@@ -209,10 +211,17 @@ function render(flip) {
 
         <dl class="level__facts">
           <div class="level__fact"><dt>Cash</dt><dd>${money(level.cash)}</dd></div>
-          <div class="level__fact"><dt>Requires</dt><dd>${esc(level.requires)}</dd></div>
+          <div class="level__fact ${missingCaps.length ? 'is-short' : ''}"><dt>Requires</dt><dd>${esc(requiresText(level))}</dd></div>
           <div class="level__fact"><dt>Gives</dt><dd>${esc(level.provides)}</dd></div>
           <div class="level__fact ${noPower ? 'is-short' : ''}"><dt>Power</dt><dd>${powerFact}</dd></div>
         </dl>
+
+        ${missingCaps
+          .map(
+            (m) =>
+              `<p class="level__warn">${icon('lock')}<span><b>Needs ${esc(missingLabel(m))}.</b> This room has ${m.have}. Build ${esc(missingFix(m))} to get more.</span></p>`
+          )
+          .join('')}
 
         ${
           noPower

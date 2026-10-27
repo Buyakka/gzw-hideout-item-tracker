@@ -167,6 +167,34 @@
   &.is-ready .station-card__next {
     color: color('ok');
   }
+
+  // Requirements met: this is where the player can start
+  &.is-startable .station-card__next {
+    color: color('accent');
+  }
+
+  // Waiting on a capability or power: calmer card, text stays readable
+  &.is-waiting {
+    border-right-color: color('line-strong');
+
+    .station-card__icon {
+      color: color('text-dim');
+      border-color: color('line-strong');
+      background: none;
+    }
+
+    .station-card__next {
+      display: flex;
+      align-items: center;
+      gap: space('1');
+
+      svg {
+        flex: none;
+        width: 13px;
+        height: 13px;
+      }
+    }
+  }
 }
 
 // Level pips (one per level)

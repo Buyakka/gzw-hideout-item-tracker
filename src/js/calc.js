@@ -150,3 +150,67 @@ export function shoppingList() {
     .map((r) => ({ ...r, left: Math.max(0, r.need - r.have) }))
     .sort((a, b) => b.left - a.left || a.name.localeCompare(b.name));
 }
+
+// ---------- Requirements ----------
+// A level's "requires" text mixes 3 kinds of needs:
+//   "Heat Source Lv 1"  previous level (the site already unlocks levels in order)
+//   "Heat Control 2"    a capability: the sum of what built levels in the same room give
+//   "2 kW"              free power
+// Notes in brackets, like "(no Lv 2 exists)", are not requirements.
+
+const CAP_RE = /^\+(\d+)\s+(.+)$/; // "+2 Extraction & Reaction"
+
+// Capability totals for a room from its built levels, e.g. { 'Heat Control': 2 }
+export function capabilities(roomId) {
+  const caps = {};
+  for (const s of STATIONS) {
+    if (s.roomId !== roomId) continue;
+    const b = store.builtCount(s.id);
+    s.levels.forEach((lvl, i) => {
+      if (i >= b) return;
+      const m = CAP_RE.exec(lvl.provides);
+      if (m && !/kW/.test(m[2])) caps[m[2]] = (caps[m[2]] || 0) + Number(m[1]);
+    });
+  }
+  return caps;
+}
+
+// Stations in a room that give a capability (for "build X" hints)
+function providers(roomId, cap, exceptId) {
+  return STATIONS.filter(
+    (s) => s.roomId === roomId && s.id !== exceptId && s.levels.some((l) => CAP_RE.exec(l.provides)?.[2] === cap)
+  ).map((s) => s.name);
+}
+
+// Requirement text without notes in brackets, for showing on screen
+export const requiresText = (level) => level.requires.replace(/\s*\([^)]*\)/g, '');
+
+// What is still missing before this level can be built.
+// Returns [] when it is ready, otherwise items like
+//   { kind: 'cap', name: 'Heat Control', need: 1, have: 0, from: ['Heat Source'] }
+//   { kind: 'power', need: 2, free: 0 }
+export function missingFor(station, levelIndex, free = power().free) {
+  const level = station.levels[levelIndex];
+  const caps = capabilities(station.roomId);
+  const missing = [];
+  for (const raw of requiresText(level).split(',')) {
+    const part = raw.trim();
+    if (!part || part === 'None' || /\bLv\s*\d+$/.test(part)) continue;
+    if (/^\d+\s*kW$/.test(part)) continue; // power is checked below from level.kw
+    const m = /^(.+?)\s+(\d+)$/.exec(part);
+    if (!m) continue;
+    const [, name, n] = m;
+    const have = caps[name] || 0;
+    if (have < Number(n)) {
+      missing.push({ kind: 'cap', name, need: Number(n), have, from: providers(station.roomId, name, station.id) });
+    }
+  }
+  if (!hasPower(level, free)) missing.push({ kind: 'power', need: level.kw, free });
+  return missing;
+}
+
+// Short words for a missing item: "Heat Control 1" / "1 kW"
+export const missingLabel = (m) => (m.kind === 'power' ? `${m.need} kW` : `${m.name} ${m.need}`);
+
+// What to build to fix it: "Heat Source" / "generator"
+export const missingFix = (m) => (m.kind === 'power' ? 'the generator' : m.from.join(' or ') || 'more levels');

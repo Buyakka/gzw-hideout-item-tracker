@@ -3,7 +3,7 @@
 // A banner plus a grid of 3D station cards.
 // =============================================================
 import { ROOM_BY_ID } from '../data.js';
-import { stationSummary, overall, power, hasPower } from '../calc.js';
+import { stationSummary, overall, power, missingFor, missingLabel, missingFix } from '../calc.js';
 import { icon, esc, money } from '../icons.js';
 
 export function renderRoom(el, roomId) {
@@ -34,21 +34,25 @@ export function renderRoom(el, roomId) {
 
 function card(station, i, kw) {
   const sum = stationSummary(station);
-  const noPower = !sum.maxed && !hasPower(sum.next, kw);
+  // What the next level still needs (capabilities, power)
+  const missing = sum.maxed ? [] : missingFor(station, sum.built, kw);
+  const waiting = missing.length > 0;
   const pips = station.levels
     .map((_, n) => `<span class="pips__pip ${n < sum.built ? 'is-on' : ''}"></span>`)
     .join('');
 
+  // Status line: tells the player where they can start right now
   let nextLabel;
   if (sum.maxed) nextLabel = 'Fully upgraded';
+  else if (waiting) nextLabel = `Level ${sum.next.step} · needs ${missing.map(missingLabel).join(', ')}`;
   else if (sum.ready) nextLabel = `Ready to build L${sum.next.step}`;
-  else if (sum.built === 0) nextLabel = 'Build first';
-  else nextLabel = `Next: level ${sum.next.step}`;
+  else nextLabel = `Level ${sum.next.step} · ready to start`;
+  const status = sum.maxed ? '' : waiting ? 'is-waiting' : 'is-startable';
 
   const device = sum.maxed ? station.levels.at(-1).device : sum.next.device;
 
   return `
-    <button class="station-card ${sum.maxed ? 'is-maxed' : ''} ${sum.ready ? 'is-ready' : ''}"
+    <button class="station-card ${status} ${sum.maxed ? 'is-maxed' : ''} ${sum.ready && !waiting ? 'is-ready' : ''}"
             style="--i:${i}" data-action="open" data-station="${station.id}"
             aria-label="${esc(station.name)}, level ${sum.built} of ${sum.total}">
       <div class="station-card__head">
@@ -59,9 +63,13 @@ function card(station, i, kw) {
         </div>
       </div>
       <div class="station-card__body">
-        <p class="station-card__next">${nextLabel}</p>
+        <p class="station-card__next">${waiting ? icon('lock') : ''}${esc(nextLabel)}</p>
         <p class="station-card__device">${esc(device)}</p>
-        ${noPower ? `<p class="station-card__power">${icon('bolt')}Needs ${sum.next.kw} kW. ${kw} kW free.</p>` : ''}
+        ${
+          waiting
+            ? `<p class="station-card__power">${icon('arrow')}Build ${esc([...new Set(missing.map(missingFix))].join(' and '))} first</p>`
+            : ''
+        }
       </div>
       <div class="station-card__foot">
         <div class="pips">${pips}</div>
