@@ -1,0 +1,1021 @@
+{
+  "game": "Gray Zone Warfare",
+  "version": "0.5 Rogue Ops",
+  "checked": "2026-10-27",
+  "sources": [
+    "http://gzwhideout.com/",
+    "https://gray-zone-warfare.fandom.com/wiki/Hideout",
+    "https://grayzonewarfaregame.wiki/hideout/hideout-guide/"
+  ],
+  "rooms": [
+    {
+      "room": "Utility Room",
+      "stations": [
+        {
+          "station": "Generator",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Two-Stroke Engine",
+              "cash": 0,
+              "requires": "None",
+              "provides": "+9 kW Power",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 1
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 1
+                },
+                {
+                  "item": "Motor Oil",
+                  "qty": 1
+                },
+                {
+                  "item": "Dynamo",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Diesel Generator",
+              "cash": 0,
+              "requires": "Generator Lv 1",
+              "provides": "+9 kW Power (18 kW total)",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 2
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Motor Oil",
+                  "qty": 1
+                },
+                {
+                  "item": "Dynamo",
+                  "qty": 1
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 2
+                }
+              ],
+              "sourceConflict": "Fandom wiki says Plumbing Parts x1 and Electrical Parts x1. Tracker says x2 each."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room": "Laboratory",
+      "stations": [
+        {
+          "station": "Heat Source",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Open Fire Pit",
+              "cash": 0,
+              "requires": "None",
+              "provides": "+1 Heat Control",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 3
+                },
+                {
+                  "item": "Construction Material",
+                  "qty": 2
+                },
+                {
+                  "item": "Wood",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Single Burner",
+              "cash": 0,
+              "requires": "Heat Source Lv 1, Safety 1",
+              "provides": "+1 Heat Control",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 4
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Construction Material",
+                  "qty": 3
+                },
+                {
+                  "item": "Burner Head",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 3,
+              "device": "Multiple Burner Array",
+              "cash": 40000,
+              "requires": "Heat Source Lv 2",
+              "provides": "+2 Heat Control",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 10
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 5
+                },
+                {
+                  "item": "Construction Material",
+                  "qty": 5
+                },
+                {
+                  "item": "Burner Head",
+                  "qty": 2
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Extraction Vessel",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Oil Tank",
+              "cash": 0,
+              "requires": "Heat Control 1",
+              "provides": "+2 Extraction & Reaction",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 1
+                },
+                {
+                  "item": "Copper",
+                  "qty": 1
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 1
+                },
+                {
+                  "item": "Analog Indicator",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Copper Distillation Still",
+              "cash": 0,
+              "requires": "Extraction Lv 1, Heat Control 2",
+              "provides": "+3 Extraction & Reaction",
+              "items": [
+                {
+                  "item": "Copper",
+                  "qty": 5
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 1
+                },
+                {
+                  "item": "Analog Indicator",
+                  "qty": 1
+                },
+                {
+                  "item": "Water Pump",
+                  "qty": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Reaction Vessel",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Plastic Drums",
+              "cash": 0,
+              "requires": "None",
+              "provides": "+1 Extraction & Reaction",
+              "items": [
+                {
+                  "item": "Plastics",
+                  "qty": 2
+                },
+                {
+                  "item": "Construction Material",
+                  "qty": 1
+                },
+                {
+                  "item": "Silicone Sealant",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Galvanized Tank",
+              "cash": 0,
+              "requires": "Reaction Vessel Lv 1",
+              "provides": "+1 Extraction & Reaction",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 4
+                },
+                {
+                  "item": "Chemicals",
+                  "qty": 2
+                },
+                {
+                  "item": "Zinc Electrode",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 3,
+              "device": "Stainless Steel Tank",
+              "cash": 45000,
+              "requires": "Reaction Vessel Lv 2",
+              "provides": "+2 Extraction & Reaction",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 12
+                },
+                {
+                  "item": "Stainless Steel Sheet",
+                  "qty": 3
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Filtration",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Cloth Sheet Filter",
+              "cash": 0,
+              "requires": "Extraction & Reaction 1",
+              "provides": "+1 Filtration & Processing",
+              "items": [
+                {
+                  "item": "Wood",
+                  "qty": 2
+                },
+                {
+                  "item": "Fabrics",
+                  "qty": 4
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Metal Sieve",
+              "cash": 0,
+              "requires": "Filtration Lv 1",
+              "provides": "+1 Filtration & Processing",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 3
+                },
+                {
+                  "item": "Fine Metal Mesh",
+                  "qty": 3
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Analysis",
+          "levels": [
+            {
+              "level": 1,
+              "device": "PH Meter",
+              "cash": 0,
+              "requires": "Analysis & Precision 1, 1 kW",
+              "provides": "+3 Analysis & Precision",
+              "items": [
+                {
+                  "item": "Plastics",
+                  "qty": 2
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 1
+                },
+                {
+                  "item": "Circuit Board",
+                  "qty": 1
+                },
+                {
+                  "item": "Complex Glass Electrode",
+                  "qty": 1
+                }
+              ],
+              "sourceConflict": "Fandom wiki leaves out Complex Glass Electrode. Tracker and GamesHorizon both list it."
+            },
+            {
+              "level": 2,
+              "device": "Spectrometer",
+              "cash": 35000,
+              "requires": "Analysis Lv 1, Analysis & Precision 5, 1 kW",
+              "provides": "+2 Analysis & Precision",
+              "items": [
+                {
+                  "item": "Plastics",
+                  "qty": 2
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 4
+                },
+                {
+                  "item": "Circuit Board",
+                  "qty": 3
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Vapor Lamp",
+                  "qty": 1
+                },
+                {
+                  "item": "Crystal Prism",
+                  "qty": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Glassware",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Basic Glass Set",
+              "cash": 0,
+              "requires": "None",
+              "provides": "+1 Analysis & Precision",
+              "items": [
+                {
+                  "item": "Glass",
+                  "qty": 1
+                },
+                {
+                  "item": "Plastics",
+                  "qty": 1
+                },
+                {
+                  "item": "Laboratory Flask",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Laboratory Glass Set",
+              "cash": 0,
+              "requires": "Glassware Lv 1",
+              "provides": "+2 Analysis & Precision",
+              "items": [
+                {
+                  "item": "Glass",
+                  "qty": 2
+                },
+                {
+                  "item": "Plastics",
+                  "qty": 1
+                },
+                {
+                  "item": "Laboratory Flask",
+                  "qty": 1
+                },
+                {
+                  "item": "Mechanical Pipette",
+                  "qty": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Storage Equipment",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Rusty Old Fridge",
+              "cash": 0,
+              "requires": "1 kW",
+              "provides": "+1 Storage Capacity",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 1
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 1
+                },
+                {
+                  "item": "Refrigerant",
+                  "qty": 1
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Beverage Cooler",
+              "cash": 0,
+              "requires": "Storage Lv 1, 1 kW",
+              "provides": "+3 Storage Capacity",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 3
+                },
+                {
+                  "item": "Glass",
+                  "qty": 3
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 1
+                },
+                {
+                  "item": "Refrigerant",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 3,
+              "device": "Laboratory Fridge",
+              "cash": 45000,
+              "requires": "Storage Lv 2, 1 kW",
+              "provides": "+2 Storage Capacity",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 6
+                },
+                {
+                  "item": "Glass",
+                  "qty": 5
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Refrigerant",
+                  "qty": 2
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Circuit Board",
+                  "qty": 2
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Ventilation System",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Fan",
+              "cash": 0,
+              "requires": "1 kW",
+              "provides": "+1 Safety",
+              "items": [
+                {
+                  "item": "Electrical Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Plastics",
+                  "qty": 2
+                },
+                {
+                  "item": "PC Fan",
+                  "qty": 2
+                }
+              ],
+              "sourceConflict": "Fandom wiki says 2 Mechanical Parts instead of 2 Electrical Parts."
+            },
+            {
+              "level": 3,
+              "device": "Ventilation",
+              "cash": 35000,
+              "requires": "Ventilation Lv 1, 2 kW (no Lv 2 exists)",
+              "provides": "+2 Safety",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 10
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 5
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 5
+                },
+                {
+                  "item": "PC Fan",
+                  "qty": 3
+                },
+                {
+                  "item": "HEPA Filter",
+                  "qty": 1
+                }
+              ],
+              "sourceConflict": "Fandom wiki calls this Level 2. Tracker calls it Level 3."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "room": "Electronics Workshop",
+      "stations": [
+        {
+          "station": "Hardware",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Scavenged PC Rig",
+              "cash": 0,
+              "requires": "1 kW",
+              "provides": "+1 Compute Capacity",
+              "items": [
+                {
+                  "item": "Motherboard",
+                  "qty": 1
+                },
+                {
+                  "item": "Graphics Card",
+                  "qty": 1
+                },
+                {
+                  "item": "CPU",
+                  "qty": 1
+                },
+                {
+                  "item": "PC Fan",
+                  "qty": 1
+                },
+                {
+                  "item": "RAM",
+                  "qty": 1
+                },
+                {
+                  "item": "Power Supply",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "High-End Workstation",
+              "cash": 0,
+              "requires": "Hardware Lv 1, 1 kW",
+              "provides": "+2 Compute Capacity",
+              "items": [
+                {
+                  "item": "Motherboard",
+                  "qty": 1
+                },
+                {
+                  "item": "Graphics Card",
+                  "qty": 1
+                },
+                {
+                  "item": "CPU",
+                  "qty": 1
+                },
+                {
+                  "item": "Plumbing Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "RAM",
+                  "qty": 3
+                },
+                {
+                  "item": "Power Supply",
+                  "qty": 1
+                }
+              ],
+              "sourceConflict": "Fandom wiki says RAM x1. Tracker says RAM x3."
+            },
+            {
+              "level": 3,
+              "device": "Dedicated Server Rack",
+              "cash": 45000,
+              "requires": "Hardware Lv 2, 1 kW",
+              "provides": "+2 Compute Capacity",
+              "items": [
+                {
+                  "item": "Motherboard",
+                  "qty": 1
+                },
+                {
+                  "item": "Server CPU",
+                  "qty": 1
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 5
+                },
+                {
+                  "item": "RAM",
+                  "qty": 4
+                },
+                {
+                  "item": "Power Supply",
+                  "qty": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Software",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Leaked Military Firmware Bypass",
+              "cash": 0,
+              "requires": "Compute Capacity 1",
+              "provides": "+2 Compute Capacity",
+              "items": [
+                {
+                  "item": "Civilian Software",
+                  "qty": 3
+                },
+                {
+                  "item": "Military Software",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "GPU-Accelerated Brute-Force Matrix",
+              "cash": 0,
+              "requires": "Software Lv 1, Compute Capacity 5",
+              "provides": "+2 Compute Capacity",
+              "items": [
+                {
+                  "item": "Civilian Software",
+                  "qty": 6
+                },
+                {
+                  "item": "Military Software",
+                  "qty": 2
+                },
+                {
+                  "item": "Graphics Card",
+                  "qty": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Micro Electronics",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Basic Electronics Bench",
+              "cash": 0,
+              "requires": "None",
+              "provides": "+1 Electronics Capability",
+              "items": [
+                {
+                  "item": "Soldering Iron",
+                  "qty": 1
+                },
+                {
+                  "item": "Multimeter",
+                  "qty": 1
+                },
+                {
+                  "item": "Tool Set",
+                  "qty": 1
+                },
+                {
+                  "item": "Power Supply",
+                  "qty": 1
+                },
+                {
+                  "item": "Wood",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Advanced Technical Workbench",
+              "cash": 0,
+              "requires": "Micro Electronics Lv 1, 2 kW",
+              "provides": "+2 Electronics Capability",
+              "items": [
+                {
+                  "item": "Soldering Iron",
+                  "qty": 2
+                },
+                {
+                  "item": "Multimeter",
+                  "qty": 1
+                },
+                {
+                  "item": "Power Supply",
+                  "qty": 1
+                },
+                {
+                  "item": "Oscilloscope",
+                  "qty": 1
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 4
+                }
+              ]
+            },
+            {
+              "level": 3,
+              "device": "Microelectronics Station",
+              "cash": 35000,
+              "requires": "Micro Electronics Lv 2, 1 kW",
+              "provides": "+3 Electronics Capability",
+              "items": [
+                {
+                  "item": "Microscope",
+                  "qty": 1
+                },
+                {
+                  "item": "Multimeter",
+                  "qty": 1
+                },
+                {
+                  "item": "Circuit Board",
+                  "qty": 2
+                },
+                {
+                  "item": "Power Supply",
+                  "qty": 1
+                },
+                {
+                  "item": "Oscilloscope",
+                  "qty": 1
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 5
+                }
+              ],
+              "sourceConflict": "Fandom wiki leaves out Oscilloscope x1."
+            }
+          ]
+        },
+        {
+          "station": "Machine Tools",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Manual Tooling Rig",
+              "cash": 0,
+              "requires": "None",
+              "provides": "+1 Mechanical Engineering",
+              "items": [
+                {
+                  "item": "Wood",
+                  "qty": 1
+                },
+                {
+                  "item": "Steel",
+                  "qty": 1
+                },
+                {
+                  "item": "Tool Set",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "CNC System",
+              "cash": 0,
+              "requires": "Machine Tools Lv 1, 2 kW",
+              "provides": "+2 Mechanical Engineering",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 3
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 1
+                },
+                {
+                  "item": "Tooling Coolant",
+                  "qty": 1
+                },
+                {
+                  "item": "CNC Drill Bits",
+                  "qty": 1
+                }
+              ],
+              "sourceConflict": "Fandom wiki leaves out Mechanical Parts x2."
+            }
+          ]
+        },
+        {
+          "station": "RF Sensors",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Signal Diagnostics Bench",
+              "cash": 0,
+              "requires": "1 kW",
+              "provides": "+1 Sensor & RF Processing",
+              "items": [
+                {
+                  "item": "Wood",
+                  "qty": 1
+                },
+                {
+                  "item": "Steel",
+                  "qty": 1
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 1
+                },
+                {
+                  "item": "Signal Generator",
+                  "qty": 1
+                },
+                {
+                  "item": "Soldering Iron",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Electro-Optics & Radar Suite",
+              "cash": 30000,
+              "requires": "RF Sensors Lv 1, 1 kW",
+              "provides": "+2 Sensor & RF Processing",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 6
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 2
+                },
+                {
+                  "item": "Electrical Parts",
+                  "qty": 4
+                },
+                {
+                  "item": "Signal Generator",
+                  "qty": 1
+                },
+                {
+                  "item": "Oscilloscope",
+                  "qty": 1
+                },
+                {
+                  "item": "Laser Tube",
+                  "qty": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "station": "Storage Equipment",
+          "levels": [
+            {
+              "level": 1,
+              "device": "Salvaged Wooden Crate",
+              "cash": 0,
+              "requires": "None",
+              "provides": "+1 Storage Capacity",
+              "items": [
+                {
+                  "item": "Wood",
+                  "qty": 1
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 1
+                }
+              ]
+            },
+            {
+              "level": 2,
+              "device": "Heavy-Duty Steel Locker",
+              "cash": 0,
+              "requires": "Storage Lv 1",
+              "provides": "+3 Storage Capacity",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 9
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 3
+                }
+              ]
+            },
+            {
+              "level": 3,
+              "device": "Modified Server Cabinet",
+              "cash": 30000,
+              "requires": "Storage Lv 2",
+              "provides": "+2 Storage Capacity",
+              "items": [
+                {
+                  "item": "Steel",
+                  "qty": 12
+                },
+                {
+                  "item": "Mechanical Parts",
+                  "qty": 6
+                },
+                {
+                  "item": "Stainless Steel Sheet",
+                  "qty": 4
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
