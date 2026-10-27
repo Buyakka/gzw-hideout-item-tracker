@@ -7,7 +7,7 @@ import { ROOMS, ROOM_BY_ID } from '../data.js';
 import { overall, power } from '../calc.js';
 import { store } from '../state.js';
 import { icon, esc } from '../icons.js';
-import { logo } from '../logo.js';
+import { logo, LETTER_VIEW } from '../logo.js';
 
 const LAST_KEY = 'buyaka-gzw-hideout:last-room';
 
@@ -57,11 +57,11 @@ export function renderHome(el) {
     <section class="home">
       <div class="home__menu">
         <header class="home__brand" ${step()}>
-          <span class="home__logo">${logo('logo--intro')}</span>
-          <div>
-            <h1 class="home__title">Buyaka</h1>
-            <p class="home__sub">Hideout Item Tracker</p>
-          </div>
+          <!-- The logo's B (with its crown) is the first letter of the name -->
+          <h1 class="home__title" aria-label="Buyaka">
+            <span class="home__b" aria-hidden="true">${logo('logo--intro', LETTER_VIEW)}</span><span aria-hidden="true">uyaka</span>
+          </h1>
+          <p class="home__sub">Hideout Item Tracker</p>
         </header>
 
         <p class="home__note" ${step()}>

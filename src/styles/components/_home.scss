@@ -56,22 +56,29 @@
   }
 
   &__brand {
-    display: flex;
-    align-items: center;
-    gap: space('4');
     margin-bottom: space('2');
   }
 
-  &__logo {
-    flex: none;
-    width: clamp(76px, 16vw, 116px);
-    height: clamp(76px, 16vw, 116px);
-  }
-
   &__title {
-    font-size: clamp(3rem, 2rem + 4vw, 4.8rem);
+    font-size: clamp(3.6rem, 2.4rem + 4.6vw, 5.6rem);
     letter-spacing: 0.04em;
     color: #d4d4d4;
+    // Room for the crown above the first letter
+    padding-top: 0.26em;
+  }
+
+  // The logo B as a letter. Its B part is sized to the font's cap
+  // height (0.7em in Bebas Neue); the crown rises above the line.
+  &__b {
+    display: inline-block;
+    width: 0.61em;
+    height: 0.98em;
+    margin-right: 0.03em;
+    vertical-align: baseline;
+
+    .logo {
+      display: block;
+    }
   }
 
   &__sub {
