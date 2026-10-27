@@ -25,6 +25,7 @@ import {
   refreshPanel, isOpen, currentStation, panelLevel,
 } from './views/panel.js';
 import { initTilt, initParallax, toast } from './fx.js';
+import { initToTop, setToTopPage } from './to-top.js';
 
 const $ = (s) => document.querySelector(s);
 const els = {
@@ -66,6 +67,7 @@ function route() {
 function renderAll(isStatic = false) {
   document.body.dataset.room = room;
   document.body.classList.toggle('is-home', room === 'home');
+  setToTopPage(room);
   els.bg.dataset.room = room;
   showScene(room);
   renderStats(els.stats);
@@ -239,5 +241,6 @@ initScenes(els.bg);
 initPanel(els.panel, els.scrim);
 initTilt(els.main);
 initParallax(els.bg);
+initToTop($('.to-top'), $('.footer'));
 window.addEventListener('hashchange', route);
 route();

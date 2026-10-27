@@ -1,0 +1,75 @@
+// =============================================================
+// BACK TO TOP (js/to-top.js)
+// A small dark square with an orange edge and arrow, bottom right.
+// Slides up when shown, the arrow nudges up now and then, and it
+// brightens on hover. Muted orange so it is easy on the eyes.
+// --lift (set by the JS) raises it above the footer when the
+// footer is on screen; no transition, so it moves with the scroll.
+// =============================================================
+@use '../abstracts' as *;
+
+.to-top {
+  position: fixed;
+  right: max(space('4'), env(safe-area-inset-right));
+  bottom: max(space('4'), env(safe-area-inset-bottom));
+  margin-bottom: var(--lift, 0px);
+  z-index: z('header');
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: color('accent');
+  background: tint('bg', 0.85);
+  border: 1px solid tint('accent', 0.45);
+  border-bottom-width: 3px;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  transition:
+    opacity dur('base') ease,
+    transform dur('base') var(--t-ease),
+    visibility 0s linear dur('base'),
+    background dur('fast') ease,
+    border-color dur('fast') ease;
+  @include focus-ring;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &.is-shown {
+    opacity: 0.85;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity dur('base') ease,
+      transform dur('base') var(--t-ease),
+      visibility 0s,
+      background dur('fast') ease,
+      border-color dur('fast') ease;
+
+    @include motion {
+      svg {
+        animation: to-top-nudge 3.2s ease-in-out 1s infinite;
+      }
+    }
+  }
+
+  @include hover {
+    opacity: 1;
+    background: tint('accent', 0.14);
+    border-color: color('accent');
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  @include up('md') {
+    right: space('6');
+    bottom: space('6');
+  }
+}
