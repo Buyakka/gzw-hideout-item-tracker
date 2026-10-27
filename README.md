@@ -16,7 +16,7 @@ second monitor while you play. Two open tabs stay in sync.
 - Edit button to fix a recipe amount if the game shows a different number
 - Warning flags on the 7 recipes where sources disagree
 - Backup and load your progress as a file
-- 3D tilt cards, 3D level flips, moving 3D grid floor, radar and HUD effects
+- Faded hideout photo in the background, 3D tilt cards, 3D level flips, radar and HUD effects
 - Works on phones, tablets and wide screens
 - Respects "reduce motion" in your system settings
 
@@ -43,6 +43,7 @@ src/
     fx.js                3D tilt, parallax, toasts
     icons.js             SVG icons and small helpers
     views/               hud, room, panel, shopping, disassembly
+  assets/hideout-bg.webp background photo (fade it with --photo-opacity)
   styles/                Sass (see below)
 public/favicon.svg
 ```

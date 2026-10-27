@@ -12,11 +12,6 @@
   to   { transform: rotateX(-24deg) rotateY(360deg); }
 }
 
-@keyframes floor-move {
-  from { background-position: 0 0, 0 0; }
-  to   { background-position: 0 64px, 0 0; }
-}
-
 @keyframes dust {
   from { background-position: 0 0; }
   to   { background-position: 600px -600px; }
