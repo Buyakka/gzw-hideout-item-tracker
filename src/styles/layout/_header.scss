@@ -163,4 +163,22 @@
       color: color('warn');
     }
   }
+
+  // Shown instead of "0 kW / 0" before the generator is built
+  &__hint {
+    display: flex;
+    align-items: center;
+    gap: space('1');
+    min-height: 1.6rem;
+    font-size: fs('xs');
+    font-weight: 700;
+    color: color('accent');
+    white-space: nowrap;
+
+    svg {
+      flex: none;
+      width: 16px;
+      height: 16px;
+    }
+  }
 }

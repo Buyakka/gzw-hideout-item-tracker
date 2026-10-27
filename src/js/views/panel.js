@@ -145,8 +145,9 @@ function render(flip) {
         : `Uses ${level.kw} kW · ${kw} kW free`
       : 'Not needed';
   const noPower = !readOnly && !hasPower(level, kw);
-  const fixPower =
-    pw.total < pw.max
+  const fixPower = !pw.total
+    ? `<a href="#utility/generator">Build the generator</a> first.`
+    : pw.total < pw.max
       ? `<a href="#utility/generator">Upgrade the generator</a> for more power.`
       : 'Your generator is at max, so free some power first.';
 

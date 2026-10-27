@@ -94,7 +94,7 @@ export function renderHome(el) {
         <dl class="home__stats" ${step()}>
           <div><dt>Levels built</dt><dd>${o.built} / ${o.total}</dd></div>
           <div><dt>Items found</dt><dd>${o.itemsHave} / ${o.itemsNeed}</dd></div>
-          <div><dt>Available power</dt><dd>${p.free} of ${p.total} kW</dd></div>
+          <div><dt>Available power</dt><dd>${p.total ? `${p.free} of ${p.total} kW` : 'Build the generator'}</dd></div>
         </dl>
       </div>
     </section>`;
