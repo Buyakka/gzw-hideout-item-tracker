@@ -9,7 +9,7 @@ import { icon, esc, money } from '../icons.js';
 export function renderRoom(el, roomId) {
   const room = ROOM_BY_ID[roomId];
   const o = overall(room.stations);
-  const kw = power().available;
+  const kw = power().free;
 
   el.innerHTML = `
     <section class="view" data-room="${room.id}">
@@ -61,7 +61,7 @@ function card(station, i, kw) {
       <div class="station-card__body">
         <p class="station-card__next">${nextLabel}</p>
         <p class="station-card__device">${esc(device)}</p>
-        ${noPower ? `<p class="station-card__power">${icon('bolt')}Needs ${sum.next.kw} kW. You have ${kw} kW.</p>` : ''}
+        ${noPower ? `<p class="station-card__power">${icon('bolt')}Needs ${sum.next.kw} kW. ${kw} kW free.</p>` : ''}
       </div>
       <div class="station-card__foot">
         <div class="pips">${pips}</div>

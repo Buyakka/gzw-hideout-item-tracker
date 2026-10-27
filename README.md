@@ -20,7 +20,8 @@ second monitor while you play. Two open tabs stay in sync.
 - All 3 rooms, 15 stations and 36 upgrade levels
 - Have / need counter for every item, with + and − buttons
 - Shopping list that adds up everything still needed
-- Power meter: kW from your generator, and a warning on levels that need more
+- Power meter like the game: available kW = generator kW minus what built stations use,
+  and a warning on levels that need more than is free
 - Disassembly page: all 15 recipes (12 hours each) with search
 - Edit button to fix a recipe amount if the game shows a different number
 - Backup and load your progress as a file
@@ -91,8 +92,8 @@ Recipes come from [gzwhideout.com](http://gzwhideout.com/), checked against the
 [grayzonewarfaregame.wiki](https://grayzonewarfaregame.wiki/hideout/hideout-guide/).
 Where they disagree, the level has a `sourceConflict` note in the JSON (not shown on the site).
 
-Power: each level's `kw` is the power it needs before it can be built. Sources do not say
-if built stations use power up, so the site treats kW as a minimum, not a running total.
+Power: each level's `kw` is the power it uses once built, and it adds up. This matches the
+game: a maxed generator (18 kW) with 8 kW of built levels shows "Available Power 10 kW".
 
 Disassembly recipes come from the Fandom wiki. It does not list how many of each part you get.
 

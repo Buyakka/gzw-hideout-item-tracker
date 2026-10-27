@@ -135,13 +135,20 @@ function render(flip) {
   }[st];
 
   const readOnly = st === 'built';
-  const kw = power().available;
+  const pw = power();
+  const kw = pw.free;
   const powerFact = level.powerKw
     ? `+${level.powerKw} kW`
     : level.kw
-      ? `Needs ${level.kw} kW · you have ${kw} kW`
+      ? readOnly
+        ? `Uses ${level.kw} kW`
+        : `Uses ${level.kw} kW · ${kw} kW free`
       : 'Not needed';
   const noPower = !readOnly && !hasPower(level, kw);
+  const fixPower =
+    pw.total < pw.max
+      ? `<a href="#utility/generator">Upgrade the generator</a> for more power.`
+      : 'Your generator is at max, so free some power first.';
 
   const rows = prog.items
     .map((it, n) => {
@@ -208,7 +215,7 @@ function render(flip) {
 
         ${
           noPower
-            ? `<p class="level__warn">${icon('bolt')}<span><b>Not enough power.</b> This level needs ${level.kw} kW and your generator gives ${kw} kW. <a href="#utility/generator">Build the generator</a> first.</span></p>`
+            ? `<p class="level__warn">${icon('bolt')}<span><b>Not enough power.</b> This level uses ${level.kw} kW and you have ${kw} kW free. ${fixPower}</span></p>`
             : ''
         }
 

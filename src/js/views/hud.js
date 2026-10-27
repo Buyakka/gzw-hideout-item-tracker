@@ -26,10 +26,10 @@ export function renderStats(el) {
       <span class="stat__value">${money(o.cash)}</span>
       <span class="stat__bar"></span>
     </div>
-    <a class="stat stat--power ${p.available ? '' : 'is-off'}" href="#utility/generator" style="--p:${p.max ? p.available / p.max : 0}"
-       title="Power from your built generator levels">
-      <span class="stat__label">Power</span>
-      <span class="stat__value">${p.available}<small> / ${p.max} kW</small></span>
+    <a class="stat stat--power ${p.free > 0 ? '' : 'is-off'}" href="#utility/generator" style="--p:${p.total ? p.used / p.total : 0}"
+       title="Available power: ${p.free} kW. Generator gives ${p.total} kW, built stations use ${p.used} kW.">
+      <span class="stat__label">Free power</span>
+      <span class="stat__value">${p.free} kW<small> / ${p.total}</small></span>
       <span class="stat__bar"></span>
     </a>`;
 }
