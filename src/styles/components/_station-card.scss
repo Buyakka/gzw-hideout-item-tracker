@@ -141,6 +141,22 @@
     color: color('text');
   }
 
+  &__power {
+    display: flex;
+    align-items: center;
+    gap: space('1');
+    margin-top: space('1');
+    font-family: font('mono');
+    font-size: fs('xs');
+    color: color('warn');
+
+    svg {
+      flex: none;
+      width: 14px;
+      height: 14px;
+    }
+  }
+
   &__foot {
     display: grid;
     gap: space('2');

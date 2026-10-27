@@ -3,12 +3,13 @@
 // Top stats and the room tab bar.
 // =============================================================
 import { ROOMS } from '../data.js';
-import { overall } from '../calc.js';
+import { overall, power } from '../calc.js';
 import { store } from '../state.js';
 import { icon, money } from '../icons.js';
 
 export function renderStats(el) {
   const o = overall();
+  const p = power();
   el.innerHTML = `
     <div class="stat" style="--p:${o.levelRatio}">
       <span class="stat__label">Levels built</span>
@@ -24,7 +25,13 @@ export function renderStats(el) {
       <span class="stat__label">Cash left</span>
       <span class="stat__value">${money(o.cash)}</span>
       <span class="stat__bar"></span>
-    </div>`;
+    </div>
+    <a class="stat stat--power ${p.available ? '' : 'is-off'}" href="#utility/generator" style="--p:${p.max ? p.available / p.max : 0}"
+       title="Power from your built generator levels">
+      <span class="stat__label">Power</span>
+      <span class="stat__value">${p.available}<small> / ${p.max} kW</small></span>
+      <span class="stat__bar"></span>
+    </a>`;
 }
 
 export function renderTabs(el, active) {
@@ -34,6 +41,7 @@ export function renderTabs(el, active) {
     return { id: r.id, label: r.short, icon: r.icon, count: `${built}/${total}` };
   });
   tabs.push({ id: 'shopping', label: 'Shopping List', icon: 'list', count: '' });
+  tabs.push({ id: 'disassembly', label: 'Disassembly', icon: 'split', count: '' });
 
   el.innerHTML = tabs
     .map(

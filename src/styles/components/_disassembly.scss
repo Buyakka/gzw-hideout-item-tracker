@@ -1,0 +1,92 @@
+// =============================================================
+// DISASSEMBLY
+// One card per recipe: item in, timer, parts out.
+// Stacks on phones, one row per recipe from md, two columns from xl.
+// =============================================================
+@use '../abstracts' as *;
+
+.dis-grid {
+  display: grid;
+  gap: space('3');
+
+  @include up('xl') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.dis {
+  display: grid;
+  gap: space('2');
+  align-items: center;
+  padding: space('3') space('4');
+  background: tint('panel', 0.85);
+  border: 1px solid color('line');
+  border-left: 2px solid var(--room);
+  @include notch(10px);
+
+  @include up('md') {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: space('4');
+  }
+
+  @include motion {
+    animation: card-in 600ms var(--t-ease) backwards;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+
+  &__in {
+    display: grid;
+    gap: 2px;
+  }
+
+  &__label {
+    @include label-text;
+    font-size: 0.62rem;
+  }
+
+  &__item {
+    font-family: font('display');
+    font-size: fs('md');
+    font-weight: 600;
+    color: color('text');
+  }
+
+  &__time {
+    display: inline-flex;
+    align-items: center;
+    gap: space('1');
+    font-family: font('mono');
+    font-size: fs('xs');
+    color: var(--room);
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__out {
+    display: flex;
+    flex-wrap: wrap;
+    gap: space('1');
+
+    li {
+      padding: 2px space('2');
+      font-family: font('mono');
+      font-size: fs('xs');
+      color: var(--room);
+      border: 1px solid color-mix(in srgb, var(--room) 40%, transparent);
+      background: color-mix(in srgb, var(--room) 8%, transparent);
+    }
+  }
+}
+
+.dis-note {
+  margin-top: space('4');
+  font-size: fs('sm');
+  color: color('text-faint');
+}
+
+.is-static .dis {
+  animation: none;
+}

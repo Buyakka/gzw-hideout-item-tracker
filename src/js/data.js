@@ -71,6 +71,9 @@ export const STATIONS = ROOMS.flatMap((r) => r.stations);
 export const STATION_BY_ID = Object.fromEntries(STATIONS.map((s) => [s.id, s]));
 export const ROOM_BY_ID = Object.fromEntries(ROOMS.map((r) => [r.id, r]));
 export const TOTAL_LEVELS = STATIONS.reduce((n, s) => n + s.levels.length, 0);
+export const DISASSEMBLY = raw.disassembly.map((r) => ({ ...r, id: slug(r.item) }));
+export const DISASSEMBLY_NOTE = raw.disassemblyNote;
+
 export const META = {
   game: raw.game,
   version: raw.version,

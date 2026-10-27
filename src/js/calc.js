@@ -96,6 +96,26 @@ export function overall(stations = STATIONS) {
 
 export const ALL_LEVELS = TOTAL_LEVELS;
 
+// Power from built generator levels. Sources only say a level
+// "needs X kW" to be built, not that built stations use it up,
+// so kW is treated as a minimum, not as a running total.
+export function power() {
+  let available = 0;
+  let max = 0;
+  for (const s of STATIONS) {
+    const b = store.builtCount(s.id);
+    s.levels.forEach((lvl, i) => {
+      if (!lvl.powerKw) return;
+      max += lvl.powerKw;
+      if (i < b) available += lvl.powerKw;
+    });
+  }
+  return { available, max };
+}
+
+// Does this level have enough power to be built?
+export const hasPower = (level, available = power().available) => !level.kw || available >= level.kw;
+
 // Every material still needed across all levels not yet built
 export function shoppingList() {
   const map = new Map();

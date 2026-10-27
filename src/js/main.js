@@ -5,6 +5,7 @@
 //   #laboratory                 room view
 //   #laboratory/heat-source     room view + station panel
 //   #shopping                   shopping list
+//   #disassembly                disassembly recipes
 // =============================================================
 import '../styles/main.scss';
 
@@ -14,6 +15,7 @@ import { store } from './state.js';
 import { renderStats, renderTabs } from './views/hud.js';
 import { renderRoom } from './views/room.js';
 import { renderShopping, refreshShoppingBody, setShopQuery, setShopHide } from './views/shopping.js';
+import { renderDisassembly, refreshDisassemblyBody, setDisQuery } from './views/disassembly.js';
 import {
   initPanel, openPanel, closePanel, showLevel, toggleEdit,
   refreshPanel, isOpen, currentStation, panelLevel,
@@ -33,11 +35,12 @@ const els = {
 };
 
 let room = 'utility';
+const PAGES = ['shopping', 'disassembly'];
 
 // ---------- Routing ----------
 function parseHash() {
   const [r, s] = location.hash.replace(/^#/, '').split('/');
-  const roomId = ROOM_BY_ID[r] || r === 'shopping' ? r : 'utility';
+  const roomId = ROOM_BY_ID[r] || PAGES.includes(r) ? r : 'utility';
   const stationId = s ? `${roomId}/${s}` : null;
   return { roomId, stationId: STATION_BY_ID[stationId] ? stationId : null };
 }
@@ -68,6 +71,7 @@ function renderAll(isStatic = false) {
   const caret = search?.selectionStart;
 
   if (room === 'shopping') renderShopping(els.main);
+  else if (room === 'disassembly') renderDisassembly(els.main);
   else renderRoom(els.main, room);
 
   const view = els.main.firstElementChild;
@@ -195,6 +199,10 @@ document.addEventListener('input', (e) => {
   if (e.target.matches('[data-action="shop-search"]')) {
     setShopQuery(e.target.value);
     refreshShoppingBody(els.main);
+  }
+  if (e.target.matches('[data-action="dis-search"]')) {
+    setDisQuery(e.target.value);
+    refreshDisassemblyBody(els.main);
   }
 });
 

@@ -3,12 +3,13 @@
 // A banner plus a grid of 3D station cards.
 // =============================================================
 import { ROOM_BY_ID } from '../data.js';
-import { stationSummary, overall } from '../calc.js';
+import { stationSummary, overall, power, hasPower } from '../calc.js';
 import { icon, esc, money } from '../icons.js';
 
 export function renderRoom(el, roomId) {
   const room = ROOM_BY_ID[roomId];
   const o = overall(room.stations);
+  const kw = power().available;
 
   el.innerHTML = `
     <section class="view" data-room="${room.id}">
@@ -26,13 +27,14 @@ export function renderRoom(el, roomId) {
         </div>
       </header>
       <div class="station-grid">
-        ${room.stations.map((s, i) => card(s, i)).join('')}
+        ${room.stations.map((s, i) => card(s, i, kw)).join('')}
       </div>
     </section>`;
 }
 
-function card(station, i) {
+function card(station, i, kw) {
   const sum = stationSummary(station);
+  const noPower = !sum.maxed && !hasPower(sum.next, kw);
   const pips = station.levels
     .map((_, n) => `<span class="pips__pip ${n < sum.built ? 'is-on' : ''}"></span>`)
     .join('');
@@ -59,6 +61,7 @@ function card(station, i) {
       <div class="station-card__body">
         <p class="station-card__next">${nextLabel}</p>
         <p class="station-card__device">${esc(device)}</p>
+        ${noPower ? `<p class="station-card__power">${icon('bolt')}Needs ${sum.next.kw} kW. You have ${kw} kW.</p>` : ''}
       </div>
       <div class="station-card__foot">
         <div class="pips">${pips}</div>

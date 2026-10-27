@@ -29,6 +29,8 @@ const P = {
   fill: '<path d="M4 12h16M12 4v16"/>',
   lock: '<rect x="5" y="11" width="14" height="10" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  split: '<rect x="3" y="9" width="6" height="6" rx="1"/><path d="M9 12h4M13 12l3-5h3M13 12l3 5h3"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
 };
 
 export function icon(name, cls = '') {

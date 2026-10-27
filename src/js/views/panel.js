@@ -4,7 +4,7 @@
 // how many you have and how many you need.
 // =============================================================
 import { STATION_BY_ID, ROOM_BY_ID } from '../data.js';
-import { levelProgress, levelState } from '../calc.js';
+import { levelProgress, levelState, power, hasPower } from '../calc.js';
 import { store } from '../state.js';
 import { icon, esc, money } from '../icons.js';
 
@@ -135,6 +135,13 @@ function render(flip) {
   }[st];
 
   const readOnly = st === 'built';
+  const kw = power().available;
+  const powerFact = level.powerKw
+    ? `+${level.powerKw} kW`
+    : level.kw
+      ? `Needs ${level.kw} kW · you have ${kw} kW`
+      : 'Not needed';
+  const noPower = !readOnly && !hasPower(level, kw);
 
   const rows = prog.items
     .map((it, n) => {
@@ -196,7 +203,14 @@ function render(flip) {
           <div class="level__fact"><dt>Cash</dt><dd>${money(level.cash)}</dd></div>
           <div class="level__fact"><dt>Requires</dt><dd>${esc(level.requires)}</dd></div>
           <div class="level__fact"><dt>Gives</dt><dd>${esc(level.provides)}</dd></div>
+          <div class="level__fact ${noPower ? 'is-short' : ''}"><dt>Power</dt><dd>${powerFact}</dd></div>
         </dl>
+
+        ${
+          noPower
+            ? `<p class="level__warn">${icon('bolt')}<span><b>Not enough power.</b> This level needs ${level.kw} kW and your generator gives ${kw} kW. <a href="#utility/generator">Build the generator</a> first.</span></p>`
+            : ''
+        }
 
         ${
           level.sourceConflict

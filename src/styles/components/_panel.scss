@@ -219,6 +219,14 @@
     background: tint('panel', 0.8);
     border: 1px solid color('line');
 
+    &.is-short {
+      border-color: tint('warn', 0.5);
+
+      dd {
+        color: color('warn');
+      }
+    }
+
     dt {
       @include label-text;
       font-size: 0.62rem;
@@ -244,6 +252,11 @@
       flex: none;
       width: 20px;
       height: 20px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: underline;
     }
   }
 
