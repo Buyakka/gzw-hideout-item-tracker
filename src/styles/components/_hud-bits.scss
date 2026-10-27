@@ -50,7 +50,7 @@
 .toasts {
   position: fixed;
   left: 50%;
-  bottom: max(space('4'), env(safe-area-inset-bottom));
+  bottom: calc(max(space('4'), env(safe-area-inset-bottom)) + var(--corner-badge));
   z-index: z('toast');
   display: grid;
   gap: space('2');

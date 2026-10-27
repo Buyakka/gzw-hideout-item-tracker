@@ -28,6 +28,9 @@
 
   --header-h: 0px;
   --panel-w: min(600px, 46vw);
+  // Space kept free along the bottom for the host's corner badge
+  // ("Powered by Netlify", about 40px tall). Buttons sit above it.
+  --corner-badge: 60px;
 }
 
 // Each room sets one variable, and every child uses it

@@ -11,7 +11,7 @@
 .to-top {
   position: fixed;
   right: max(space('4'), env(safe-area-inset-right));
-  bottom: max(space('4'), env(safe-area-inset-bottom));
+  bottom: calc(max(space('4'), env(safe-area-inset-bottom)) + var(--corner-badge));
   margin-bottom: var(--lift, 0px);
   z-index: z('header');
   display: grid;
@@ -70,6 +70,6 @@
 
   @include up('md') {
     right: space('6');
-    bottom: space('6');
+    bottom: calc(#{space('6')} + var(--corner-badge));
   }
 }

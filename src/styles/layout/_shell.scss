@@ -89,6 +89,8 @@
 
 .footer {
   padding: space('5') space('4');
+  // Room under the text for the host's corner badge
+  padding-bottom: calc(#{space('5')} + var(--corner-badge));
   text-align: center;
   font-size: fs('xs');
   color: color('text-faint');
