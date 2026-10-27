@@ -41,9 +41,8 @@
     left: 0;
     bottom: -1px;
     width: 120px;
-    height: 2px;
+    height: 3px;
     background: var(--room);
-    box-shadow: 0 0 12px var(--room);
   }
 
   &__eyebrow {
@@ -53,7 +52,7 @@
 
   &__title {
     font-size: fs('xxl');
-    text-shadow: 0 0 24px tint('bg', 0.9);
+    color: #d4d4d4;
   }
 
   &__desc {
@@ -74,7 +73,7 @@
   align-items: center;
   gap: space('1');
   padding: 0.2rem 0.6rem;
-  font-family: font('mono');
+  font-family: font('ui');
   font-size: fs('xs');
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -84,7 +83,7 @@
 
   b {
     color: var(--room, color('accent'));
-    font-weight: 400;
+    font-weight: 700;
   }
 }
 

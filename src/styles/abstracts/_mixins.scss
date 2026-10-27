@@ -35,36 +35,12 @@
   }
 }
 
-// Cut corner shape (military plate look)
-@mixin notch($size: 12px) {
-  clip-path: polygon(
-    $size 0,
-    100% 0,
-    100% calc(100% - #{$size}),
-    calc(100% - #{$size}) 100%,
-    0 100%,
-    0 $size
-  );
-}
-
-// Thin HUD corner brackets drawn with gradients
-@mixin brackets($color: f.color('line-strong'), $len: 14px, $w: 2px) {
-  background-image:
-    linear-gradient($color, $color), linear-gradient($color, $color),
-    linear-gradient($color, $color), linear-gradient($color, $color),
-    linear-gradient($color, $color), linear-gradient($color, $color),
-    linear-gradient($color, $color), linear-gradient($color, $color);
-  background-repeat: no-repeat;
-  background-size:
-    $len $w, $w $len,
-    $len $w, $w $len,
-    $len $w, $w $len,
-    $len $w, $w $len;
-  background-position:
-    0 0, 0 0,
-    100% 0, 100% 0,
-    0 100%, 0 100%,
-    100% 100%, 100% 100%;
+// In-game panel: dark glass, thin gray border, yellow right edge
+@mixin game-panel($edge: 3px) {
+  background: f.tint('bg', 0.82);
+  border: 1px solid f.color('line-strong');
+  border-right: $edge solid var(--room, #{f.color('accent')});
+  backdrop-filter: blur(6px);
 }
 
 @mixin focus-ring {
@@ -83,10 +59,12 @@
   white-space: nowrap;
 }
 
+// Small gray caps, like "SELECTED OPERATOR"
 @mixin label-text {
-  font-family: f.font('mono');
+  font-family: f.font('ui');
   font-size: f.fs('xs');
-  letter-spacing: 0.14em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: f.color('text-dim');
 }

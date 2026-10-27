@@ -7,7 +7,7 @@
 .bar {
   --p: 0;
   position: relative;
-  height: 6px;
+  height: 3px;
   background: tint('line', 0.6);
   overflow: hidden;
 
@@ -16,10 +16,7 @@
     inset: 0;
     transform-origin: left;
     transform: scaleX(var(--p));
-    background:
-      repeating-linear-gradient(-45deg, transparent 0 6px, tint('bg', 0.25) 6px 12px),
-      var(--room, #{color('accent')});
-    box-shadow: 0 0 12px var(--room, #{color('accent')});
+    background: var(--room, #{color('accent')});
     transition: transform dur('slow') var(--t-ease);
 
     @include motion {
@@ -29,7 +26,6 @@
 
   &.is-done .bar__fill {
     background: color('ok');
-    box-shadow: 0 0 12px color('ok');
   }
 }
 
@@ -57,7 +53,7 @@
     inset: 0;
     display: grid;
     place-items: center;
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: 0.78rem;
   }
 }

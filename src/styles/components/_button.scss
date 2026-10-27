@@ -17,20 +17,19 @@
   gap: space('2');
   min-height: 40px;
   padding: 0 space('4');
-  font-family: font('display');
+  font-family: font('ui');
   font-size: fs('sm');
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: color('text');
-  background: tint('panel-2', 0.9);
-  border: 1px solid color('line-strong');
-  @include notch(8px);
+  background: tint('panel-2', 0.92);
+  border: 1px solid transparent;
   transition:
     background dur('fast') ease,
     color dur('fast') ease,
     transform dur('fast') ease,
-    box-shadow dur('fast') ease;
+    border-color dur('fast') ease;
   @include focus-ring;
 
   svg {
@@ -40,9 +39,8 @@
   }
 
   @include hover {
-    color: color('bg');
-    background: var(--btn-c);
-    border-color: var(--btn-c);
+    background: #3a3a3e;
+    border-color: color('line-strong');
   }
 
   &:active {
@@ -55,13 +53,15 @@
   }
 
   &--primary {
-    color: color('bg');
+    color: #1a1a1a;
+    letter-spacing: 0.14em;
     background: var(--btn-c);
     border-color: var(--btn-c);
-    box-shadow: 0 0 18px -4px var(--btn-c);
 
     @include hover {
-      filter: brightness(1.12);
+      background: var(--btn-c);
+      border-color: var(--btn-c);
+      filter: brightness(1.1);
     }
   }
 
@@ -77,6 +77,11 @@
 
   &--danger {
     --btn-c: #{color('danger')};
+
+    @include hover {
+      color: color('danger');
+      border-color: tint('danger', 0.6);
+    }
   }
 
   &--sm {

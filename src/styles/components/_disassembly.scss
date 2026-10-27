@@ -19,10 +19,7 @@
   gap: space('2');
   align-items: center;
   padding: space('3') space('4');
-  background: tint('panel', 0.85);
-  border: 1px solid color('line');
-  border-left: 2px solid var(--room);
-  @include notch(10px);
+  @include game-panel;
 
   @include up('md') {
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
@@ -45,7 +42,7 @@
   }
 
   &__item {
-    font-family: font('display');
+    font-family: font('body');
     font-size: fs('md');
     font-weight: 600;
     color: color('text');
@@ -55,7 +52,7 @@
     display: inline-flex;
     align-items: center;
     gap: space('1');
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: fs('xs');
     color: var(--room);
 
@@ -72,7 +69,7 @@
 
     li {
       padding: 2px space('2');
-      font-family: font('mono');
+      font-family: font('ui');
       font-size: fs('xs');
       color: var(--room);
       border: 1px solid color-mix(in srgb, var(--room) 40%, transparent);

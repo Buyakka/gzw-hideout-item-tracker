@@ -77,7 +77,7 @@
   }
 
   &__edited {
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: 0.6rem;
     color: color('info');
     border: 1px solid tint('info', 0.5);
@@ -90,7 +90,7 @@
     display: flex;
     align-items: center;
     gap: space('1');
-    font-family: font('mono');
+    font-family: font('ui');
     color: color('text-dim');
     white-space: nowrap;
   }
@@ -101,7 +101,7 @@
     text-align: center;
     background: color('bg');
     border: 1px solid color('info');
-    font-family: font('mono');
+    font-family: font('ui');
   }
 
   &.is-done {
@@ -116,7 +116,6 @@
       color: color('bg');
       background: color('ok');
       border-color: color('ok');
-      box-shadow: 0 0 10px color('ok');
     }
   }
 
@@ -139,7 +138,7 @@
     place-items: center;
     width: 40px;
     min-height: 40px;
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: 1.1rem;
     color: color('text-dim');
     transition: background dur('fast') ease, color dur('fast') ease;
@@ -161,7 +160,7 @@
     background: transparent;
     border: 0;
     border-inline: 1px solid color('line');
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: fs('md');
     @include focus-ring;
   }

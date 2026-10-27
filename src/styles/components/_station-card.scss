@@ -29,11 +29,7 @@
   min-height: 210px;
   padding: space('4');
   text-align: left;
-  background:
-    radial-gradient(120% 80% at 100% 0%, tint('panel-2', 1), transparent 60%),
-    color('panel');
-  border: 1px solid color('line');
-  @include notch(16px);
+  @include game-panel;
   transform-style: preserve-3d;
   transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--lift));
   transition:
@@ -41,7 +37,6 @@
     border-color dur('fast') ease,
     box-shadow dur('base') ease;
   @include focus-ring;
-  @include brackets(color('line-strong'));
 
   // Glare that follows the mouse
   &::before {
@@ -58,22 +53,11 @@
     transition: opacity dur('base') ease;
   }
 
-  // Room colored edge line
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 16px;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--room), transparent 80%);
-    opacity: 0.8;
-  }
-
   &.is-tilting {
     --lift: 24px;
     transition: transform 60ms linear, border-color dur('fast') ease;
-    border-color: color-mix(in srgb, var(--room) 50%, transparent);
+    border-color: color('text-faint');
+    border-right-color: var(--room);
 
     &::before {
       opacity: 1;
@@ -81,7 +65,8 @@
   }
 
   @include hover {
-    border-color: color-mix(in srgb, var(--room) 50%, transparent);
+    border-color: color('text-faint');
+    border-right-color: var(--room);
   }
 
   // Parts that pop out in 3D
@@ -106,7 +91,6 @@
     color: var(--room);
     background: color-mix(in srgb, var(--room) 10%, transparent);
     border: 1px solid color-mix(in srgb, var(--room) 45%, transparent);
-    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
 
     svg {
       width: 24px;
@@ -115,11 +99,11 @@
   }
 
   &__name {
-    font-size: fs('lg');
+    font-size: fs('xl');
   }
 
   &__level {
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: fs('xs');
     color: color('text-dim');
     letter-spacing: 0.1em;
@@ -135,7 +119,7 @@
   }
 
   &__device {
-    font-family: font('display');
+    font-family: font('body');
     font-size: fs('md');
     font-weight: 600;
     color: color('text');
@@ -146,7 +130,7 @@
     align-items: center;
     gap: space('1');
     margin-top: space('1');
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: fs('xs');
     color: color('warn');
 
@@ -165,14 +149,14 @@
   &__progress-row {
     display: flex;
     justify-content: space-between;
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: fs('xs');
     color: color('text-dim');
   }
 
   // Finished station
   &.is-maxed {
-    border-color: color-mix(in srgb, var(--room) 40%, transparent);
+    border-color: tint('accent', 0.5);
 
     .station-card__icon {
       color: color('bg');
@@ -195,11 +179,10 @@
     height: 6px;
     background: color('line');
     transform: skewX(-25deg);
-    transition: background dur('base') ease, box-shadow dur('base') ease;
+    transition: background dur('base') ease;
 
     &.is-on {
       background: var(--room);
-      box-shadow: 0 0 8px var(--room);
     }
   }
 }

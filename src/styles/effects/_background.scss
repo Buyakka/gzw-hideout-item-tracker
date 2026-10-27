@@ -15,7 +15,7 @@
   overflow: hidden;
   pointer-events: none;
   background:
-    radial-gradient(90% 60% at 50% 110%, color-mix(in srgb, var(--room, #{color('accent')}) 14%, transparent), transparent 70%),
+    radial-gradient(90% 60% at 50% 110%, color-mix(in srgb, var(--room, #{color('accent')}) 7%, transparent), transparent 70%),
     radial-gradient(60% 50% at 50% 0%, tint('panel-2', 0.8), transparent 70%),
     color('bg');
   transition: background dur('slow') ease;
@@ -38,8 +38,8 @@
     transform-origin: 50% 0%;
     transform: rotateX(72deg);
     background-image:
-      linear-gradient(color-mix(in srgb, var(--room, #{color('accent')}) 26%, transparent) 1px, transparent 1px),
-      linear-gradient(90deg, color-mix(in srgb, var(--room, #{color('accent')}) 18%, transparent) 1px, transparent 1px);
+      linear-gradient(tint('text', 0.09) 1px, transparent 1px),
+      linear-gradient(90deg, tint('text', 0.06) 1px, transparent 1px);
     background-size: 64px 64px;
     mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 80%, transparent 100%);
 
@@ -75,7 +75,7 @@
     background: repeating-linear-gradient(
       0deg,
       transparent 0 2px,
-      rgba(0, 0, 0, 0.18) 2px 3px
+      rgba(0, 0, 0, 0.08) 2px 3px
     );
     mix-blend-mode: multiply;
   }
@@ -86,7 +86,7 @@
     left: 0;
     right: 0;
     height: 140px;
-    background: linear-gradient(transparent, tint('ok', 0.035), transparent);
+    background: linear-gradient(transparent, tint('text', 0.025), transparent);
 
     @include motion {
       animation: sweep 7s linear infinite;

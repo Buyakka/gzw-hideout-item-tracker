@@ -6,7 +6,8 @@
 body {
   font-family: font('body');
   font-size: fs('md');
-  font-weight: 500;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
   color: color('text');
   background: color('bg');
 }
@@ -16,14 +17,15 @@ h2,
 h3,
 h4 {
   font-family: font('display');
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: 0.04em;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
 .mono {
-  font-family: font('mono');
+  font-family: font('ui');
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 

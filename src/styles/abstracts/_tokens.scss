@@ -6,37 +6,40 @@
 // base/_root.scss, so values can also change at runtime.
 // =============================================================
 
+// Matches the in-game menus and grayzonewarfare.com:
+// near-black grays, white text, one strong yellow.
 $colors: (
-  // Base surfaces (dark tactical olive)
-  'bg':            #070a08,
-  'bg-2':          #0c110d,
-  'panel':         #111812,
-  'panel-2':       #172018,
-  'line':          #2a3a2c,
-  'line-strong':   #3f5640,
+  // Base surfaces
+  'bg':            #0c0c0c,
+  'bg-2':          #121314,
+  'panel':         #17191b,
+  'panel-2':       #27272a,
+  'line':          #2c2e31,
+  'line-strong':   #45484d,
 
   // Text
-  'text':          #d9e6d4,
-  'text-dim':      #8fa48b,
-  'text-faint':    #5b6e58,
+  'text':          #ffffff,
+  'text-dim':      #99a1af,
+  'text-faint':    #6b7280,
 
   // Signals
-  'accent':        #f2b33d,   // hazard amber
-  'ok':            #6dff7a,   // night-vision green
-  'warn':          #ffb547,
-  'danger':        #ff5a4e,
-  'info':          #5fd4ff,
+  'accent':        #ffa800,   // GZW yellow (PLAY button)
+  'highlight':     #ffd60a,   // bright yellow (operator name)
+  'ok':            #4caf50,   // signal bars green
+  'warn':          #ffb80e,
+  'danger':        #ef4444,
+  'info':          #3b82f6,
 
-  // Rooms
-  'utility':       #f2b33d,
-  'laboratory':    #6dff7a,
-  'workshop':      #5fb8ff,
+  // Rooms: the game uses one yellow everywhere
+  'utility':       #ffa800,
+  'laboratory':    #ffa800,
+  'workshop':      #ffa800,
 );
 
 $fonts: (
-  'display': ('Chakra Petch', 'Rajdhani', system-ui, sans-serif),
-  'body':    ('Rajdhani', system-ui, sans-serif),
-  'mono':    ('Share Tech Mono', ui-monospace, monospace),
+  'display': ('Bebas Neue', 'Inter', system-ui, sans-serif),   // big titles, like the logo
+  'body':    ('Inter', system-ui, sans-serif),
+  'ui':      ('Inter', system-ui, sans-serif),                 // labels, buttons, numbers
 );
 
 // Fluid type scale: clamp(min, preferred, max). Kept as strings

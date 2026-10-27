@@ -34,14 +34,13 @@
   gap: space('2');
   min-height: 44px;
   padding: 0 space('4');
-  font-family: font('display');
+  font-family: font('ui');
   font-size: fs('sm');
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: color('text-dim');
   border: 1px solid transparent;
-  @include notch(8px);
   transition: color dur('fast') ease, background dur('fast') ease;
   @include focus-ring;
 
@@ -51,7 +50,7 @@
   }
 
   &__count {
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: fs('xs');
     color: color('text-faint');
   }
@@ -62,12 +61,12 @@
   }
 
   &[aria-selected='true'] {
-    color: color('bg');
-    background: var(--room);
-    box-shadow: 0 0 20px -6px var(--room);
+    color: var(--room);
+    background: #000;
+    border-color: var(--room);
 
     .room-tab__count {
-      color: tint('bg', 0.7);
+      color: tint('accent', 0.7);
     }
   }
 }

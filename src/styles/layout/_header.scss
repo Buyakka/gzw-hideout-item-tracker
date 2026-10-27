@@ -112,7 +112,6 @@
   padding: space('2') space('3');
   background: tint('panel', 0.75);
   border: 1px solid color('line');
-  @include notch(8px);
 
   &__label {
     @include label-text;
@@ -121,7 +120,7 @@
   }
 
   &__value {
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: fs('lg');
     color: color('text');
     line-height: 1.1;
@@ -140,7 +139,6 @@
     height: 2px;
     width: calc(var(--p, 0) * 100%);
     background: color('accent');
-    box-shadow: 0 0 10px color('accent');
     transition: width dur('slow') var(--t-ease);
   }
 

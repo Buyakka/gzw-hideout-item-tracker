@@ -18,7 +18,7 @@
   padding: 0 space('3');
   background: color('panel');
   border: 1px solid color('line-strong');
-  font-family: font('mono');
+  font-family: font('ui');
   @include focus-ring;
 
   &::placeholder {
@@ -32,7 +32,7 @@
   gap: space('2');
   min-height: 40px;
   padding: 0 space('3');
-  font-family: font('mono');
+  font-family: font('ui');
   font-size: fs('xs');
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -67,7 +67,7 @@
   }
 
   .num {
-    font-family: font('mono');
+    font-family: font('ui');
     font-variant-numeric: tabular-nums;
     text-align: right;
   }
@@ -109,7 +109,7 @@
   }
 
   &__tag {
-    font-family: font('mono');
+    font-family: font('ui');
     font-size: 0.66rem;
     padding: 1px 6px;
     color: var(--room);
