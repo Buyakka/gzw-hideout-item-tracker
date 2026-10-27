@@ -1,0 +1,33 @@
+.lab-background { position: absolute; inset: 0; overflow: hidden; isolation: isolate; pointer-events: none; background: #070605; }
+.lab-background__image, .lab-background__effects { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.lab-background__image { object-fit: contain; object-position: center; }
+.lab-background[data-fit="cover"] .lab-background__image { object-fit: cover; }
+.lab-background__effects { visibility: hidden; }
+.lab-background[data-running="true"] .lab-background__effects { visibility: visible; }
+.lab-background__rotor { transform-origin: 0 0; animation: lab-rotate 1.15s linear infinite; animation-play-state: paused; }
+.lab-background__smoke-thread { opacity: .68; transform-origin: 0 0; animation: lab-smoke-curl 5.8s ease-in-out infinite alternate; animation-play-state: paused; }
+.lab-background__wisp { opacity: 0; transform-origin: 0 0; animation: lab-rise 6.6s ease-in-out infinite; animation-delay: -1.6s; animation-play-state: paused; }
+.lab-background__wisp--second { animation-delay: -3.8s; animation-duration: 7.3s; }
+.lab-background__wisp--third { animation-delay: -5.9s; animation-duration: 8.1s; }
+.lab-background[data-running="true"] .lab-background__rotor, .lab-background[data-running="true"] .lab-background__wisp, .lab-background[data-running="true"] .lab-background__smoke-thread { animation-play-state: running; }
+.lab-background[data-fan="false"] .lab-background__fan, .lab-background[data-smoke="false"] .lab-background__smoke, .lab-background[data-fridge="false"] .lab-background__fridge { display: none; }
+.lab-background[data-fan="false"] .lab-background__rotor, .lab-background[data-smoke="false"] .lab-background__wisp, .lab-background[data-smoke="false"] .lab-background__smoke-thread { animation-play-state: paused; }
+.lab-background__fridge { opacity: 0; transition: opacity 40ms ease-out; }
+@keyframes lab-rotate { to { transform: rotate(360deg); } }
+@keyframes lab-smoke-curl {
+  0% { transform: skewX(-5deg) scaleX(.85); opacity: .6; }
+  50% { transform: skewX(2deg) scaleX(1.1); opacity: .76; }
+  100% { transform: skewX(6deg) scaleX(.9); opacity: .64; }
+}
+@keyframes lab-rise {
+  0% { opacity: 0; transform: translate(0, 4px) scaleX(.75); }
+  20% { opacity: .35; }
+  50% { opacity: .48; transform: translate(-3px, -18px) scaleX(1.1); }
+  80% { opacity: .2; }
+  100% { opacity: 0; transform: translate(8px, -45px) scaleX(1.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-background .lab-background__effects { display: none !important; }
+  .lab-background__rotor, .lab-background__wisp, .lab-background__smoke-thread { animation: none !important; }
+  .lab-background__fridge { transition: none; }
+}

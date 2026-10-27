@@ -15,9 +15,13 @@
     />
   </head>
   <body>
-    <!-- 3D background -->
+    <!-- Background: hideout photo, plus one animated scene per room.
+         The scene image is plain HTML so it still shows without JS. -->
     <div class="bg-fx" aria-hidden="true">
       <div class="bg-fx__photo"></div>
+      <div class="lab-background bg-fx__scene" data-scene="laboratory">
+        <img class="lab-background__image" src="/src/assets/laboratory.png" width="1672" height="941" alt="" decoding="async" />
+      </div>
       <div class="bg-fx__dust"></div>
       <div class="bg-fx__sweep"></div>
       <div class="bg-fx__scan"></div>

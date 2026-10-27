@@ -19,6 +19,7 @@ import { renderShopping, refreshShoppingBody, setShopQuery, setShopHide } from '
 import { renderDisassembly, refreshDisassemblyBody, setDisQuery } from './views/disassembly.js';
 import { renderHome, rememberRoom } from './views/home.js';
 import { mountLogos } from './logo.js';
+import { initScenes, showScene } from './scenes.js';
 import {
   initPanel, openPanel, closePanel, showLevel, toggleEdit,
   refreshPanel, isOpen, currentStation, panelLevel,
@@ -66,6 +67,7 @@ function renderAll(isStatic = false) {
   document.body.dataset.room = room;
   document.body.classList.toggle('is-home', room === 'home');
   els.bg.dataset.room = room;
+  showScene(room);
   renderStats(els.stats);
   renderTabs(els.tabs, room);
   // On phones the tab bar scrolls, so bring the active tab into view
@@ -233,6 +235,7 @@ new ResizeObserver(() => {
 
 // ---------- Start ----------
 mountLogos();
+initScenes(els.bg);
 initPanel(els.panel, els.scrim);
 initTilt(els.main);
 initParallax(els.bg);

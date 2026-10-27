@@ -29,7 +29,28 @@
     background: url('../../assets/hideout-bg.webp') center / cover no-repeat;
     opacity: var(--photo-opacity);
     transform: translate(calc(var(--px) * 10px), calc(var(--py) * 10px));
-    transition: transform 400ms ease-out;
+    transition: transform 400ms ease-out, opacity 700ms ease;
+  }
+
+  // Animated room scenes (see js/scenes.js). Hidden until their
+  // room is open, then they fade in over the hideout photo.
+  // Change --scene-opacity to make them stronger or weaker.
+  &__scene {
+    --scene-opacity: 0.6;
+    opacity: 0;
+    transition: opacity 700ms ease;
+  }
+
+  @each $room in ('laboratory') {
+    &[data-room='#{$room}'] {
+      .bg-fx__scene[data-scene='#{$room}'] {
+        opacity: var(--scene-opacity);
+      }
+
+      .bg-fx__photo {
+        opacity: 0;
+      }
+    }
   }
 
   // Floating dust particles at different depths
