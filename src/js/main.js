@@ -5,6 +5,7 @@
 //   (empty) or #home            landing page
 //   #laboratory                 room view
 //   #laboratory/heat-source     room view + station panel
+//   #build                      levels you can work on now
 //   #shopping                   shopping list
 //   #disassembly                disassembly recipes
 // =============================================================
@@ -18,6 +19,8 @@ import { renderRoom } from './views/room.js';
 import { renderShopping, refreshShoppingBody, setShopQuery, setShopHide } from './views/shopping.js';
 import { renderDisassembly, refreshDisassemblyBody, setDisQuery } from './views/disassembly.js';
 import { renderHome, rememberRoom } from './views/home.js';
+import { renderBuildNow } from './views/build-now.js';
+import { initLookup, openLookup } from './lookup.js';
 import { mountLogos } from './logo.js';
 import { initScenes, showScene } from './scenes.js';
 import {
@@ -41,7 +44,7 @@ const els = {
 };
 
 let room = 'home';
-const PAGES = ['home', 'shopping', 'disassembly'];
+const PAGES = ['home', 'build', 'shopping', 'disassembly'];
 
 // ---------- Routing ----------
 function parseHash() {
@@ -86,6 +89,7 @@ function renderAll(isStatic = false) {
   }
   else if (room === 'shopping') renderShopping(els.main);
   else if (room === 'disassembly') renderDisassembly(els.main);
+  else if (room === 'build') renderBuildNow(els.main);
   else renderRoom(els.main, room);
 
   const view = els.main.firstElementChild;
@@ -161,6 +165,9 @@ const actions = {
   },
   import() {
     els.file.click();
+  },
+  lookup() {
+    openLookup();
   },
   'text-size'() {
     const size = cycleTextSize();
@@ -251,5 +258,6 @@ initPanel(els.panel, els.scrim);
 initTilt(els.main);
 initParallax(els.bg);
 initToTop($('.to-top'), $('.footer'));
+initLookup();
 window.addEventListener('hashchange', route);
 route();

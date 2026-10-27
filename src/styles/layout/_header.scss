@@ -74,8 +74,15 @@
       font-size: 1rem;
     }
 
-    span {
+    span span {
       color: color('accent');
+    }
+  }
+
+  // Small phones: just "Buyaka", so the name is never cut off
+  &__title-rest {
+    @include down('sm') {
+      display: none;
     }
   }
 
@@ -119,6 +126,15 @@
     display: flex;
     gap: space('2');
     justify-self: end;
+
+    // Phones: slimmer buttons so the title keeps its room
+    @include down('sm') {
+      gap: space('1');
+
+      .btn--sm {
+        padding: 0 space('2');
+      }
+    }
 
     // Phones: the text-size button shows just A / A+ / A++
     .text-size svg {

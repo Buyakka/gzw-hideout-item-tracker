@@ -7,7 +7,7 @@
 // it never covers the footer text.
 // =============================================================
 
-const PAGES = ['shopping', 'disassembly'];
+const PAGES = ['build', 'shopping', 'disassembly'];
 
 const state = { btn: null, page: '', footer: null };
 

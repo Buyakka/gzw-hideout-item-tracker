@@ -45,6 +45,7 @@ export function renderTabs(el, active) {
     return { id: r.id, label: r.tab, count: `${built}/${total}` };
   });
   const tools = [
+    { id: 'build', label: 'Build Now', icon: 'check' },
     { id: 'shopping', label: 'Shopping List', icon: 'list' },
     { id: 'disassembly', label: 'Disassembly', icon: 'split' },
   ];

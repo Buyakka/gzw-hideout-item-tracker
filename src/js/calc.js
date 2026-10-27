@@ -214,3 +214,22 @@ export const missingLabel = (m) => (m.kind === 'power' ? `${m.need} kW` : `${m.n
 
 // What to build to fix it: "Heat Source" / "generator"
 export const missingFix = (m) => (m.kind === 'power' ? 'the generator' : m.from.join(' or ') || 'more levels');
+
+// ---------- Build now ----------
+// The next level of every station whose requirements are met:
+//   ready     all items found, can be built right away
+//   startable requirements met, still collecting (fewest left first)
+export function buildNow() {
+  const free = power().free;
+  const ready = [];
+  const startable = [];
+  for (const s of STATIONS) {
+    const b = store.builtCount(s.id);
+    if (b >= s.levels.length || missingFor(s, b, free).length) continue;
+    const p = levelProgress(s, b);
+    const entry = { station: s, index: b, level: s.levels[b], left: p.need - p.have, need: p.need, ratio: p.ratio };
+    (p.allDone ? ready : startable).push(entry);
+  }
+  startable.sort((a, b) => a.left - b.left || b.ratio - a.ratio);
+  return { ready, startable };
+}

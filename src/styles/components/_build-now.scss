@@ -1,0 +1,148 @@
+// =============================================================
+// BUILD NOW (js/views/build-now.js)
+// One row per level you can work on: station, level, how many
+// items are left, a bar, and an arrow into the station.
+// =============================================================
+@use '../abstracts' as *;
+
+.bn-head {
+  display: flex;
+  align-items: center;
+  gap: space('2');
+  margin: space('5') 0 space('3');
+  font-family: font('ui');
+  font-size: fs('md');
+  font-weight: 800;
+  letter-spacing: 0.04em;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: var(--room);
+  }
+}
+
+.bn-list {
+  display: grid;
+  gap: space('2');
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up('xl') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.bn {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'icon main'
+    'state state';
+  align-items: center;
+  gap: space('2') space('3');
+  padding: space('3') space('4');
+  @include game-panel;
+  transition: transform dur('fast') var(--t-ease), border-color dur('fast') ease;
+  @include focus-ring;
+
+  @include up('md') {
+    grid-template-columns: auto minmax(0, 1fr) minmax(170px, 0.6fr) auto;
+    grid-template-areas: 'icon main state go';
+  }
+
+  @include motion {
+    animation: card-in 500ms var(--t-ease) backwards;
+    animation-delay: calc(min(var(--i, 0), 12) * 40ms);
+  }
+
+  @include hover {
+    transform: translateX(4px);
+    border-color: color('text-faint');
+    border-right-color: var(--room);
+  }
+
+  &__icon {
+    grid-area: icon;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    color: var(--room);
+    border: 1px solid tint('accent', 0.45);
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  &__main {
+    grid-area: main;
+    display: grid;
+    min-width: 0;
+  }
+
+  &__room {
+    @include label-text;
+    font-size: fs('xxs');
+  }
+
+  &__name {
+    font-family: font('ui');
+    font-size: fs('md');
+    font-weight: 800;
+  }
+
+  &__lvl {
+    color: var(--room);
+  }
+
+  &__device {
+    font-size: fs('sm');
+    color: color('text-dim');
+  }
+
+  &__state {
+    grid-area: state;
+    display: grid;
+    gap: space('1');
+    font-family: font('ui');
+    font-size: fs('sm');
+    font-weight: 700;
+    color: color('warn');
+
+    &.is-done {
+      color: color('ok');
+    }
+  }
+
+  &__msg {
+    display: flex;
+    align-items: center;
+    gap: space('1');
+
+    svg {
+      flex: none;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__go {
+    grid-area: go;
+    display: none;
+    width: 18px;
+    height: 18px;
+    color: color('text-dim');
+
+    @include up('md') {
+      display: block;
+    }
+  }
+}
+
+.is-static .bn {
+  animation: none;
+}

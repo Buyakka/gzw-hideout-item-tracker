@@ -22,6 +22,10 @@ second monitor while you play. Two open tabs stay in sync.
   (a room capability like Heat Control 1, or power) and which station to build for it
 - Have / need counter for every item, with + and − buttons
 - Shopping list that adds up everything still needed
+- Build Now page: every level whose requirements are met, ready ones first, then the
+  ones closest to having all their items
+- Find an item from any page (Find button or the / key): how many you still need,
+  which stations use it, and which disassembly gives it
 - Power meter like the game: available kW = generator kW minus what built stations use,
   and a warning on levels that need more than is free
 - Disassembly page: all 15 recipes (12 hours each) with search
@@ -62,7 +66,8 @@ src/
     utility-scene.js     Utility Room background effects
     hideout-scene.js     main hideout background effects
     scene-parts.js       dust, smoke and flicker shared by the scenes
-    views/               home, hud, room, panel, shopping, disassembly
+    lookup.js            the Find an item search box
+    views/               home, hud, room, panel, build-now, shopping, disassembly
   assets/                room and hideout images (fade the main one with --photo-opacity)
   styles/                Sass (see below)
 public/favicon.svg

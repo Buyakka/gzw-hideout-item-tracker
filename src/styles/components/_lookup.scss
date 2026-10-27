@@ -1,0 +1,172 @@
+// =============================================================
+// FIND AN ITEM (js/lookup.js)
+// A search box over the page: dark glass box with the game's
+// yellow edge, results as readable cards. Closes with Esc,
+// the X button, or a click outside.
+// =============================================================
+@use '../abstracts' as *;
+
+.lookup {
+  position: fixed;
+  inset: 0;
+  z-index: z('panel') + 5;
+  display: grid;
+  justify-items: center;
+  align-items: start;
+  padding: max(space('6'), 6vh) space('4') space('4');
+
+  &[hidden] {
+    display: none;
+  }
+
+  &__scrim {
+    position: absolute;
+    inset: 0;
+    background: tint('bg', 0.75);
+    backdrop-filter: blur(4px);
+  }
+
+  &__box {
+    position: relative;
+    display: grid;
+    gap: space('3');
+    width: min(100%, 620px);
+    max-height: calc(100dvh - 12vh);
+    padding: space('4');
+    @include game-panel;
+    background: tint('bg', 0.94);
+    overflow: hidden;
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+
+    @include motion {
+      animation: view-in dur('base') var(--t-ease) both;
+    }
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: space('3');
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: space('2');
+    font-size: fs('xl');
+
+    svg {
+      width: 22px;
+      height: 22px;
+      color: color('accent');
+    }
+  }
+
+  &__input {
+    min-height: 48px;
+    font-size: fs('md');
+  }
+
+  &__hint {
+    font-size: fs('xs');
+    color: color('text-dim');
+
+    kbd {
+      padding: 0 0.4em;
+      font-family: font('ui');
+      font-weight: 800;
+      color: color('accent');
+      border: 1px solid tint('accent', 0.5);
+    }
+  }
+
+  &__results {
+    display: grid;
+    gap: space('2');
+    overflow-y: auto;
+    padding-right: space('1');
+  }
+
+  &__label {
+    @include label-text;
+  }
+
+  &__item {
+    display: grid;
+    gap: space('2');
+    padding: space('3');
+    background: tint('panel', 0.85);
+    border: 1px solid color('line');
+  }
+
+  &__name {
+    font-family: font('ui');
+    font-size: fs('md');
+    font-weight: 800;
+  }
+
+  &__nums {
+    display: flex;
+    gap: space('5');
+
+    dt {
+      @include label-text;
+      font-size: fs('xxs');
+    }
+
+    dd {
+      font-family: font('ui');
+      font-size: fs('lg');
+      font-weight: 700;
+    }
+
+    .is-left {
+      color: color('warn');
+    }
+
+    .is-done {
+      color: color('ok');
+    }
+  }
+
+  &__none {
+    font-size: fs('sm');
+    color: color('text-dim');
+  }
+
+  &__dis {
+    display: flex;
+    align-items: center;
+    gap: space('2');
+    font-size: fs('sm');
+    color: color('text-dim');
+
+    svg {
+      flex: none;
+      width: 16px;
+      height: 16px;
+      color: color('accent');
+    }
+
+    b {
+      color: color('text');
+    }
+
+    @include hover {
+      color: color('text');
+    }
+  }
+}
+
+// Page under the search box does not scroll
+.is-looking {
+  overflow: hidden;
+}
+
+// "/" shortcut on the landing page Find button
+kbd.home__tool-value {
+  padding: 0 0.45em;
+  font-family: font('ui');
+  border: 1px solid tint('accent', 0.5);
+}

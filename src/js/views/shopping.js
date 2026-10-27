@@ -57,7 +57,7 @@ export function setShopHide(v) {
 
 // One tag per station, with each level that needs the item inside,
 // e.g. "Heat Source · L1 ×3 · L2 ×4", so long rows stay readable.
-function usedTags(uses) {
+export function usedTags(uses) {
   const byStation = new Map();
   for (const u of uses) {
     if (!byStation.has(u.stationId)) byStation.set(u.stationId, { ...u, levels: [] });
