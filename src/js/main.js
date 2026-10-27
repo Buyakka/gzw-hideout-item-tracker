@@ -16,7 +16,7 @@ import { levelItems } from './calc.js';
 import { store } from './state.js';
 import { renderStats, renderTabs } from './views/hud.js';
 import { renderRoom } from './views/room.js';
-import { renderShopping, refreshShoppingBody, setShopQuery, setShopHide } from './views/shopping.js';
+import { renderShopping, refreshShoppingBody, setShopQuery, setShopHide, setShopGroup, setShopNext } from './views/shopping.js';
 import { renderDisassembly, refreshDisassemblyBody, setDisQuery } from './views/disassembly.js';
 import { renderHome, rememberRoom } from './views/home.js';
 import { renderBuildNow } from './views/build-now.js';
@@ -202,6 +202,10 @@ const actions = {
   lookup() {
     openLookup();
   },
+  // Shopping List: show only one group of items
+  'shop-group'(el) {
+    setShopGroup(els.main, el.dataset.group);
+  },
   'text-size'() {
     const size = cycleTextSize();
     toast(`Text size: ${size.name}`);
@@ -250,7 +254,9 @@ document.addEventListener('click', (e) => {
 // Typed numbers save when you press Enter or leave the box
 document.addEventListener('change', (e) => {
   const t = e.target;
-  if (t.matches('.stepper__input')) {
+  // Station steppers only (the Shopping List box also uses the
+  // stepper look, but it sets storage, below)
+  if (t.matches('.stepper__input[data-key]')) {
     const added = store.setAssigned(t.dataset.key, t.value, { grow: true });
     if (added) toast(`Added ${added} ${itemName(t.dataset.key)} to storage`);
   }
@@ -265,6 +271,10 @@ document.addEventListener('change', (e) => {
   }
   if (t.matches('[data-action="shop-hide"]')) {
     setShopHide(t.checked);
+    refreshShoppingBody(els.main);
+  }
+  if (t.matches('[data-action="shop-next"]')) {
+    setShopNext(t.checked);
     refreshShoppingBody(els.main);
   }
 });

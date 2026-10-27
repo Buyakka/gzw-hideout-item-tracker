@@ -47,6 +47,75 @@
     width: 16px;
     height: 16px;
   }
+
+  // How many items the levels you can work on now need
+  &__n {
+    font-weight: 700;
+    color: color('accent');
+  }
+
+  // Ticked: the label lights up so it is clear the list is filtered
+  &:has(input:checked) {
+    color: color('text');
+    border-color: color('accent');
+  }
+}
+
+// Group filter buttons (All, Construction, Electronics...).
+// Wrap on wide screens, scroll sideways in one row on phones.
+.shop-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: space('2');
+  margin-bottom: space('4');
+
+  @include down('md') {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(-1 * #{space('4')});
+    padding: 0 space('4') space('1');
+    scrollbar-width: thin;
+  }
+}
+
+.shop-group {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: space('2');
+  min-height: 40px;
+  padding: 0 space('3');
+  font-family: font('ui');
+  font-size: fs('xs');
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color('text');
+  background: tint('panel-2', 0.9);
+  border: 1px solid color('line-strong');
+  cursor: pointer;
+  transition: background dur('fast') ease, border-color dur('fast') ease;
+  @include focus-ring;
+
+  &__n {
+    font-weight: 600;
+    color: color('text-dim');
+  }
+
+  @include hover {
+    border-color: color('text-faint');
+  }
+
+  // The group being shown: yellow, like the game's selected tab
+  &[aria-pressed='true'] {
+    color: #1a1a1a;
+    background: color('accent');
+    border-color: color('accent');
+
+    .shop-group__n {
+      color: #1a1a1a;
+    }
+  }
 }
 
 .shop {
@@ -94,6 +163,16 @@
 
   &__name {
     font-weight: 600;
+  }
+
+  // "Next: 4" under the item name
+  &__next {
+    display: block;
+    margin-top: 2px;
+    font-family: font('ui');
+    font-size: fs('xs');
+    font-weight: 700;
+    color: color('accent');
   }
 
   // Numbers that are less important than "Left"
@@ -163,6 +242,15 @@
     // A level you already built: still listed, in green
     &.is-built {
       color: color('ok');
+    }
+
+    // A level you can work on now (with "Next upgrades only" on)
+    &.is-next {
+      font-weight: 800;
+      color: #1a1a1a;
+      background: var(--room);
+      border-left-color: transparent;
+      padding-right: 0.4rem;
     }
   }
 

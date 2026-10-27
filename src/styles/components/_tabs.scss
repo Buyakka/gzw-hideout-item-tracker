@@ -85,6 +85,11 @@
     }
   }
 
+  // The selected tab is lighter grey, so a lighter green keeps 4.5:1
+  &[aria-selected='true'] .room-tab__count.is-done {
+    color: #7ed982;
+  }
+
   &.is-locked {
     color: color('text-faint');
     cursor: not-allowed;

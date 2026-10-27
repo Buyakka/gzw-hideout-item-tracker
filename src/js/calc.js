@@ -198,7 +198,10 @@ export function shoppingList() {
       const storage = store.storage(r.name);
       return { ...r, storage, have: Math.min(storage, r.need), left: Math.max(0, r.need - storage) };
     })
-    .sort((x, y) => y.left - x.left || y.need - x.need || x.name.localeCompare(y.name));
+    // A to Z, so items are quick to find. The order never changes
+    // when the player sets storage, so rows do not jump away from
+    // the − / + they are clicking.
+    .sort((x, y) => x.name.localeCompare(y.name));
 }
 
 // ---------- Requirements ----------

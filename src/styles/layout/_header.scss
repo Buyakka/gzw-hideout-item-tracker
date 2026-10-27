@@ -203,7 +203,8 @@
     font-variant-numeric: tabular-nums;
 
     small {
-      font-size: 0.6em;
+      // Never under 12px, even on phones
+      font-size: max(0.6em, #{fs('xxs')});
       color: color('text-faint');
     }
   }
