@@ -11,9 +11,11 @@
 // =============================================================
 import '../vendor/lab-background/lab-background.js'; // sets window.LabBackground
 import '../vendor/lab-background/lab-background.css';
+import { WorkshopScene } from './workshop-scene.js';
 
 const CONTROLLERS = {
   laboratory: (el) => new window.LabBackground(el, { paused: true }),
+  workshop: (el) => new WorkshopScene(el, { paused: true }),
 };
 
 const scenes = new Map();

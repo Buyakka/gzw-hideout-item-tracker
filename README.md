@@ -11,6 +11,8 @@ second monitor while you play. Two open tabs stay in sync.
 - Landing page like the game's main menu: pick a room, or Continue where you left off
 - Room tabs in the game's order (Laboratory, Workshop, Utility Room, locked Personal)
 - Animated Buyaka emblem (original, not the game's logo)
+- Animated room backgrounds: Laboratory (fan, smoke, fridge flicker) and
+  Workshop (light and screen flicker, smoke, dust); other pages use the hideout photo
 - All 3 rooms, 15 stations and 36 upgrade levels
 - Have / need counter for every item, with + and − buttons
 - Shopping list that adds up everything still needed
@@ -46,6 +48,8 @@ src/
     fx.js                3D tilt, parallax, toasts
     icons.js             SVG icons and small helpers
     logo.js              the Buyaka emblem (SVG)
+    scenes.js            runs the animated background of the open room
+    workshop-scene.js    Workshop background effects
     views/               home, hud, room, panel, shopping, disassembly
   assets/hideout-bg.webp background photo (fade it with --photo-opacity)
   styles/                Sass (see below)
