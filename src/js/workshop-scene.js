@@ -9,7 +9,7 @@
 //   new WorkshopScene(root, { paused }) · setPaused() · destroy()
 // Motion stops for reduced motion, hidden tabs and while paused.
 // =============================================================
-import { dustMarkup } from './scene-dust.js';
+import { dustMarkup, smokeMarkup, Flicker } from './scene-parts.js';
 
 const W = 1759;
 const H = 894;
@@ -40,12 +40,10 @@ export class WorkshopScene {
     this.media = window.matchMedia('(prefers-reduced-motion: reduce)');
     this.paused = Boolean(options.paused);
     this.destroyed = false;
-    this.timers = { tube: null, screen: null };
 
     const id = `ws-${++count}`;
     const [x1, y1] = TUBE.from;
     const [x2, y2] = TUBE.to;
-    const [sx, sy] = SMOKE;
 
     root.insertAdjacentHTML(
       'beforeend',
@@ -54,12 +52,6 @@ export class WorkshopScene {
         <defs>
           <filter id="${id}-soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
           <filter id="${id}-glow" x="-30%" y="-200%" width="160%" height="500%"><feGaussianBlur stdDeviation="3"/></filter>
-          <filter id="${id}-smoke" filterUnits="userSpaceOnUse" x="-50" y="-170" width="100" height="180"><feGaussianBlur stdDeviation=".8"/></filter>
-          <linearGradient id="${id}-fade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="-120">
-            <stop offset="0" stop-color="#d8dde0" stop-opacity=".85"/>
-            <stop offset=".35" stop-color="#cfd5d8" stop-opacity=".7"/>
-            <stop offset="1" stop-color="#cfd5d8" stop-opacity="0"/>
-          </linearGradient>
           <clipPath id="${id}-screen"><path d="${SCREEN}"/></clipPath>
         </defs>
 
@@ -74,27 +66,29 @@ export class WorkshopScene {
 
         <!-- Device screen: a slow scan line, and a dark layer for the flicker -->
         <g clip-path="url(#${id}-screen)">
-          <rect class="ws__scan" x="1370" y="528" width="58" height="3" fill="#bfeaff"/>
+          <rect class="screen-scan" x="1370" y="528" width="58" height="3" fill="#bfeaff"/>
           <path class="ws__screen-dim" d="${SCREEN}" fill="#01060a"/>
         </g>
 
-        <!-- Cigarette: glowing tip and rising smoke -->
-        <g transform="translate(${sx} ${sy})">
-          <circle class="ws__ember" r="1.6" fill="#ff8a45"/>
-          <g class="ws__smoke" fill="none" stroke="url(#${id}-fade)" stroke-linecap="round" filter="url(#${id}-smoke)">
-            <path class="ws__smoke-thread" stroke-width="1.4" d="M0,0 C-2,-8 2,-15 0,-24 S-6,-38 -1,-50 S7,-66 1,-81 S-9,-101 -1,-124"/>
-            <path class="ws__wisp" stroke-width="3.2" d="M0,-12 C-4,-24 6,-32 1,-45 S-11,-60 -4,-76 S9,-98 0,-120"/>
-            <path class="ws__wisp ws__wisp--2" stroke-width="4.4" d="M0,-16 C5,-28 -4,-37 1,-50 S13,-66 4,-83 S-6,-103 3,-124"/>
-            <path class="ws__wisp ws__wisp--3" stroke-width="3.6" d="M0,-14 C-2,-29 8,-38 3,-54 S-8,-72 -1,-88 S9,-107 2,-127"/>
-          </g>
-        </g>
+        ${smokeMarkup(id, ...SMOKE)}
       </svg>`
     );
 
     this.effects = root.querySelector('.scene__effects');
-    this.tubeDim = root.querySelector('.ws__tube-dim');
-    this.bloom = root.querySelector('.ws__tube-bloom');
-    this.screenDim = root.querySelector('.ws__screen-dim');
+    const tubeDim = root.querySelector('.ws__tube-dim');
+    const bloom = root.querySelector('.ws__tube-bloom');
+    const screenDim = root.querySelector('.ws__screen-dim');
+
+    this.flickers = [
+      new Flicker(
+        (level) => {
+          tubeDim.style.opacity = String(level);
+          bloom.style.opacity = String(1 - level * 1.6);
+        },
+        { wait: [1600, 4800], depth: [0.35, 0.25] }
+      ),
+      new Flicker((level) => (screenDim.style.opacity = String(level)), { wait: [900, 3400], depth: [0.45, 0.35] }),
+    ];
 
     this.sync = this.sync.bind(this);
     this.media.addEventListener('change', this.sync);
@@ -106,52 +100,10 @@ export class WorkshopScene {
 
   sync() {
     if (this.destroyed) return;
-    this.stopTimers();
-    this.setDim('tube', 0);
-    this.setDim('screen', 0);
     this.running =
       !this.paused && !this.media.matches && !document.hidden && this.image.complete && this.image.naturalWidth > 0;
     this.root.dataset.running = String(this.running);
-    if (this.running) {
-      this.schedule('tube');
-      this.schedule('screen');
-    }
-  }
-
-  // Dim one light. Level 0 = normal, higher = darker.
-  setDim(which, level) {
-    if (which === 'tube') {
-      this.tubeDim.style.opacity = String(level);
-      this.bloom.style.opacity = String(1 - level * 1.6);
-    } else {
-      this.screenDim.style.opacity = String(level);
-    }
-  }
-
-  // Like the lab fridge: one or two quick dips, then a steady pause
-  schedule(which) {
-    const [min, span] = which === 'tube' ? [1600, 4800] : [900, 3400];
-    this.timers[which] = window.setTimeout(() => this.pulse(which, Math.random() < 0.5 ? 2 : 1), min + Math.random() * span);
-  }
-
-  pulse(which, remaining) {
-    if (this.destroyed || !this.running) return;
-    const level = which === 'tube' ? 0.35 + Math.random() * 0.25 : 0.45 + Math.random() * 0.35;
-    this.setDim(which, level);
-    this.timers[which] = window.setTimeout(() => {
-      this.setDim(which, 0);
-      if (remaining > 1) {
-        this.timers[which] = window.setTimeout(() => this.pulse(which, remaining - 1), 120 + Math.random() * 160);
-      } else {
-        this.schedule(which);
-      }
-    }, 70 + Math.random() * 120);
-  }
-
-  stopTimers() {
-    window.clearTimeout(this.timers.tube);
-    window.clearTimeout(this.timers.screen);
-    this.timers = { tube: null, screen: null };
+    this.flickers.forEach((f) => (this.running ? f.start() : f.stop()));
   }
 
   setPaused(paused) {
@@ -164,7 +116,7 @@ export class WorkshopScene {
     if (this.destroyed) return;
     this.destroyed = true;
     this.running = false;
-    this.stopTimers();
+    this.flickers.forEach((f) => f.stop());
     this.media.removeEventListener('change', this.sync);
     document.removeEventListener('visibilitychange', this.sync);
     this.image.removeEventListener('load', this.sync);

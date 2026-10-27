@@ -13,11 +13,13 @@ import '../vendor/lab-background/lab-background.js'; // sets window.LabBackgroun
 import '../vendor/lab-background/lab-background.css';
 import { WorkshopScene } from './workshop-scene.js';
 import { UtilityScene } from './utility-scene.js';
+import { HideoutScene } from './hideout-scene.js';
 
 const CONTROLLERS = {
   laboratory: (el) => new window.LabBackground(el, { paused: true }),
   workshop: (el) => new WorkshopScene(el, { paused: true }),
   utility: (el) => new UtilityScene(el, { paused: true }),
+  hideout: (el) => new HideoutScene(el, { paused: true }),
 };
 
 const scenes = new Map();
@@ -29,9 +31,11 @@ export function initScenes(bg) {
   });
 }
 
-// Run the scene for this room, pause all the others
+// Run the scene for this room, pause all the others. Pages that
+// are not a room (landing, Shopping List, ...) use the hideout scene.
 export function showScene(roomId) {
-  scenes.forEach((scene, id) => scene.setPaused(id !== roomId));
+  const active = roomId !== 'hideout' && scenes.has(roomId) ? roomId : 'hideout';
+  scenes.forEach((scene, id) => scene.setPaused(id !== active));
 }
 
 // Dev server reloads: clean up so scenes are not mounted twice

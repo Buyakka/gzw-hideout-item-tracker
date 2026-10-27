@@ -12,9 +12,9 @@
     display: none;
   }
 
+  // (its stronger opacity is set in effects/_background.scss,
+  // because the effects layer wins over this one)
   .bg-fx__photo {
-    --photo-opacity: 0.6;
-
     @include motion {
       animation: slow-zoom 14s ease-out both;
     }

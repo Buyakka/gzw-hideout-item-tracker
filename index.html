@@ -18,7 +18,9 @@
     <!-- Background: hideout photo, plus one animated scene per room.
          The scene image is plain HTML so it still shows without JS. -->
     <div class="bg-fx" aria-hidden="true">
-      <div class="bg-fx__photo"></div>
+      <div class="scene scene--cover bg-fx__photo" data-scene="hideout">
+        <img class="scene__image" src="/src/assets/hideout-bg.webp" width="1672" height="941" alt="" decoding="async" />
+      </div>
       <div class="lab-background bg-fx__scene" data-scene="laboratory">
         <img class="lab-background__image" src="/src/assets/laboratory.png" width="1672" height="941" alt="" decoding="async" />
       </div>

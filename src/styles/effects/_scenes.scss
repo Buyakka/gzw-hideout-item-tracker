@@ -1,7 +1,7 @@
 // =============================================================
 // SCENES
-// Our own animated room backgrounds (js/workshop-scene.js,
-// js/utility-scene.js).
+// Our own animated backgrounds (js/hideout-scene.js,
+// js/workshop-scene.js, js/utility-scene.js).
 // The lab scene has its own CSS in vendor/lab-background.
 // The image and the SVG effects use the same "contain" fit, so
 // they always line up and the whole scene stays visible.
@@ -17,7 +17,8 @@
   background: #050505;
 
   &__image,
-  &__effects {
+  &__effects,
+  &__tint {
     position: absolute;
     inset: 0;
     display: block;
@@ -27,6 +28,16 @@
 
   &__image {
     object-fit: contain;
+  }
+
+  // Fills the screen instead (the SVG layers use "slice" to match)
+  &--cover &__image {
+    object-fit: cover;
+  }
+
+  // Static colour fix laid over the photo (not motion)
+  &__tint {
+    mix-blend-mode: saturation;
   }
 
   // Effects only show while running (not paused, not reduced motion)
@@ -52,28 +63,44 @@
   transition: opacity 40ms ease-out;
 }
 
-// Shared dust (js/scene-dust.js)
+// ---------- Hideout ----------
+.hd__fridge-dim,
+.hd__screen-dim {
+  opacity: 0;
+  transition: opacity 40ms ease-out;
+}
+
+.hd__rotor {
+  transform-origin: 0 0;
+  animation: hd-rotate 0.9s linear infinite;
+}
+
+.screen-scan--green {
+  opacity: 0.22;
+}
+
+// Shared dust (js/scene-parts.js)
 .scene-dust circle {
   opacity: 0;
   animation: scene-dust var(--dur) linear var(--delay) infinite;
 }
 
-.ws__scan {
+.screen-scan {
   opacity: 0.18;
   animation: ws-scan 2.6s linear infinite;
 }
 
-.ws__ember {
+.smoke__ember {
   animation: ws-ember 3.4s ease-in-out infinite;
 }
 
-.ws__smoke-thread {
+.smoke__thread {
   opacity: 0.6;
   transform-origin: 0 0;
   animation: ws-smoke-curl 5.6s ease-in-out infinite alternate;
 }
 
-.ws__wisp {
+.smoke__wisp {
   opacity: 0;
   transform-origin: 0 0;
   animation: ws-rise 6.4s ease-in-out -1.4s infinite;
@@ -107,15 +134,20 @@
 
 // Everything above waits until the scene is running
 .scene:not([data-running='true']) {
+  .hd__rotor,
   .ut__shake,
   .ut__puff,
   .scene-dust circle,
-  .ws__scan,
-  .ws__ember,
-  .ws__smoke-thread,
-  .ws__wisp {
+  .screen-scan,
+  .smoke__ember,
+  .smoke__thread,
+  .smoke__wisp {
     animation-play-state: paused;
   }
+}
+
+@keyframes hd-rotate {
+  to { transform: rotate(360deg); }
 }
 
 @keyframes scene-dust {

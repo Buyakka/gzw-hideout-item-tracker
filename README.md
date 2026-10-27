@@ -13,7 +13,9 @@ second monitor while you play. Two open tabs stay in sync.
 - Animated Buyaka emblem (original, not the game's logo)
 - Animated room backgrounds: Laboratory (fan, smoke, fridge flicker),
   Workshop (light and screen flicker, smoke, dust) and Utility Room (blinking lamp,
-  running generator, exhaust, dust); other pages use the hideout photo
+  running generator, exhaust, dust)
+- Animated main hideout background on the landing page, Shopping List and Disassembly
+  (fan, smoke, fridge and screen flicker, whiter hanging lamps, dust), moves with the mouse
 - All 3 rooms, 15 stations and 36 upgrade levels
 - Have / need counter for every item, with + and − buttons
 - Shopping list that adds up everything still needed
@@ -21,7 +23,7 @@ second monitor while you play. Two open tabs stay in sync.
 - Disassembly page: all 15 recipes (12 hours each) with search
 - Edit button to fix a recipe amount if the game shows a different number
 - Backup and load your progress as a file
-- Faded hideout photo in the background, 3D tilt cards, 3D level flips, radar and HUD effects
+- 3D tilt cards, 3D level flips, radar and HUD effects
 - Works on phones, tablets and wide screens
 - Respects "reduce motion" in your system settings
 
@@ -51,9 +53,10 @@ src/
     scenes.js            runs the animated background of the open room
     workshop-scene.js    Workshop background effects
     utility-scene.js     Utility Room background effects
-    scene-dust.js        floating dust shared by the scenes
+    hideout-scene.js     main hideout background effects
+    scene-parts.js       dust, smoke and flicker shared by the scenes
     views/               home, hud, room, panel, shopping, disassembly
-  assets/hideout-bg.webp background photo (fade it with --photo-opacity)
+  assets/                room and hideout images (fade the main one with --photo-opacity)
   styles/                Sass (see below)
 public/favicon.svg
 ```

@@ -9,7 +9,7 @@
 //   - dust floats, more of it in the window light and lamp light
 // Same API as the other scenes: setPaused() · destroy()
 // =============================================================
-import { dustMarkup } from './scene-dust.js';
+import { dustMarkup } from './scene-parts.js';
 
 const W = 1672;
 const H = 941;
