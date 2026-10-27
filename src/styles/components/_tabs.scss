@@ -71,6 +71,20 @@
     }
   }
 
+  // Every station in the room is maxed: green count with a check
+  .room-tab__count.is-done {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-weight: 700;
+    color: color('ok');
+
+    svg {
+      width: 13px;
+      height: 13px;
+    }
+  }
+
   &.is-locked {
     color: color('text-faint');
     cursor: not-allowed;

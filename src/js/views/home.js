@@ -50,11 +50,14 @@ export function renderHome(el) {
 
   const rooms = ROOMS.map((r) => {
     const ro = overall(r.stations);
+    // Whole room built: green, with a check (no room colour class,
+    // because utility classes would win over the green)
+    const done = ro.built >= ro.total;
     return `
-      <a class="home-room u-room-${r.id}" href="#${r.id}" ${step()}>
+      <a class="home-room ${done ? 'is-done' : `u-room-${r.id}`}" href="#${r.id}" ${step()}>
         <span class="home-room__icon">${icon(r.icon)}</span>
         <span class="home-room__name">${esc(r.tab)}</span>
-        <span class="home-room__count">${ro.built} / ${ro.total} built</span>
+        <span class="home-room__count">${done ? `${icon('check')}Maxed · ${ro.built} / ${ro.total}` : `${ro.built} / ${ro.total} built`}</span>
         <span class="bar" style="--p:${ro.levelRatio}"><span class="bar__fill"></span></span>
       </a>`;
   }).join('');

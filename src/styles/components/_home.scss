@@ -380,6 +380,24 @@
     border-right-color: var(--room);
   }
 
+  // Whole room built: green edge, icon, bar and count
+  &.is-done {
+    --room: #{color('ok')};
+
+    .home-room__count {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-weight: 700;
+      color: color('ok');
+
+      svg {
+        width: 13px;
+        height: 13px;
+      }
+    }
+  }
+
   &.is-locked {
     grid-template-areas:
       'icon name'

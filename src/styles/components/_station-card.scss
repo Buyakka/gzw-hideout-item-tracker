@@ -154,13 +154,52 @@
     color: color('text-dim');
   }
 
-  // Finished station
+  // Finished station: everything in the room colour turns green
+  // (icon, level pips, edge, glare) with a "Maxed" check badge
   &.is-maxed {
-    border-color: tint('accent', 0.5);
+    --room: #{color('ok')};
+    border-color: tint('ok', 0.5);
+    border-right-color: var(--room);
+    background: linear-gradient(160deg, tint('ok', 0.12), transparent 60%), tint('bg', 0.82);
 
     .station-card__icon {
       color: color('bg');
       background: var(--room);
+    }
+
+    .station-card__next {
+      display: flex;
+      align-items: center;
+      gap: space('1');
+      color: color('ok');
+
+      svg {
+        flex: none;
+        width: 13px;
+        height: 13px;
+      }
+    }
+  }
+
+  // Check badge in the top right of a finished station
+  &__done {
+    display: inline-flex;
+    align-items: center;
+    gap: space('1');
+    margin-left: auto;
+    align-self: flex-start;
+    padding: 0.2rem 0.5rem;
+    font-family: font('ui');
+    font-size: fs('xs');
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color('bg');
+    background: color('ok');
+
+    svg {
+      width: 14px;
+      height: 14px;
     }
   }
 

@@ -42,7 +42,7 @@ export function renderTabs(el, active) {
   const tabs = ROOMS.map((r) => {
     const built = r.stations.reduce((n, s) => n + Math.min(store.builtCount(s.id), s.levels.length), 0);
     const total = r.stations.reduce((n, s) => n + s.levels.length, 0);
-    return { id: r.id, label: r.tab, count: `${built}/${total}` };
+    return { id: r.id, label: r.tab, count: `${built}/${total}`, done: built >= total };
   });
   const tools = [
     { id: 'build', label: 'Next Upgrades', icon: 'arrow' },
@@ -55,7 +55,7 @@ export function renderTabs(el, active) {
          aria-selected="${t.id === active}" data-room="${t.id}">
         ${t.icon ? icon(t.icon) : ''}
         <span>${t.label}</span>
-        ${t.count ? `<span class="room-tab__count">${t.count}</span>` : ''}
+        ${t.count ? `<span class="room-tab__count ${t.done ? 'is-done' : ''}">${t.done ? icon('check') : ''}${t.count}</span>` : ''}
       </a>`;
 
   // Room tabs match the game, including the locked Personal room

@@ -54,16 +54,17 @@ function card(station, i, kw) {
   return `
     <button class="station-card ${status} ${sum.maxed ? 'is-maxed' : ''} ${sum.ready && !waiting ? 'is-ready' : ''}"
             style="--i:${i}" data-action="open" data-station="${station.id}"
-            aria-label="${esc(station.name)}, level ${sum.built} of ${sum.total}">
+            aria-label="${esc(station.name)}, level ${sum.built} of ${sum.total}${sum.maxed ? ', fully upgraded' : ''}">
       <div class="station-card__head">
         <span class="station-card__icon">${icon(station.icon)}</span>
         <div>
           <h2 class="station-card__name">${esc(station.name)}</h2>
           <span class="station-card__level">LV ${sum.built} / ${sum.total}</span>
         </div>
+        ${sum.maxed ? `<span class="station-card__done">${icon('check')}Maxed</span>` : ''}
       </div>
       <div class="station-card__body">
-        <p class="station-card__next">${waiting ? icon('lock') : ''}${esc(nextLabel)}</p>
+        <p class="station-card__next">${waiting ? icon('lock') : sum.maxed ? icon('check') : ''}${esc(nextLabel)}</p>
         <p class="station-card__device">${esc(device)}</p>
         ${
           waiting
