@@ -20,7 +20,6 @@ second monitor while you play. Two open tabs stay in sync.
 - Power meter: kW from your generator, and a warning on levels that need more
 - Disassembly page: all 15 recipes (12 hours each) with search
 - Edit button to fix a recipe amount if the game shows a different number
-- Warning flags on the 7 recipes where sources disagree
 - Backup and load your progress as a file
 - Faded hideout photo in the background, 3D tilt cards, 3D level flips, radar and HUD effects
 - Works on phones, tablets and wide screens
@@ -86,7 +85,7 @@ src/styles/
 Recipes come from [gzwhideout.com](http://gzwhideout.com/), checked against the
 [Fandom wiki](https://gray-zone-warfare.fandom.com/wiki/Hideout) and
 [grayzonewarfaregame.wiki](https://grayzonewarfaregame.wiki/hideout/hideout-guide/).
-Where they disagree, the level has a `sourceConflict` note and the site shows a warning.
+Where they disagree, the level has a `sourceConflict` note in the JSON (not shown on the site).
 
 Power: each level's `kw` is the power it needs before it can be built. Sources do not say
 if built stations use power up, so the site treats kW as a minimum, not a running total.

@@ -213,12 +213,6 @@ function render(flip) {
         }
 
         ${
-          level.sourceConflict
-            ? `<p class="level__warn">${icon('warn')}<span><b>Not confirmed.</b> ${esc(level.sourceConflict)} Check it in game and use the edit button to fix it.</span></p>`
-            : ''
-        }
-
-        ${
           readOnly
             ? ''
             : `<div class="level__progress">
