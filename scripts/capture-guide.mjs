@@ -345,14 +345,15 @@ async function main() {
   // 8b. Safe to sell, with a bigger stash so some items are extra.
   // The demo save goes back afterwards for the other shots.
   await run(`localStorage.setItem('buyaka-gzw-hideout:v1', ${JSON.stringify(
-    JSON.stringify({ ...DEMO, storage: { ...DEMO.storage, Steel: 100, Wood: 9, Glass: 15 }, assigned: {} })
+    JSON.stringify({ ...DEMO, storage: { ...DEMO.storage, Copper: 20, Wood: 9, Glass: 15 }, assigned: {} })
   )}); true`);
   await reload('#shopping');
   await run(`document.querySelector('[data-action="shop-latch"][data-k="sell"]').click(); true`);
   await wait(600);
   await mark([
     { sel: '[data-action="shop-latch"][data-k="sell"]', side: 'top', gap: 14 },
-    { sel: '.shop__extra', nth: 1, side: 'right', gap: 40 },
+    { sel: '.shop__extra', nth: 2, side: 'bottom', gap: 22 },
+    { sel: '.shop__keep', nth: 0, side: 'top', gap: 22 },
     { sel: '.shop__sold', nth: 1, side: 'right', gap: 30 },
   ]);
   await shot('shopping-sell', await rect(['.shop-tools', '.shop tbody tr:last-child', '.shop thead'], 10));

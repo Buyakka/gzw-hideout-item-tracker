@@ -112,6 +112,11 @@
   &__vignette {
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.7));
+    // Dark edges, plus a light dim over the whole picture so the
+    // photo and room scenes stay visible but calmer. Raise the 0.22
+    // to make every background darker.
+    background:
+      radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.7)),
+      rgb(0 0 0 / 0.22);
   }
 }

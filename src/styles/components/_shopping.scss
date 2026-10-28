@@ -62,24 +62,23 @@
   display: inline-flex;
   align-items: center;
   gap: space('2');
-  min-height: 46px;
-  padding: 0 space('4');
+  min-height: 36px;
+  padding: 0 space('3');
   font-family: font('ui');
-  font-size: fs('xs');
+  font-size: fs('xxs');
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--c);
   background: var(--dk);
   border: 1px solid var(--ed);
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  // Up: shadow around it, light top edge, dark bottom edge
+  // Up: small shadow, light top edge, dark bottom edge
   box-shadow:
-    0 4px 10px rgb(0 0 0 / 0.85),
-    0 1px 0 rgb(0 0 0 / 0.9),
-    inset 0 1px 0 rgb(255 255 255 / 0.18),
-    inset 0 -3px 0 rgb(0 0 0 / 0.4);
+    0 2px 5px rgb(0 0 0 / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    inset 0 -2px 0 rgb(0 0 0 / 0.35);
   @include focus-ring;
 
   @include motion {
@@ -101,9 +100,9 @@
     background: var(--c);
     border-color: var(--c);
     box-shadow:
-      0 0 18px -2px var(--c),
-      inset 0 3px 7px rgb(0 0 0 / 0.55),
-      inset 0 -1px 0 rgb(255 255 255 / 0.25);
+      0 0 8px -2px var(--c),
+      inset 0 2px 5px rgb(0 0 0 / 0.45),
+      inset 0 -1px 0 rgb(255 255 255 / 0.2);
 
     @include motion {
       transform: scale(0.985);
@@ -115,8 +114,8 @@
   // Small lamp: dark when up, bright white when pushed
   &__lamp {
     flex: none;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: #1a1a1a;
     box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.9), 0 0 0 1px var(--ed);
@@ -124,12 +123,12 @@
 
   &[aria-pressed='true'] &__lamp {
     background: #fff;
-    box-shadow: 0 0 6px 2px rgb(255 255 255 / 0.8);
+    box-shadow: 0 0 4px 1px rgb(255 255 255 / 0.6);
   }
 
   // Count in a small pill, readable in both states
   &__n {
-    padding: 1px 7px;
+    padding: 0 6px;
     border-radius: 999px;
     background: rgb(0 0 0 / 0.35);
   }
@@ -262,7 +261,6 @@
   }
 
   &__extra {
-    font-size: fs('lg');
     font-weight: 800;
     color: color('ok');
   }
@@ -271,38 +269,109 @@
     text-align: right;
   }
 
+  // "Keep 2", then one line per level not built yet: "1 for Glassware L1"
+  &__keep-head {
+    margin-bottom: space('1');
+    font-family: font('ui');
+    font-size: fs('xxs');
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: color('text-dim');
+  }
+
+  &__keep-list {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0 space('2');
+    }
+  }
+
+  &__keep-line {
+    font-size: fs('xs');
+    color: color('text');
+    text-decoration: none;
+    @include focus-ring;
+
+    b {
+      font-family: font('ui');
+      font-weight: 800;
+    }
+
+    @include hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Station and level in the room colour, like the tags elsewhere
+  &__keep-st {
+    font-weight: 700;
+    color: var(--room);
+  }
+
+  &__keep-set {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: fs('xxs');
+    font-weight: 700;
+    color: color('ok');
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    &.is-part {
+      color: color('text-dim');
+    }
+  }
+
+  &__keep-none {
+    font-size: fs('xs');
+    color: color('text-dim');
+  }
+
   // A real raised button, same family as the push buttons above:
   // rounded, bevel on top, dark edge below, shadow under it.
   // Hover lifts it a little, pressing sinks it in.
   &__sold {
     display: inline-flex;
     align-items: center;
-    gap: space('2');
-    min-height: 34px;
-    padding: 0 space('3');
+    gap: space('1');
+    min-height: 28px;
+    padding: 0 space('3') 0 space('2');
     font-family: font('ui');
-    font-size: fs('xs');
+    font-size: fs('xxs');
     font-weight: 800;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     white-space: nowrap;
     color: #0c0c0c;
     background: linear-gradient(#6fcf73, color('ok'));
     border: 1px solid #2b6a2f;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     box-shadow:
-      0 4px 10px rgb(0 0 0 / 0.75),
-      inset 0 1px 0 rgb(255 255 255 / 0.45),
-      inset 0 -3px 0 rgb(0 0 0 / 0.25);
+      0 2px 5px rgb(0 0 0 / 0.6),
+      inset 0 1px 0 rgb(255 255 255 / 0.4),
+      inset 0 -2px 0 rgb(0 0 0 / 0.2);
     @include focus-ring;
 
     // Check mark in a dark circle, like a "done" stamp
     svg {
       flex: none;
-      width: 16px;
-      height: 16px;
-      padding: 3px;
+      width: 14px;
+      height: 14px;
+      padding: 2px;
       color: color('ok');
       background: #0f2a12;
       border-radius: 50%;
@@ -318,14 +387,14 @@
       filter: brightness(1.12);
       border-color: #fff;
       box-shadow:
-        0 0 0 2px rgb(255 255 255 / 0.9),
-        0 0 16px 2px rgb(76 175 80 / 0.7),
-        0 6px 12px rgb(0 0 0 / 0.75),
-        inset 0 1px 0 rgb(255 255 255 / 0.45),
-        inset 0 -3px 0 rgb(0 0 0 / 0.25);
+        0 0 0 2px rgb(255 255 255 / 0.85),
+        0 0 10px 1px rgb(76 175 80 / 0.55),
+        0 3px 8px rgb(0 0 0 / 0.6),
+        inset 0 1px 0 rgb(255 255 255 / 0.4),
+        inset 0 -2px 0 rgb(0 0 0 / 0.2);
 
       @include motion {
-        transform: translateY(-2px);
+        transform: translateY(-1px);
       }
     }
 
@@ -528,7 +597,7 @@
   // and its Mark as sold button sit close together
   &--sell {
     @include up('lg') {
-      max-width: 860px;
+      max-width: 1080px;
       margin-inline: auto;
 
       th,
@@ -553,7 +622,10 @@
       grid-template-areas:
         'name  name  name  name'
         'total used  need  havn'
+        'keep  keep  keep  keep'
         'extra extra act   act';
+
+      .shop__keep { grid-area: keep; }
 
       .shop__havn  { grid-area: havn; }
 

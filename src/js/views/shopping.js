@@ -185,6 +185,7 @@ function body() {
           <th class="num" title="What you have in storage">Have</th>
           ${sell
             ? `<th class="num" title="Have minus still need: the extra you can sell">Sell</th>
+               <th title="What to keep, and which level not built yet needs it">Keep for</th>
                <th><span class="sr-only">Mark as sold</span></th>`
             : `<th class="num" title="Still need minus what you have">Left</th>
                <th>Used by</th>`}
@@ -230,9 +231,30 @@ function row(r, i, next, sell) {
     </tr>`;
 }
 
+// What to keep and why: one line per level not built yet, e.g.
+// "1 for Glassware L1". Built levels are left out (their items are
+// already used up). Says when the items are already set aside.
+function keepList(r) {
+  const open = r.uses.filter((u) => !u.built);
+  if (!open.length) return '<p class="shop__keep-none">Keep none. Every level that uses it is built.</p>';
+  const lines = open
+    .map((u) => {
+      const ready =
+        u.have >= u.qty
+          ? `<span class="shop__keep-set">${icon('check')}set aside</span>`
+          : u.have > 0
+            ? `<span class="shop__keep-set is-part">${u.have} of ${u.qty} set aside</span>`
+            : '';
+      return `<li><a class="shop__keep-line u-room-${u.roomId}" href="#${u.stationId}" title="Open ${esc(stationLabel(u))}">
+                <b>${u.qty}</b> for <span class="shop__keep-st">${esc(stationLabel(u))} L${u.step}</span></a>${ready}</li>`;
+    })
+    .join('');
+  return `<p class="shop__keep-head">Keep ${r.need}</p><ul class="shop__keep-list">${lines}</ul>`;
+}
+
 // Safe to sell: only the numbers that matter for selling, read only.
-// Total, used, still need, what you have, and how many you can sell,
-// then the "Mark as sold" button.
+// Total, used, still need, what you have, how many you can sell,
+// what to keep and for which level, then "Mark as sold".
 function sellRow(r, i) {
   const name = esc(r.name);
   return `
@@ -243,6 +265,7 @@ function sellRow(r, i) {
       <td class="num shop__need" data-label="Still need">${r.need}</td>
       <td class="num shop__havn" data-label="Have">${r.storage}</td>
       <td class="num shop__extra" data-label="Sell">${r.extra}</td>
+      <td class="shop__keep">${keepList(r)}</td>
       <td class="shop__act">
         <button class="shop__sold" type="button" data-action="store-sold" data-item="${name}"
                 title="I sold the extra: keep only what the hideout still needs (${r.need})">${icon('check')}<span>Mark as sold</span></button>

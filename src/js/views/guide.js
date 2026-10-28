@@ -19,9 +19,9 @@ const SHOTS = {
   item: [845, 291],
   'panel-foot': [905, 324],
   confirm: [750, 543],
-  shopping: [1995, 730],
-  'shopping-next': [1983, 750],
-  'shopping-sell': [1983, 611],
+  shopping: [1995, 715],
+  'shopping-next': [1983, 735],
+  'shopping-sell': [1983, 978],
   'phone-card': [561, 363],
   power: [1053, 209],
   'power-gen': [911, 663],
@@ -235,14 +235,22 @@ export function renderGuide(el) {
           <section class="guide__part" tabindex="-1" id="sell">
             <h2>${icon('check')}Selling extras</h2>
             <p>Stash getting crowded? The green <b>Safe to sell</b> button shows every item you have more of than the hideout will ever need, and exactly how many you can let go.</p>
-            ${shot('shopping-sell', 'The Shopping List with the green Safe to sell button pushed in, showing one short row per item: total, used, still need, have, how many to sell, and a Mark as sold button', 'Steel: 100 in storage, 86 still needed, so 14 can go.', 'wide')}
+            ${shot('shopping-sell', 'The Shopping List with the green Safe to sell button pushed in, showing one short row per item: total, used, still need, have, how many to sell, and a Mark as sold button', 'Copper: 20 in storage, 6 kept for Extraction Vessel, so 14 can go.', 'wide')}
             ${marks([
               '<b>Safe to sell, pushed in.</b> Lit up green means you are looking at extras only. The number on it says how many items have extras.',
-              '<b>Sell.</b> How many of this item you can sell. Big and green so you cannot miss it.',
+              '<b>Sell.</b> How many of this item you can sell, in green.',
+              '<b>Keep for.</b> How many to keep, and exactly which level wants each one, like <b>2 for Glassware L2</b>. Click a line to open that station.',
               '<b>Mark as sold.</b> Press it after you sell them in game.',
             ])}
-            <p>This view is kept short on purpose. You get just the numbers that matter for selling: <b>Total</b>, <b>Used</b>, <b>Still need</b>, what you <b>Have</b> and how many to <b>Sell</b>. The station tags and the − / + buttons are hidden here, and the rows take turns light and dark so your eye stays on the right line. On a computer the list sits in the middle of the page, so the item name and its button are close together.</p>
-            <p>The math is simple. We take what you have, subtract what every station you have not built yet still needs, and whatever is left over shows as <b>Sell</b>. An item only shows up here once every level that uses it is covered, across all three rooms. If even one level still wants it, it stays off the list.</p>
+            <p>Each row answers three questions: how many can I sell, how many do I keep, and who are they for. Here is an example:</p>
+            <dl class="guide__terms">
+              <div><dt>You have</dt><dd>20 Glass.</dd></div>
+              <div><dt>Keep 10</dt><dd>2 for Glassware L2, 3 for Storage Equipment (Lab) L2 and 5 for Storage Equipment (Lab) L3.</dd></div>
+              <div><dt>Sell 10</dt><dd>Everything else. Nothing in the hideout will ever ask for it.</dd></div>
+            </dl>
+            <p>Only levels you have <b>not built yet</b> count. Levels you already built used their items up, so they never show here. If a level already has its items set aside, the line says <b>set aside</b> (or <b>1 of 3 set aside</b> when it is only part way). If every level that uses an item is built, it says <b>Keep none</b> and you can sell them all.</p>
+            ${tip('Keep what the list says even if you cannot build that level yet. You may still be missing other items for it, but these ones will be waiting.')}
+            <p>An item only shows up here once you have more than every level not built yet needs, across all three rooms. If even one level is still short, it stays off the list.</p>
             <p>Sold it in game? Hit <b>Mark as sold</b>. Your storage drops to exactly what the hideout still needs, a short message confirms it, and the item leaves the list. No retyping. Sold only part of it? Pop the green button back out and type the new amount in <b>Have</b>.</p>
             ${tip('This only counts the hideout. If you also need an item for something else in the game, hold on to it.')}
             <p>The yellow and green buttons pop each other out, since one means "I still need this" and the other means "I don't". <b>Hide done</b> works with either.</p>
