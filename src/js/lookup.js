@@ -98,6 +98,10 @@ function card(name, rows) {
        </dl>
        <div class="shop__used">${usedTags(row.uses)}</div>`
     : `<p class="lookup__none">No level you still have to build needs this.</p>`;
+  // More than the whole hideout still needs: safe to sell
+  const extra = row?.extra
+    ? `<p class="lookup__extra">${icon('check')}<span><b>${row.extra} extra</b>, safe to sell. The hideout only needs ${row.need} more.</span></p>`
+    : '';
 
   const dis = [
     ...breaksInto.map((r) => `${icon('split')}<span>Get it by disassembling <b>${esc(r.item)}</b> (${r.hours} h)</span>`),
@@ -108,6 +112,7 @@ function card(name, rows) {
     <article class="lookup__item">
       <h3 class="lookup__name">${esc(name)}</h3>
       ${need}
+      ${extra}
       ${dis.length ? `<a class="lookup__dis" href="#disassembly">${dis.join('</a><a class="lookup__dis" href="#disassembly">')}</a>` : ''}
     </article>`;
 }
@@ -118,7 +123,8 @@ function render() {
 
   if (!q) {
     // Nothing typed yet: show the items still needed most
-    const top = [...rows.values()].filter((r) => r.left > 0).slice(0, 4);
+    // (the list itself is A to Z, so sort by what is left here)
+    const top = [...rows.values()].filter((r) => r.left > 0).sort((a, b) => b.left - a.left).slice(0, 4);
     ui.results.innerHTML = top.length
       ? `<p class="lookup__label">Most needed right now</p>${top.map((r) => card(r.name, rows)).join('')}`
       : `<p class="lookup__none">You have everything for every level. Nice work.</p>`;

@@ -206,6 +206,65 @@
     }
   }
 
+  // Step by step list: "Step 1", "Step 2"... in yellow
+  &__steps {
+    display: grid;
+    gap: space('2');
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+
+    li {
+      counter-increment: step;
+
+      &::before {
+        content: 'Step ' counter(step) '  ';
+        font-family: font('ui');
+        font-size: fs('xs');
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: color('accent');
+        white-space: pre;
+      }
+    }
+  }
+
+  // "What you see" list under a screenshot. Each number matches a
+  // pink numbered badge drawn on the picture.
+  &__marks {
+    display: grid;
+    gap: space('2');
+    margin: 0;
+    padding: space('3') space('4');
+    list-style: none;
+    background: tint('panel', 0.85);
+    border: 1px solid color('line');
+    border-left: 3px solid #ff2d78;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: space('3');
+    }
+  }
+
+  &__mark-n {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    margin-top: 0.05em;
+    font-family: font('ui');
+    font-size: fs('xs');
+    font-weight: 800;
+    color: #fff;
+    background: #d10a5a;
+    border: 2px solid #fff;
+    border-radius: 50%;
+  }
+
   // Screenshot in a game-style frame
   &__shot {
     display: grid;

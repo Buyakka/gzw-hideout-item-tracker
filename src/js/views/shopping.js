@@ -3,7 +3,7 @@
 // Everything still needed for levels you have not built yet.
 // =============================================================
 import { shoppingList, overall, buildNow, levelItems } from '../calc.js';
-import { esc, money } from '../icons.js';
+import { esc, money, icon } from '../icons.js';
 import { STATIONS, ROOM_BY_ID } from '../data.js';
 import { GROUPS, groupOf } from '../item-groups.js';
 
@@ -14,7 +14,8 @@ const SHARED = new Set(
 );
 const stationLabel = (u) => (SHARED.has(u.station) ? `${u.station} (${ROOM_BY_ID[u.roomId].short})` : u.station);
 
-const ui = { query: '', hideDone: false, group: 'all', next: false };
+// mode: 'all', 'next' (Next upgrades) or 'sell' (Safe to sell)
+const ui = { query: '', hideDone: false, group: 'all', mode: 'all' };
 
 // Items for the levels you can work on right now (the same levels as
 // the Next Upgrades page): how many those levels need of each item,
@@ -64,14 +65,10 @@ export function renderShopping(el) {
       <div class="shop-tools">
         <input class="search" type="search" placeholder="Search items..." value="${esc(ui.query)}"
                data-action="shop-search" aria-label="Search items">
-        <label class="toggle">
-          <input type="checkbox" data-action="shop-hide" ${ui.hideDone ? 'checked' : ''}>
-          Hide done
-        </label>
-        <label class="toggle toggle--next" title="Only items for levels you can build or start now">
-          <input type="checkbox" data-action="shop-next" ${ui.next ? 'checked' : ''}>
-          Next upgrades only <span class="toggle__n">${nextNeeds().need.size}</span>
-        </label>
+      </div>
+      <div class="latches" role="group" aria-label="Show">
+        <span class="latches__label" aria-hidden="true">Show</span>
+        ${latchButtons()}
       </div>
       <div class="shop-groups" role="group" aria-label="Show item group">${groupButtons()}</div>
       <div data-shop-body>${body()}</div>
@@ -87,12 +84,32 @@ export function setShopQuery(q) {
   ui.query = q;
 }
 
-export function setShopHide(v) {
-  ui.hideDone = v;
+// The three push buttons. Next upgrades and Safe to sell pop each
+// other out (one means "I need it", the other "I don't"). Hide done
+// works with either one.
+function latchButtons() {
+  const sell = shoppingList().filter((r) => r.extra > 0).length;
+  const btn = (k, pressed, label, n, title) => `
+    <button class="latch latch--${k}" type="button" data-action="shop-latch" data-k="${k}"
+            aria-pressed="${pressed}" title="${title}">
+      <span class="latch__lamp" aria-hidden="true"></span>${label}${n === null ? '' : `<span class="latch__n">${n}</span>`}
+    </button>`;
+  return [
+    btn('next', ui.mode === 'next', 'Next upgrades', nextNeeds().need.size, 'Only items for levels you can build or start now'),
+    btn('sell', ui.mode === 'sell', 'Safe to sell', sell, 'Items you have more of than the whole hideout still needs'),
+    btn('hide', ui.hideDone, 'Hide done', null, 'Hide items you already have enough of'),
+  ].join('');
 }
 
-export function setShopNext(v) {
-  ui.next = v;
+// Push or pop one button, then redraw the list
+export function toggleShopLatch(root, k) {
+  if (k === 'hide') ui.hideDone = !ui.hideDone;
+  else ui.mode = ui.mode === k ? 'all' : k;
+  root.querySelectorAll('.latch').forEach((b) => {
+    const on = b.dataset.k === 'hide' ? ui.hideDone : ui.mode === b.dataset.k;
+    b.setAttribute('aria-pressed', on);
+  });
+  refreshShoppingBody(root);
 }
 
 // Pick a group and mark its button as pressed
@@ -133,19 +150,23 @@ export function usedTags(uses, nextLevels = null) {
 
 function body() {
   const q = ui.query.trim().toLowerCase();
-  const next = ui.next ? nextNeeds() : null;
+  const next = ui.mode === 'next' ? nextNeeds() : null;
+  const sell = ui.mode === 'sell';
   const rows = shoppingList().filter(
     (r) =>
       (!q || r.name.toLowerCase().includes(q)) &&
       (!ui.hideDone || r.left > 0) &&
       (ui.group === 'all' || groupOf(r.name) === ui.group) &&
-      (!next || next.need.has(r.name))
+      (!next || next.need.has(r.name)) &&
+      (!sell || r.extra > 0)
   );
 
   if (!rows.length) {
     const msg = q
       ? 'No items match your search.'
-      : next
+      : sell
+        ? 'Nothing extra yet. Everything you have is still needed for the hideout.'
+        : next
         ? 'None of the levels you can work on now need items from here.'
         : ui.group !== 'all'
           ? 'Nothing left to find in this group.'
@@ -154,7 +175,7 @@ function body() {
   }
 
   return `
-    <table class="shop">
+    <table class="shop${sell ? ' shop--sell' : ''}">
       <thead>
         <tr>
           <th>Item</th>
@@ -162,23 +183,30 @@ function body() {
           <th class="num" title="Already used by levels you built">Used</th>
           <th class="num" title="Total minus used: for levels not built yet">Still need</th>
           <th class="num" title="What you have in storage">Have</th>
-          <th class="num" title="Still need minus what you have">Left</th>
-          <th>Used by</th>
+          ${sell
+            ? `<th class="num" title="Have minus still need: the extra you can sell">Sell</th>
+               <th><span class="sr-only">Mark as sold</span></th>`
+            : `<th class="num" title="Still need minus what you have">Left</th>
+               <th>Used by</th>`}
         </tr>
       </thead>
       <tbody>
-        ${rows.map((r, i) => row(r, i, next)).join('')}
+        ${rows.map((r, i) => row(r, i, next, sell)).join('')}
       </tbody>
     </table>`;
 }
 
 // One item: the 5 numbers, a storage stepper, and the stations.
-// With "Next upgrades only" on, the name also says how many the
-// levels you can work on now need ("Next: 4").
-function row(r, i, next) {
+// With Next upgrades pushed, the name also says how many the levels
+// you can work on now need ("Next: 4"). With Safe to sell pushed it
+// shows a short row instead (see sellRow).
+function row(r, i, next, sell) {
+  if (sell) return sellRow(r, i);
   const name = esc(r.name);
   const n = next?.need.get(r.name);
-  const nextLine = next ? `<span class="shop__next" title="The levels you can work on now need ${n}">Next: ${n}</span>` : '';
+  const nextLine = next
+    ? `<span class="shop__next" title="The levels you can work on now need ${n}">Next: ${n}</span>`
+    : '';
   return `
     <tr class="${r.left === 0 ? 'is-done' : ''}" style="--i:${i}">
       <td class="shop__name">${name}${nextLine}</td>
@@ -198,6 +226,26 @@ function row(r, i, next) {
       <td class="num shop__left" data-label="Left">${r.left === 0 ? '✓' : r.left}</td>
       <td class="shop__used-cell">
         <div class="shop__used">${usedTags(r.uses, next?.levels)}</div>
+      </td>
+    </tr>`;
+}
+
+// Safe to sell: only the numbers that matter for selling, read only.
+// Total, used, still need, what you have, and how many you can sell,
+// then the "Mark as sold" button.
+function sellRow(r, i) {
+  const name = esc(r.name);
+  return `
+    <tr class="shop__sellrow" style="--i:${i}">
+      <td class="shop__name">${name}</td>
+      <td class="num shop__total" data-label="Total">${r.total}</td>
+      <td class="num shop__usedn" data-label="Used">${r.used}</td>
+      <td class="num shop__need" data-label="Still need">${r.need}</td>
+      <td class="num shop__havn" data-label="Have">${r.storage}</td>
+      <td class="num shop__extra" data-label="Sell">${r.extra}</td>
+      <td class="shop__act">
+        <button class="shop__sold" type="button" data-action="store-sold" data-item="${name}"
+                title="I sold the extra: keep only what the hideout still needs (${r.need})">${icon('check')}<span>Mark as sold</span></button>
       </td>
     </tr>`;
 }

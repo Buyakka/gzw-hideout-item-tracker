@@ -13,11 +13,11 @@
 import '../styles/main.scss';
 
 import { ROOM_BY_ID, STATION_BY_ID } from './data.js';
-import { levelItems } from './calc.js';
+import { levelItems, shoppingList } from './calc.js';
 import { store } from './state.js';
 import { renderStats, renderTabs } from './views/hud.js';
 import { renderRoom } from './views/room.js';
-import { renderShopping, refreshShoppingBody, setShopQuery, setShopHide, setShopGroup, setShopNext } from './views/shopping.js';
+import { renderShopping, refreshShoppingBody, setShopQuery, setShopGroup, toggleShopLatch } from './views/shopping.js';
 import { renderDisassembly, refreshDisassemblyBody, setDisQuery } from './views/disassembly.js';
 import { renderHome, rememberRoom } from './views/home.js';
 import { renderBuildNow } from './views/build-now.js';
@@ -214,6 +214,18 @@ const actions = {
     // Move keyboard focus there too, so Tab carries on from the topic
     target?.focus({ preventScroll: true });
   },
+  // Shopping List push buttons: Next upgrades, Safe to sell, Hide done
+  'shop-latch'(el) {
+    toggleShopLatch(els.main, el.dataset.k);
+  },
+  // Safe to sell: after selling in game, keep only what is still needed
+  'store-sold'(el) {
+    const item = el.dataset.item;
+    const keep = shoppingList().find((r) => r.name === item)?.need ?? 0;
+    const sold = store.storage(item) - keep;
+    store.setStorage(item, keep);
+    toast(`Sold ${sold} ${item} · ${keep} kept for the hideout`);
+  },
   // Shopping List: show only one group of items
   'shop-group'(el) {
     setShopGroup(els.main, el.dataset.group);
@@ -280,14 +292,6 @@ document.addEventListener('change', (e) => {
   if (t.matches('.item__need-input')) {
     store.setNeed(t.dataset.needKey, t.value, Number(t.dataset.base));
     toggleEdit(t.dataset.needKey);
-  }
-  if (t.matches('[data-action="shop-hide"]')) {
-    setShopHide(t.checked);
-    refreshShoppingBody(els.main);
-  }
-  if (t.matches('[data-action="shop-next"]')) {
-    setShopNext(t.checked);
-    refreshShoppingBody(els.main);
   }
 });
 

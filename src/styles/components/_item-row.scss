@@ -64,13 +64,13 @@
     font-weight: 600;
   }
 
-  // "Storage 7 · 1 free · Also needed by ..."
+  // "Storage 7 · 1 available", then "Also needed by ..." underneath
   &__store {
     grid-area: store;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: space('1') space('3');
+    gap: space('2') space('3');
     font-size: fs('xs');
     color: color('text-dim');
   }
@@ -119,8 +119,15 @@
     }
   }
 
+  // "Also needed by": tomato, a heads-up (not an error) that other
+  // stations want the same item
+  // Always on its own line under Storage, with room above it
   &__also {
-    color: color('text-faint');
+    flex-basis: 100%;
+    margin-top: space('1');
+    font-weight: 600;
+    line-height: 1.4;
+    color: #ff6347;
   }
 
   &__check {

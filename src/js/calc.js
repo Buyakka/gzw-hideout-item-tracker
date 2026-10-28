@@ -159,6 +159,8 @@ export const hasPower = (level, free = power().free) => !level.kw || free >= lev
 //   need   still needed = total - used (levels not built yet)
 //   have   what is in storage, counted up to "need"
 //   left   still to find = need - storage
+//   extra  more than the whole hideout still needs = storage - need,
+//          safe to sell (only once every level that uses it is covered)
 // "uses" lists every level that needs the item, built ones too
 // (marked built), so the player always sees what it is for.
 export function shoppingList() {
@@ -196,7 +198,13 @@ export function shoppingList() {
   return [...map.values()]
     .map((r) => {
       const storage = store.storage(r.name);
-      return { ...r, storage, have: Math.min(storage, r.need), left: Math.max(0, r.need - storage) };
+      return {
+        ...r,
+        storage,
+        have: Math.min(storage, r.need),
+        left: Math.max(0, r.need - storage),
+        extra: Math.max(0, storage - r.need),
+      };
     })
     // A to Z, so items are quick to find. The order never changes
     // when the player sets storage, so rows do not jump away from
