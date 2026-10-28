@@ -6,7 +6,8 @@
 // =============================================================
 import { STATIONS, DISASSEMBLY } from './data.js';
 import { shoppingList } from './calc.js';
-import { usedTags } from './views/shopping.js';
+import { store } from './state.js';
+import { usedTags, nextNeeds } from './views/shopping.js';
 import { icon, esc } from './icons.js';
 
 // Every item name the site knows: recipes plus disassembly
@@ -17,7 +18,7 @@ const ALL_ITEMS = [
   ]),
 ].sort((a, b) => a.localeCompare(b));
 
-const ui = { el: null, input: null, results: null, lastFocus: null };
+const ui = { el: null, input: null, results: null, lastFocus: null, eatSlash: false };
 
 export const isLookupOpen = () => !!ui.el && !ui.el.hidden;
 
@@ -42,7 +43,20 @@ export function initLookup() {
   ui.input = el.querySelector('.lookup__input');
   ui.results = el.querySelector('.lookup__results');
 
-  ui.input.addEventListener('input', render);
+  ui.input.addEventListener('beforeinput', (e) => {
+    if (ui.eatSlash && e.data === '/') {
+      e.preventDefault();
+      ui.eatSlash = false;
+    }
+  });
+  ui.input.addEventListener('input', () => {
+    // Fallback for browsers that skip beforeinput
+    if (ui.eatSlash && ui.input.value === '/') {
+      ui.input.value = '';
+      ui.eatSlash = false;
+    }
+    render();
+  });
   el.addEventListener('click', (e) => {
     if (e.target.closest('[data-lookup-close]')) closeLookup();
     // Following a station link closes the search
@@ -59,6 +73,10 @@ export function initLookup() {
     const typing = e.target.closest?.('input, textarea, [contenteditable="true"]');
     if (e.key === '/' && !typing && !isLookupOpen()) {
       e.preventDefault();
+      // Some keyboards still let the "/" through into the search box
+      // once it has focus. Swallow that one "/" for a moment.
+      ui.eatSlash = true;
+      setTimeout(() => (ui.eatSlash = false), 500);
       openLookup();
     }
   }, true);
@@ -85,18 +103,21 @@ export function closeLookup(restoreFocus = true) {
   if (restoreFocus) ui.lastFocus?.focus?.({ preventScroll: true });
 }
 
-function card(name, rows) {
+// soon: { need, missing, levels } when the card is shown for the
+// next upgrades (empty search box), so its line and tags say so
+function card(name, rows, soon = null) {
   const row = rows.get(name);
   const breaksInto = DISASSEMBLY.filter((r) => r.outputs.includes(name));
   const breaksDown = DISASSEMBLY.find((r) => r.item === name);
 
   const need = row?.need
     ? `<dl class="lookup__nums">
-         <div><dt>Still need</dt><dd>${row.need}</dd></div>
-         <div><dt>In storage</dt><dd>${row.storage}</dd></div>
-         <div><dt>Left</dt><dd class="${row.left ? 'is-left' : 'is-done'}">${row.left || '✓'}</dd></div>
+         <div><dt>Needed</dt><dd>${row.need}</dd></div>
+         <div><dt>Have</dt><dd>${row.storage}</dd></div>
+         <div><dt>To find</dt><dd class="${row.left ? 'is-left' : 'is-done'}">${row.left || '✓'}</dd></div>
        </dl>
-       <div class="shop__used">${usedTags(row.uses)}</div>`
+       ${soon ? `<p class="lookup__next">Your next upgrades need <b>${soon.need}</b> · you are missing <b>${soon.missing}</b></p>` : ''}
+       <div class="shop__used">${usedTags(row.uses, soon?.levels)}</div>`
     : `<p class="lookup__none">No level you still have to build needs this.</p>`;
   // More than the whole hideout still needs: safe to sell
   const extra = row?.extra
@@ -122,11 +143,29 @@ function render() {
   const rows = new Map(shoppingList().map((r) => [r.name, r]));
 
   if (!q) {
-    // Nothing typed yet: show the items still needed most
-    // (the list itself is A to Z, so sort by what is left here)
+    // Nothing typed yet: what to look for on the next raid. Only the
+    // levels you can work on now (same as the Next upgrades button),
+    // sorted by how many of each item those levels are still missing.
+    const next = nextNeeds();
+    const soon = [...next.need]
+      .map(([name, need]) => ({ name, need, missing: Math.max(0, need - store.storage(name)), levels: next.levels }))
+      .filter((s) => s.missing > 0)
+      .sort((a, b) => b.missing - a.missing || a.name.localeCompare(b.name))
+      .slice(0, 4);
+    if (soon.length) {
+      ui.results.innerHTML = `
+        <div><p class="lookup__label">Find these next</p>
+        <p class="lookup__sub">Items your next upgrades are still missing.</p></div>
+        ${soon.map((s) => card(s.name, rows, s)).join('')}`;
+      return;
+    }
+    // Next upgrades have it all: fall back to the biggest gaps overall
     const top = [...rows.values()].filter((r) => r.left > 0).sort((a, b) => b.left - a.left).slice(0, 4);
     ui.results.innerHTML = top.length
-      ? `<p class="lookup__label">Most needed right now</p>${top.map((r) => card(r.name, rows)).join('')}`
+      ? `<p class="lookup__none">Your next upgrades have everything they need. Nice work.</p>
+         <div><p class="lookup__label">Your biggest gaps</p>
+         <p class="lookup__sub">Items you are missing the most, for every level you have not built.</p></div>
+         ${top.map((r) => card(r.name, rows)).join('')}`
       : `<p class="lookup__none">You have everything for every level. Nice work.</p>`;
     return;
   }

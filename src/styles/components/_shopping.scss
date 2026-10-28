@@ -1,7 +1,7 @@
 // =============================================================
 // SHOPPING LIST
-// Laptop and up (lg): a table with Total, Used, Still need, Have
-// (a storage stepper) and Left. Below that every item is a card:
+// Laptop and up (lg): a table with Total, Used, Needed, Have
+// (a storage stepper) and To find. Below that every item is a card:
 // 2 cards per row on tablets, 1 on phones.
 // =============================================================
 @use '../abstracts' as *;
@@ -335,9 +335,21 @@
     }
   }
 
+  // The amount to keep ("none", 1, 2...) stands out in tomato, the
+  // same heads-up colour as "Also needed by" on the stations
+  &__keep-n {
+    font-size: fs('sm');
+    font-weight: 800;
+    color: #ff6347;
+  }
+
   &__keep-none {
     font-size: fs('xs');
     color: color('text-dim');
+
+    .shop__keep-head {
+      display: block;
+    }
   }
 
   // A real raised button, same family as the push buttons above:
@@ -419,7 +431,7 @@
     color: color('accent');
   }
 
-  // Numbers that are less important than "Left"
+  // Numbers that are less important than "To find"
   &__total,
   &__usedn {
     color: color('text-dim');
@@ -541,7 +553,7 @@
       text-align: left;
       font-size: fs('md');
       font-weight: 700;
-      // Numbers line up even when a label wraps ("Still need")
+      // Numbers line up even when a label wraps ("Needed")
       align-self: end;
     }
 

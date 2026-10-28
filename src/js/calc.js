@@ -150,7 +150,7 @@ export function power() {
   return { total, used, free: total - used, max };
 }
 
-// Is there enough free power to build this level?
+// Is there enough available power to build this level?
 export const hasPower = (level, free = power().free) => !level.kw || free >= level.kw;
 
 // Every material in the hideout, against the shared storage:
@@ -216,7 +216,7 @@ export function shoppingList() {
 // A level's "requires" text mixes 3 kinds of needs:
 //   "Heat Source Lv 1"  previous level (the site already unlocks levels in order)
 //   "Heat Control 2"    a capability: the sum of what built levels in the same room give
-//   "2 kW"              free power
+//   "2 kW"              available power
 // Notes in brackets, like "(no Lv 2 exists)", are not requirements.
 
 const CAP_RE = /^\+(\d+)\s+(.+)$/; // "+2 Extraction & Reaction"

@@ -21,15 +21,18 @@ const SHOTS = {
   confirm: [750, 543],
   shopping: [1995, 715],
   'shopping-next': [1983, 735],
-  'shopping-sell': [1983, 978],
-  'phone-card': [561, 363],
+  'shopping-sell': [1983, 999],
+  'phone-card': [561, 337],
+  columns: [1995, 372],
+  'sell-columns': [1656, 296],
+  'find-next': [1022, 1044],
   power: [1053, 209],
   'power-gen': [911, 663],
   saving: [731, 180],
   'reset-all': [750, 540],
   undo: [905, 252],
   next: [2049, 1152],
-  find: [1022, 1044],
+  find: [1031, 1044],
   disassembly: [2049, 1152],
 };
 
@@ -108,9 +111,12 @@ export function renderGuide(el) {
           <section class="guide__part" tabindex="-1" id="getting-around">
             <h2>${icon('arrow')}Getting around</h2>
             <p>Once you are inside, the bar at the top stays with you on every page. It is your scoreboard.</p>
-            ${shot('header', 'The top bar showing levels built, items found, cash left and free power, plus five small buttons', 'Your four main numbers, always in view.')}
+            ${shot('header', 'The top bar showing levels built, items found, cash left and available power, plus five small buttons', 'Your four main numbers, always in view.')}
             ${marks([
-              '<b>Your numbers.</b> Levels built, items found, cash the remaining levels cost, and free power (how much kW your generator has to spare).',
+              '<b>Levels built.</b> How many upgrades you have finished, out of every level in the hideout.',
+              '<b>Items found.</b> How many of the items your unbuilt levels need you already have, out of the total needed.',
+              '<b>Cash left.</b> The money all the levels you have not built yet still cost.',
+              '<b>Available power.</b> How much power (kW) you still have to run new stations, out of everything your generator makes. 9 of 18 kW means 9 kW are still free to use.',
               '<b>Text size.</b> Makes all the text bigger or smaller.',
               '<b>Find an item.</b> Search any item by name. The <kbd>/</kbd> key does the same.',
               '<b>Backup.</b> Saves your progress to a small file.',
@@ -126,17 +132,23 @@ export function renderGuide(el) {
             ${shot('room', 'The Laboratory room with eight station cards in a grid', 'The Laboratory. Yellow cards are ready to start, grey ones are waiting on something.')}
             ${marks([
               '<b>Room tabs.</b> Jump between rooms and tool pages from anywhere.',
-              '<b>Status line.</b> What the next level needs, or what is blocking it.',
+              '<b>Level.</b> <b>LV 1 / 3</b> means 1 of its 3 levels is built.',
+              '<b>Status line.</b> Which level is next and if anything is blocking it.',
               '<b>Level bars.</b> One bar per level. Filled bars are built.',
+              '<b>Items.</b> How many items the next level needs that you have set aside, like 9 of 10. The line under it fills up as you go.',
             ])}
-            <p>Under the name you will see the level, like <b>LV 1 / 3</b>. The line below that is the important part:</p>
+            <p>The status line (3) is the important part:</p>
             <ul class="guide__list">
               <li><b>Ready to start</b> in yellow means nothing is blocking you. Go collect the items.</li>
               <li><b>Needs Safety 1</b> (or a similar name) with a lock means another station has to be built first. The card tells you which one.</li>
               <li><b>Ready to build</b> in green means every item is set aside. Open it and build.</li>
             </ul>
-            <p>The little bars at the bottom are your levels, and the line under them fills up as you set items aside. Finish every level and the whole card turns green with a <b>Maxed</b> badge.</p>
+            <p>Finish every level and the whole card turns green with a <b>Maxed</b> badge.</p>
             ${shot('maxed', 'A green station card for the Generator with a Maxed badge', 'All done. Green means fully upgraded.', 'small')}
+            ${marks([
+              '<b>Maxed.</b> Every level of this station is built. Nothing left to do here.',
+              '<b>Level bars.</b> All of them filled in green.',
+            ])}
           </section>
 
           <section class="guide__part" tabindex="-1" id="station">
@@ -144,12 +156,16 @@ export function renderGuide(el) {
             <p>Click any card and a panel slides in from the side. Up top are the level tabs. Built levels show a green check, the one you are working on is highlighted, and the rest stay locked until you get there.</p>
             ${shot('panel', 'The Heat Source panel showing level tabs, cost, requirements, a warning and the item list', 'Heat Source, level 2. The yellow box explains what is still blocking it.', 'tall')}
             ${marks([
-              '<b>Level tabs.</b> Click one to see that level. Green check means built.',
-              '<b>The facts.</b> Cost, what it needs, what it gives and the power it uses.',
-              '<b>What is blocking it.</b> Only shows up when something is missing, and says how to fix it.',
+              '<b>Level tabs.</b> Click one to see that level. <b>Built</b> has a green check, <b>In progress</b> is the one you are on, <b>Locked</b> comes later.',
+              '<b>Set aside.</b> How much of this level\'s items you have set aside, in percent.',
+              '<b>Cash.</b> The money this level costs to build. A dash means it is free.',
+              '<b>Requires.</b> What has to be built first. Yellow means something on it is still missing.',
+              '<b>Gives.</b> What you get when it is built, like a new ability or more power.',
+              '<b>Power.</b> How much kW this level uses up. <b>Not needed</b> means none.',
+              '<b>What is blocking it.</b> Only shows up when something is missing, and says how to fix it in plain words.',
+              '<b>Set aside for this level.</b> Items set aside out of the total this level needs, like 9 of 10.',
               '<b>The items.</b> One row for each item this level needs. More on that below.',
             ])}
-            <p>Right under the name you get the facts for that level: what it costs, what it needs, what it gives you and how much power it uses. If something is missing, a yellow box spells it out in plain words, like <i>Build Ventilation System to get more.</i> No guessing.</p>
           </section>
 
           <section class="guide__part" tabindex="-1" id="items">
@@ -199,14 +215,18 @@ export function renderGuide(el) {
               '<b>Have.</b> How many you own. Change it with − and + or type a number.',
               '<b>Used by.</b> Which stations want this item, and how many each level takes. Click a tag to open that station.',
             ])}
-            <p>Here is what each column means:</p>
-            <dl class="guide__terms">
-              <div><dt>Total</dt><dd>How many the whole hideout needs, all levels together.</dd></div>
-              <div><dt>Used</dt><dd>How many your built levels already used up.</dd></div>
-              <div><dt>Still need</dt><dd>What is left for levels you have not built yet.</dd></div>
-              <div><dt>Have</dt><dd>What you own right now. Change it with − and + or type a number.</dd></div>
-              <div><dt>Left</dt><dd>What you still have to find. A check means you have enough.</dd></div>
-            </dl>
+            <p>Here is what each column title means:</p>
+            ${shot('columns', 'The Shopping List column titles, each one marked with a number', 'Every column, left to right.', 'wide')}
+            ${marks([
+              '<b>Item.</b> The name of the item, A to Z.',
+              '<b>Total.</b> How many the whole hideout needs, all levels together.',
+              '<b>Used.</b> How many your built levels already used up. Those are gone.',
+              '<b>Needed.</b> How many the levels you have not built yet need in total. It does not go down when you collect items, only when you build.',
+              '<b>Have.</b> How many you own right now. Change it with − and + or type a number.',
+              '<b>To find.</b> How many you are still missing and have to go find. This is your real shopping list. A green check means you have enough.',
+              '<b>Used by.</b> Every station and level that uses this item, and how many each one takes. Built levels show in green. Click a tag to open that station.',
+            ])}
+            ${tip('Example: CPU. Hardware L1 and L2 need 1 each, so <b>Needed</b> is 2. You own 1, so <b>Have</b> is 1. That leaves <b>To find</b> 1: go find one more CPU. Needed stays at 2 until you build a level, because the levels still use both.')}
             <p>Coming back from a raid with a full bag? This is the fastest place to log it. Find the item, type what you have, done. The rows never move while you click, so you will not hit the wrong one.</p>
             <p>The three push buttons (2, 3 and 4) work like real latching buttons. Press one and it lights up in its color and sinks in, so you always know a filter is on. Press it again and it pops back out. The number on a button tells you how many items it will show before you press it. The yellow and green ones get their own sections below.</p>
             <p>Search, the push buttons and the item types all work together. In the <b>Used by</b> tags, levels you already built stay in green, so you never lose track of where your Steel went.</p>
@@ -235,12 +255,23 @@ export function renderGuide(el) {
           <section class="guide__part" tabindex="-1" id="sell">
             <h2>${icon('check')}Selling extras</h2>
             <p>Stash getting crowded? The green <b>Safe to sell</b> button shows every item you have more of than the hideout will ever need, and exactly how many you can let go.</p>
-            ${shot('shopping-sell', 'The Shopping List with the green Safe to sell button pushed in, showing one short row per item: total, used, still need, have, how many to sell, and a Mark as sold button', 'Copper: 20 in storage, 6 kept for Extraction Vessel, so 14 can go.', 'wide')}
+            ${shot('shopping-sell', 'The Shopping List with the green Safe to sell button pushed in, showing one short row per item: total, used, needed, have, how many to sell, and a Mark as sold button', 'Copper: 20 in storage, 6 kept for Extraction Vessel, so 14 can go.', 'wide')}
             ${marks([
               '<b>Safe to sell, pushed in.</b> Lit up green means you are looking at extras only. The number on it says how many items have extras.',
               '<b>Sell.</b> How many of this item you can sell, in green.',
               '<b>Keep for.</b> How many to keep, and exactly which level wants each one, like <b>2 for Glassware L2</b>. Click a line to open that station.',
               '<b>Mark as sold.</b> Press it after you sell them in game.',
+            ])}
+            <p>The columns here are a little different from the full list:</p>
+            ${shot('sell-columns', 'The Safe to sell column titles, each one marked with a number', 'Every Safe to sell column, left to right.', 'wide')}
+            ${marks([
+              '<b>Item.</b> An item you have more of than the hideout needs.',
+              '<b>Total.</b> How many the whole hideout needs, all levels together.',
+              '<b>Used.</b> How many your built levels already used up.',
+              '<b>Needed.</b> How many the levels you have not built yet still need. This is what you keep.',
+              '<b>Have.</b> How many you own right now.',
+              '<b>Sell.</b> The extra you can sell.',
+              '<b>Keep for.</b> How many to keep, then one line per level that wants them.',
             ])}
             <p>Each row answers three questions: how many can I sell, how many do I keep, and who are they for. Here is an example:</p>
             <dl class="guide__terms">
@@ -259,13 +290,24 @@ export function renderGuide(el) {
           <section class="guide__part" tabindex="-1" id="find">
             <h2>${icon('search')}Find an item</h2>
             <p>Picked something up and not sure if it is worth keeping? Press <kbd>/</kbd> on any page, or use the search button, and type its name.</p>
-            ${shot('find', 'The Find an item box showing results for steel: still need 86, in storage 12, left 74', 'Your numbers for that item, plus every station that wants it.', 'small')}
+            ${shot('find', 'The Find an item box showing results for steel: needed 86, have 12, to find 74', 'Your numbers for that item, plus every station that wants it.', 'small')}
             ${marks([
               '<b>Type here.</b> Part of a name is enough.',
-              '<b>Your numbers.</b> Still need, in storage, and how many are left to find.',
+              '<b>Needed.</b> How many the levels you have not built yet need in total.',
+              '<b>Have.</b> How many you own right now.',
+              '<b>To find.</b> How many you are still missing. A green check means you have enough.',
               '<b>Who wants it.</b> Every station and level that uses this item. Click one to open it.',
             ])}
-            <p>You will see how many you still need, how many you have and which stations use it. Got more than the hideout needs? It says so in green, with how many are safe to sell. If you can get the item by breaking something down, that shows up here too. Press Esc to close it.</p>
+            <p>You will see how many are needed, how many you have, how many you still have to find, and which stations use it. Got more than the hideout needs? It says so in green, with how many are safe to sell. If you can get the item by breaking something down, that shows up here too. Press Esc to close it.</p>
+            <h3 class="guide__h3">Before you type: Find these next</h3>
+            <p>Open the box and do not type anything. It shows the 4 items your <b>next upgrades</b> are missing the most. Those are the levels you can build or start today, the same ones as the yellow Next upgrades button. A good list to check right before a raid.</p>
+            ${shot('find-next', 'The Find an item box before typing, with the Find these next list marked', 'What to look for on your next raid.', 'small')}
+            ${marks([
+              '<b>Find these next.</b> The 4 items your next upgrades are missing the most, biggest first.',
+              '<b>Next upgrades line.</b> How many your next upgrades need, and how many of those you are still missing.',
+              '<b>Yellow level.</b> A solid yellow tag is a level you can work on right now. That is where this item goes.',
+            ])}
+            ${tip('When your next upgrades have everything, it says so and shows <b>Your biggest gaps</b> instead: the items you are missing the most for every level you have not built.')}
           </section>
 
           <section class="guide__part" tabindex="-1" id="disassembly">
@@ -282,8 +324,8 @@ export function renderGuide(el) {
             <h2>${icon('bolt')}Power</h2>
             <p>Most stations need electricity, and it all comes from the generator in the Utility Room. That is why the site sends new players there first.</p>
             <p>Every generator level adds kW. Every station level that needs power uses some of it up for good, just like the game does.</p>
-            ${shot('power', 'The top bar with the Free power box marked', 'Your free power, always at the top of the page.')}
-            ${marks(['<b>Free power.</b> How much kW you have left to spare. The small number after the slash is your total. Click the box to open the generator.'])}
+            ${shot('power', 'The top bar with the Available power box marked', 'Your available power, always at the top of the page.')}
+            ${marks(['<b>Available power.</b> The first number is the power you can still use for new stations. The second is everything your generator makes. Click the box to open the generator.'])}
             <p>Want to see where the kW come from? Open the <b>Generator</b> in the Utility Room. Each level shows how much power it adds.</p>
             ${shot('power-gen', 'The Generator panel, level 1, with the Gives and Power boxes marked', 'Generator level 1 adds 9 kW.')}
             ${marks([

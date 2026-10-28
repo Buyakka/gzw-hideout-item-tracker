@@ -206,6 +206,15 @@
     }
   }
 
+  // Small heading inside a topic
+  &__h3 {
+    margin-top: space('3');
+    font-family: font('ui');
+    font-size: fs('md');
+    font-weight: 800;
+    color: color('accent');
+  }
+
   // Step by step list: "Step 1", "Step 2"... in yellow
   &__steps {
     display: grid;

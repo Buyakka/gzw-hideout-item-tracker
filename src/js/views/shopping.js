@@ -20,7 +20,7 @@ const ui = { query: '', hideDone: false, group: 'all', mode: 'all' };
 // Items for the levels you can work on right now (the same levels as
 // the Next Upgrades page): how many those levels need of each item,
 // and which levels they are, so their tags can be marked.
-function nextNeeds() {
+export function nextNeeds() {
   const { ready, startable } = buildNow();
   const need = new Map();
   const levels = new Set();
@@ -181,13 +181,13 @@ function body() {
           <th>Item</th>
           <th class="num" title="All levels together">Total</th>
           <th class="num" title="Already used by levels you built">Used</th>
-          <th class="num" title="Total minus used: for levels not built yet">Still need</th>
+          <th class="num" title="How many the levels you have not built yet need in total">Needed</th>
           <th class="num" title="What you have in storage">Have</th>
           ${sell
-            ? `<th class="num" title="Have minus still need: the extra you can sell">Sell</th>
+            ? `<th class="num" title="The extra you can sell">Sell</th>
                <th title="What to keep, and which level not built yet needs it">Keep for</th>
                <th><span class="sr-only">Mark as sold</span></th>`
-            : `<th class="num" title="Still need minus what you have">Left</th>
+            : `<th class="num" title="How many you are still missing and have to go find">To find</th>
                <th>Used by</th>`}
         </tr>
       </thead>
@@ -213,7 +213,7 @@ function row(r, i, next, sell) {
       <td class="shop__name">${name}${nextLine}</td>
       <td class="num shop__total" data-label="Total">${r.total}</td>
       <td class="num shop__usedn" data-label="Used">${r.used}</td>
-      <td class="num shop__need" data-label="Still need">${r.need}</td>
+      <td class="num shop__need" data-label="Needed">${r.need}</td>
       <td class="num shop__have" data-label="Have">
         <div class="stepper stepper--sm">
           <button class="stepper__btn" type="button" data-action="store-dec" data-item="${name}"
@@ -224,7 +224,7 @@ function row(r, i, next, sell) {
                   aria-label="One more ${name} in storage">+</button>
         </div>
       </td>
-      <td class="num shop__left" data-label="Left">${r.left === 0 ? '✓' : r.left}</td>
+      <td class="num shop__left" data-label="To find">${r.left === 0 ? '✓' : r.left}</td>
       <td class="shop__used-cell">
         <div class="shop__used">${usedTags(r.uses, next?.levels)}</div>
       </td>
@@ -236,7 +236,7 @@ function row(r, i, next, sell) {
 // already used up). Says when the items are already set aside.
 function keepList(r) {
   const open = r.uses.filter((u) => !u.built);
-  if (!open.length) return '<p class="shop__keep-none">Keep none. Every level that uses it is built.</p>';
+  if (!open.length) return '<p class="shop__keep-none"><span class="shop__keep-head">Keep <b class="shop__keep-n">none</b></span> Every level that uses it is built.</p>';
   const lines = open
     .map((u) => {
       const ready =
@@ -249,11 +249,11 @@ function keepList(r) {
                 <b>${u.qty}</b> for <span class="shop__keep-st">${esc(stationLabel(u))} L${u.step}</span></a>${ready}</li>`;
     })
     .join('');
-  return `<p class="shop__keep-head">Keep ${r.need}</p><ul class="shop__keep-list">${lines}</ul>`;
+  return `<p class="shop__keep-head">Keep <b class="shop__keep-n">${r.need}</b></p><ul class="shop__keep-list">${lines}</ul>`;
 }
 
 // Safe to sell: only the numbers that matter for selling, read only.
-// Total, used, still need, what you have, how many you can sell,
+// Total, used, needed, what you have, how many you can sell,
 // what to keep and for which level, then "Mark as sold".
 function sellRow(r, i) {
   const name = esc(r.name);
@@ -262,7 +262,7 @@ function sellRow(r, i) {
       <td class="shop__name">${name}</td>
       <td class="num shop__total" data-label="Total">${r.total}</td>
       <td class="num shop__usedn" data-label="Used">${r.used}</td>
-      <td class="num shop__need" data-label="Still need">${r.need}</td>
+      <td class="num shop__need" data-label="Needed">${r.need}</td>
       <td class="num shop__havn" data-label="Have">${r.storage}</td>
       <td class="num shop__extra" data-label="Sell">${r.extra}</td>
       <td class="shop__keep">${keepList(r)}</td>

@@ -209,15 +209,20 @@ async function main() {
   await go('#laboratory', 1500);
   await mark([
     { sel: '.room-tabs', side: 'bottom', gap: 26, dx: 200 },
+    { sel: '.station-card__level', side: 'right', gap: 60 },
     { sel: '.station-card__next', side: 'right', gap: 40 },
-    { sel: '.station-card .pips', side: 'bottom', gap: 30 },
+    { sel: '.station-card .pips', side: 'top', gap: 16, dx: 120 },
+    { sel: '.station-card__foot .station-card__progress-row', side: 'bottom', gap: 24, dx: 120 },
   ]);
   await shot('room');
   await unmark();
 
   // 3. The header stats and buttons
   await mark([
-    { sel: '.hud__stats', side: 'bottom', gap: 22 },
+    { sel: '.hud__stats .stat', nth: 0, side: 'bottom', gap: 22 },
+    { sel: '.hud__stats .stat', nth: 1, side: 'bottom', gap: 22 },
+    { sel: '.hud__stats .stat', nth: 2, side: 'bottom', gap: 22 },
+    { sel: '.hud__stats .stat', nth: 3, side: 'bottom', gap: 22 },
     { sel: '.hud__actions [data-action="text-size"]', side: 'bottom', gap: 22 },
     { sel: '.hud__actions [data-action="lookup"]', side: 'bottom', gap: 22 },
     { sel: '.hud__actions [data-action="export"]', side: 'bottom', gap: 22 },
@@ -227,7 +232,7 @@ async function main() {
   await shot('header', await rect(['.hud'], 6));
   await unmark();
 
-  // 3b. Free power in the top bar
+  // 3b. Available power in the top bar
   await mark([{ sel: '.hud .stat--power', side: 'bottom', gap: 22 }]);
   await shot('power', await rect(['.hud__stats'], 8));
   await unmark();
@@ -255,15 +260,25 @@ async function main() {
 
   // 4. A finished station (green)
   await go('#utility', 1500);
+  await mark([
+    { sel: '.station-card .station-card__done', side: 'bottom', gap: 18 },
+    { sel: '.station-card .pips', side: 'top', gap: 14, dx: 80 },
+  ]);
   await shot('maxed', await rect(['.station-card'], 8));
+  await unmark();
 
   // 5. Station panel, one item row and the bottom buttons
   await size(1366, 900);
   await go('#laboratory/heat-source', 1500);
   await mark([
     { sel: '#panel .panel__levels', side: 'left', gap: 30 },
-    { sel: '#panel .level__facts', side: 'left', gap: 30 },
+    { sel: '#panel .level__badge', side: 'left', gap: 30 },
+    { sel: '#panel .level__fact', nth: 0, side: 'left', gap: 30 },
+    { sel: '#panel .level__fact', nth: 1, side: 'top', gap: 10 },
+    { sel: '#panel .level__fact', nth: 2, side: 'bottom', gap: 10 },
+    { sel: '#panel .level__fact', nth: 3, side: 'left', gap: 30 },
     { sel: '#panel .level__warn', side: 'left', gap: 30 },
+    { sel: '#panel .level__progress', side: 'left', gap: 30 },
     { sel: '#panel .item', side: 'left', gap: 30 },
   ]);
   await shot('panel', await rect(['#panel']));
@@ -330,6 +345,13 @@ async function main() {
   await shot('shopping', await rect(['.shop-tools', '.shop tbody tr:nth-child(3)', '.shop thead'], 10));
   await unmark();
 
+  // 7b. Every column title, one number each
+  await run(`document.querySelector('.shop-groups').style.visibility = 'hidden'; true`);
+  await mark([0, 1, 2, 3, 4, 5, 6].map((n) => ({ sel: '.shop thead th', nth: n, side: 'top', gap: 16 })));
+  await shot('columns', await rect(['.shop thead', '.shop tbody tr:nth-child(2)'], 10));
+  await unmark();
+  await run(`document.querySelector('.shop-groups').style.visibility = ''; true`);
+
   // 8. Shopping List with the Next upgrades button pushed in
   await run(`document.querySelector('[data-action="shop-latch"][data-k="next"]').click(); true`);
   await wait(600);
@@ -358,6 +380,13 @@ async function main() {
   ]);
   await shot('shopping-sell', await rect(['.shop-tools', '.shop tbody tr:last-child', '.shop thead'], 10));
   await unmark();
+
+  // 8c. Every Safe to sell column title, one number each
+  await run(`document.querySelector('.shop-groups').style.visibility = 'hidden'; true`);
+  await mark([0, 1, 2, 3, 4, 5, 6].map((n) => ({ sel: '.shop thead th', nth: n, side: 'top', gap: 16 })));
+  await shot('sell-columns', await rect(['.shop thead', '.shop tbody tr:first-child'], 10));
+  await unmark();
+  await run(`document.querySelector('.shop-groups').style.visibility = ''; true`);
   await run(`localStorage.setItem('buyaka-gzw-hideout:v1', ${JSON.stringify(JSON.stringify(DEMO))}); true`);
   await reload('#shopping');
 
@@ -371,15 +400,25 @@ async function main() {
   await shot('next');
   await unmark();
 
-  // 10. Find an item
+  // 10. Find an item: first the empty box ("Find these next")
   await run(`document.querySelector('.hud [data-action="lookup"]').click(); true`);
   await wait(500);
+  await mark([
+    { sel: '.lookup__results .lookup__label', side: 'right', gap: 30 },
+    { sel: '.lookup__next', side: 'right', gap: 20 },
+    { sel: '.lookup__item .shop__lvl.is-next', side: 'bottom', gap: 16 },
+  ]);
+  await shot('find-next', await rect(['.lookup__box'], 10));
+  await unmark();
+  // then a search
   await run(`const i = document.querySelector('.lookup__input'); i.value = 'steel';
              i.dispatchEvent(new Event('input', { bubbles: true })); true`);
   await wait(500);
   await mark([
     { sel: '.lookup__input', side: 'right', gap: 26 },
-    { sel: '.lookup__nums', side: 'right', gap: 40 },
+    { sel: '.lookup__nums > div', nth: 0, side: 'left', gap: 2 },
+    { sel: '.lookup__nums > div', nth: 1, side: 'top', gap: 8, dx: 30 },
+    { sel: '.lookup__nums > div', nth: 2, side: 'right', gap: 30 },
     { sel: '.lookup .shop__used', side: 'right', gap: 26 },
   ]);
   await shot('find', await rect(['.lookup__box'], 10));

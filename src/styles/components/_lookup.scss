@@ -92,6 +92,26 @@
     @include label-text;
   }
 
+  // Small line under a heading, explaining what the list is
+  &__sub {
+    margin-top: 2px;
+    font-size: fs('xs');
+    color: color('text-dim');
+  }
+
+  // "Your next upgrades need 7 · you are missing 5", in yellow like
+  // the Next upgrades button
+  &__next {
+    font-family: font('ui');
+    font-size: fs('sm');
+    font-weight: 600;
+    color: color('accent');
+
+    b {
+      font-weight: 800;
+    }
+  }
+
   &__item {
     display: grid;
     gap: space('2');

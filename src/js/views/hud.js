@@ -28,10 +28,10 @@ export function renderStats(el) {
     </div>
     <a class="stat stat--power ${p.free > 0 ? '' : 'is-off'}" href="#utility/generator" style="--p:${p.total ? p.used / p.total : 0}"
        title="${p.total ? `Available power: ${p.free} kW. Generator gives ${p.total} kW, built stations use ${p.used} kW.` : 'No power yet. Build the generator in the Utility Room.'}">
-      <span class="stat__label">Free power</span>
+      <span class="stat__label">Available power</span>
       ${
         p.total
-          ? `<span class="stat__value">${p.free} kW<small> / ${p.total}</small></span>`
+          ? `<span class="stat__value">${p.free}<small> of ${p.total} kW</small></span>`
           : `<span class="stat__hint">${icon('bolt')}Build generator</span>`
       }
       <span class="stat__bar"></span>
