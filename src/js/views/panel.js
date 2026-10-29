@@ -196,11 +196,20 @@ function render(flip) {
           ${readOnly ? '' : storeLine(it)}
           <div class="stepper">
             <button class="stepper__btn" data-action="dec" data-key="${esc(it.key)}" ${readOnly || !it.have ? 'disabled' : ''} aria-label="Set aside one less ${esc(it.name)}">−</button>
-            <input class="stepper__input" type="number" min="0" inputmode="numeric"
+            <input class="stepper__input" type="number" min="0" max="${it.need}" inputmode="numeric"
                    value="${readOnly ? it.need : it.have}" data-key="${esc(it.key)}" ${readOnly ? 'disabled' : ''}
                    aria-label="How many ${esc(it.name)} are set aside for this level">
-            <button class="stepper__btn" data-action="inc" data-key="${esc(it.key)}" ${readOnly ? 'disabled' : ''}
-                    aria-label="Set aside one more ${esc(it.name)}" title="${it.free ? 'Take one from storage' : 'None available in storage: adds one you found'}">+</button>
+            ${
+              // + only takes what is available in storage. With none left it
+              // looks off but still answers a click with how to add more.
+              readOnly || it.have >= it.need
+                ? `<button class="stepper__btn" data-action="inc" data-key="${esc(it.key)}" disabled
+                           aria-label="Set aside one more ${esc(it.name)}">+</button>`
+                : `<button class="stepper__btn" data-action="inc" data-key="${esc(it.key)}"
+                           ${it.free ? '' : 'aria-disabled="true"'}
+                           aria-label="Set aside one more ${esc(it.name)}"
+                           title="${it.free ? 'Take one from storage' : 'None available. Update your storage number first.'}">+</button>`
+            }
           </div>
           <div class="item__need">
             ${needCell}

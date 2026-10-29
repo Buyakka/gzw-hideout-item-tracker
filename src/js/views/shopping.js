@@ -75,9 +75,36 @@ export function renderShopping(el) {
     </section>`;
 }
 
+// Redraw the list, and the counts on the push buttons, since the
+// search box and the item types change what each button would show
 export function refreshShoppingBody(root) {
   const b = root.querySelector('[data-shop-body]');
   if (b) b.innerHTML = body();
+  for (const [k, n] of Object.entries(latchCounts())) {
+    const el = root.querySelector(`.latch[data-k="${k}"] .latch__n`);
+    if (el) el.textContent = n;
+  }
+}
+
+// The rows the list shows for a mode ('all', 'next' or 'sell'), with
+// the search box, the item type and Hide done applied. The push
+// button counts use this too, so a count always matches its list.
+// Hide done is skipped for Safe to sell: every extra is "done".
+function visibleRows(mode, rows = shoppingList(), next = mode === 'next' ? nextNeeds() : null) {
+  const q = ui.query.trim().toLowerCase();
+  return rows.filter(
+    (r) =>
+      (!q || r.name.toLowerCase().includes(q)) &&
+      (mode === 'sell' || !ui.hideDone || r.left > 0) &&
+      (ui.group === 'all' || groupOf(r.name) === ui.group) &&
+      (mode !== 'next' || next.need.has(r.name)) &&
+      (mode !== 'sell' || r.extra > 0)
+  );
+}
+
+function latchCounts() {
+  const rows = shoppingList();
+  return { next: visibleRows('next', rows).length, sell: visibleRows('sell', rows).length };
 }
 
 export function setShopQuery(q) {
@@ -88,15 +115,15 @@ export function setShopQuery(q) {
 // other out (one means "I need it", the other "I don't"). Hide done
 // works with either one.
 function latchButtons() {
-  const sell = shoppingList().filter((r) => r.extra > 0).length;
+  const counts = latchCounts();
   const btn = (k, pressed, label, n, title) => `
     <button class="latch latch--${k}" type="button" data-action="shop-latch" data-k="${k}"
             aria-pressed="${pressed}" title="${title}">
       <span class="latch__lamp" aria-hidden="true"></span>${label}${n === null ? '' : `<span class="latch__n">${n}</span>`}
     </button>`;
   return [
-    btn('next', ui.mode === 'next', 'Next upgrades', nextNeeds().need.size, 'Only items for levels you can build or start now'),
-    btn('sell', ui.mode === 'sell', 'Safe to sell', sell, 'Items you have more of than the whole hideout still needs'),
+    btn('next', ui.mode === 'next', 'Next upgrades', counts.next, 'Only items for levels you can build or start now'),
+    btn('sell', ui.mode === 'sell', 'Safe to sell', counts.sell, 'Items you have more of than the whole hideout still needs'),
     btn('hide', ui.hideDone, 'Hide done', null, 'Hide items you already have enough of'),
   ].join('');
 }
@@ -152,14 +179,7 @@ function body() {
   const q = ui.query.trim().toLowerCase();
   const next = ui.mode === 'next' ? nextNeeds() : null;
   const sell = ui.mode === 'sell';
-  const rows = shoppingList().filter(
-    (r) =>
-      (!q || r.name.toLowerCase().includes(q)) &&
-      (!ui.hideDone || r.left > 0) &&
-      (ui.group === 'all' || groupOf(r.name) === ui.group) &&
-      (!next || next.need.has(r.name)) &&
-      (!sell || r.extra > 0)
-  );
+  const rows = visibleRows(ui.mode, shoppingList(), next);
 
   if (!rows.length) {
     const msg = q

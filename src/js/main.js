@@ -132,12 +132,15 @@ const actions = {
   level(el) {
     showLevel(Number(el.dataset.index));
   },
-  // + takes one from free storage; if none is free it means "I found
-  // one more", so it is added to storage too
+  // + takes one from what is available in storage, never more. To add
+  // items you found, change the storage number (the pencil) instead.
   inc(el) {
     const key = el.dataset.key;
-    const added = store.setAssigned(key, store.assigned(key) + 1, { grow: true });
-    if (added) toast(`Added ${added} ${itemName(key)} to storage`);
+    if (store.free(itemName(key)) <= 0) {
+      toast(`No ${itemName(key)} available. Update your storage number first.`, 'warn');
+      return;
+    }
+    store.setAssigned(key, store.assigned(key) + 1);
   },
   // − puts one back into free storage (it is not thrown away)
   dec(el) {
@@ -281,8 +284,14 @@ document.addEventListener('change', (e) => {
   // Station steppers only (the Shopping List box also uses the
   // stepper look, but it sets storage, below)
   if (t.matches('.stepper__input[data-key]')) {
-    const added = store.setAssigned(t.dataset.key, t.value, { grow: true });
-    if (added) toast(`Added ${added} ${itemName(t.dataset.key)} to storage`);
+    // Never more than the level needs, and never more than you have
+    // available (the storage number does not grow from here)
+    const key = t.dataset.key;
+    const want = Math.min(Math.max(0, Math.floor(Number(t.value) || 0)), Number(t.max) || Infinity);
+    store.setAssigned(key, want);
+    const got = store.assigned(key);
+    if (got < want) toast(`You only have ${got} ${itemName(key)} for this. Update your storage number to add more.`, 'warn');
+    t.value = got;
   }
   if (t.matches('.item__store-input')) {
     store.setStorage(t.dataset.storeItem, t.value);

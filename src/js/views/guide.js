@@ -174,8 +174,8 @@ export function renderGuide(el) {
             <p>So when you want to use some for a level, you <b>set it aside</b> for that level. Whatever is not set aside yet shows as <b>available</b>.</p>
             ${shot('item', 'One item row: Steel, 4 of 4 set aside, 12 in storage, 8 available', 'Four Steel set aside for this level. Twelve in storage, so eight are still free for other stations.')}
             ${marks([
-              '<b>Set aside.</b> Press <b>+</b> to set one more aside. If none are available, the site figures you just found one and adds it to your storage too. Press <b>−</b> to put one back in storage. Prefer typing? Click the number, type it and press Enter.',
-              '<b>Storage.</b> Click this number to fix how many you own in total.',
+              '<b>Set aside.</b> Press <b>+</b> to take one from what is available in your storage. When none are available, <b>+</b> turns grey: you can only set aside what you really have. Press <b>−</b> to put one back in storage. Prefer typing? Click the number, type it and press Enter. It never goes above what you have or what the level needs.',
+              '<b>Storage.</b> How many you own in total. Found more in a raid? Click this number and type the new total. This, or <b>Have</b> on the Shopping List, is how your storage goes up. The + button never adds to it.',
               '<b>Recipe amount.</b> The pencil next to <b>/ 4</b> changes how many the level needs, in case the game shows a different number after an update.',
             ])}
             ${tip('<b>Also needed by</b> shows which other stations want the same item. Handy before you spend your last few.')}
