@@ -270,7 +270,7 @@ function render(flip) {
             : `<div class="level__progress">
                  <div class="station-card__progress-row"><span class="label">Set aside for this level</span><span class="mono">${prog.have} / ${prog.need}</span></div>
                  <div class="bar ${prog.allDone ? 'is-done' : ''}" style="--p:${prog.ratio}"><span class="bar__fill"></span></div>
-                 <p class="level__help">Your storage is shared by every station. Set items aside here so they are not counted twice. Building uses them up.</p>
+                 <p class="level__help">Your storage is shared by every station. Set items aside here so they are not counted twice. Mark built takes everything this level needs out of storage.</p>
                </div>`
         }
 

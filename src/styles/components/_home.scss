@@ -184,6 +184,31 @@
     }
   }
 
+  // "New here?" hint, only while the save is empty (see home.js)
+  &__hint {
+    display: flex;
+    align-items: flex-start;
+    gap: space('2');
+    padding: space('2') space('3');
+    font-size: fs('sm');
+    line-height: 1.5;
+    color: color('text');
+    background: tint('accent', 0.08);
+    border: 1px solid tint('accent', 0.5);
+
+    svg {
+      flex: none;
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      color: color('accent');
+    }
+
+    b {
+      color: color('accent');
+    }
+  }
+
   &__label {
     @include label-text;
     margin-top: space('1');

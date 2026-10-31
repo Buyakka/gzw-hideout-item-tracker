@@ -190,12 +190,15 @@ export const store = {
   },
 
   // ---- building ----
-  // Build the next level: what was set aside for it leaves storage
-  // (like the game uses the items). Remembered so undo can return it.
+  // Build the next level: everything it needs leaves storage, like the
+  // game uses the items, whether or not it was set aside first (it
+  // used to take only the set-aside items, so storage stayed too high).
+  // If storage is short, it takes what is there. Remembered so undo
+  // can give it back.
   build(stationId, levelIndex, items) {
     const took = {};
     for (const it of items) {
-      const n = Math.min(state.assigned[it.key] ?? 0, it.need);
+      const n = Math.min(it.need, state.storage[it.name] ?? 0);
       if (n > 0) {
         took[it.name] = n;
         state.storage[it.name] = Math.max(0, (state.storage[it.name] ?? 0) - n);

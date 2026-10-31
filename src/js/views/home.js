@@ -45,6 +45,13 @@ export function renderHome(el) {
     ? { href: `#${last}`, text: 'Continue', sub: ROOM_BY_ID[last]?.tab ?? TOOL_NAMES[last] }
     : { href: '#utility/generator', text: 'Start', sub: 'Build the generator first' };
 
+  // New player hint: only while the save is empty (nothing built,
+  // nothing in storage). Mark built takes a level's items out of
+  // storage, so a player who is already ahead should mark their built
+  // levels first and type in their stash after. It goes away for good
+  // once they mark one level or type one item.
+  const fresh = !Object.keys(store.get().built).length && !Object.keys(store.get().storage).length;
+
   let i = 0;
   const step = () => `style="--i:${i++}"`;
 
@@ -84,6 +91,13 @@ export function renderHome(el) {
           <span>See every item a hideout upgrade needs, before you build it.
           <b>Your progress is saved in this browser.</b></span>
         </p>
+
+        ${
+          fresh
+            ? `<p class="home__hint" ${step()}>${icon('arrow')}<span><b>New here?</b> First mark the levels you already
+               built in the game. Then type in what is in your stash.</span></p>`
+            : ''
+        }
 
         <p class="home__label" ${step()}>Select room</p>
         <nav class="home__rooms" aria-label="Rooms">

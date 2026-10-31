@@ -679,3 +679,58 @@
   color: color('text-dim');
   border: 1px dashed color('line-strong');
 }
+
+// Search with Hide done on: the matching items it hides, said out
+// loud in green so "not in the list" never reads like a typo
+.shop-done {
+  margin-top: space('3');
+  padding: space('3') space('4');
+  color: color('text');
+  background: tint('ok', 0.08);
+  border: 1px solid tint('ok', 0.45);
+
+  ul {
+    display: grid;
+    gap: space('1');
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: space('2');
+    line-height: 1.5;
+  }
+
+  svg {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    align-self: center;
+    color: color('ok');
+  }
+
+  b {
+    color: color('ok');
+  }
+
+  p {
+    margin: space('2') 0 0;
+    font-size: fs('xs');
+    color: color('text-dim');
+  }
+
+  &__more {
+    color: color('text-dim');
+  }
+}
+
+// Under the list: "12 done items hidden"
+.shop-hidden {
+  margin-top: space('3');
+  text-align: center;
+  font-size: fs('xs');
+  color: color('text-dim');
+}

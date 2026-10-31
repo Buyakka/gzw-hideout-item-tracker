@@ -90,12 +90,13 @@ export function refreshShoppingBody(root) {
 // the search box, the item type and Hide done applied. The push
 // button counts use this too, so a count always matches its list.
 // Hide done is skipped for Safe to sell: every extra is "done".
-function visibleRows(mode, rows = shoppingList(), next = mode === 'next' ? nextNeeds() : null) {
+// hide = false gives the rows as if Hide done was off.
+function visibleRows(mode, rows = shoppingList(), next = mode === 'next' ? nextNeeds() : null, hide = ui.hideDone) {
   const q = ui.query.trim().toLowerCase();
   return rows.filter(
     (r) =>
       (!q || r.name.toLowerCase().includes(q)) &&
-      (mode === 'sell' || !ui.hideDone || r.left > 0) &&
+      (mode === 'sell' || !hide || r.left > 0) &&
       (ui.group === 'all' || groupOf(r.name) === ui.group) &&
       (mode !== 'next' || next.need.has(r.name)) &&
       (mode !== 'sell' || r.extra > 0)
@@ -179,9 +180,13 @@ function body() {
   const q = ui.query.trim().toLowerCase();
   const next = ui.mode === 'next' ? nextNeeds() : null;
   const sell = ui.mode === 'sell';
-  const rows = visibleRows(ui.mode, shoppingList(), next);
+  const all = shoppingList();
+  const rows = visibleRows(ui.mode, all, next);
+  // Items Hide done is hiding right now (none when it is off)
+  const hidden = ui.hideDone && !sell ? visibleRows(ui.mode, all, next, false).filter((r) => r.left === 0) : [];
 
   if (!rows.length) {
+    if (q && hidden.length) return doneBox(hidden);
     const msg = q
       ? 'No items match your search.'
       : sell
@@ -191,7 +196,7 @@ function body() {
         : ui.group !== 'all'
           ? 'Nothing left to find in this group.'
           : 'Nothing left to find. Every level is built or stocked.';
-    return `<p class="empty">${msg}</p>`;
+    return `<p class="empty">${msg}</p>${hiddenLine(hidden)}`;
   }
 
   return `
@@ -214,7 +219,31 @@ function body() {
       <tbody>
         ${rows.map((r, i) => row(r, i, next, sell)).join('')}
       </tbody>
-    </table>`;
+    </table>
+    ${q && hidden.length ? doneBox(hidden) : hiddenLine(hidden)}`;
+}
+
+// Searching with Hide done on: say which matching items are done,
+// instead of leaving them out with no word (it read like a typo)
+function doneBox(hidden) {
+  const MAX = 8;
+  const line = (r) =>
+    `<li>${icon('check')}<span><b>${esc(r.name)}</b>: done, ${
+      r.need ? `you have enough (have ${r.storage}, need ${r.need}).` : 'every level that uses it is built.'
+    }</span></li>`;
+  const more = hidden.length > MAX ? `<li class="shop-done__more">and ${hidden.length - MAX} more.</li>` : '';
+  return `
+    <div class="shop-done" role="status">
+      <ul>${hidden.slice(0, MAX).map(line).join('')}${more}</ul>
+      <p>Hidden because <b>Hide done</b> is on.</p>
+    </div>`;
+}
+
+// Under the list: how many done items Hide done is tucking away
+function hiddenLine(hidden) {
+  if (!hidden.length) return '';
+  const n = hidden.length;
+  return `<p class="shop-hidden">${n} done item${n === 1 ? '' : 's'} hidden. Turn off <b>Hide done</b> to see ${n === 1 ? 'it' : 'them'}.</p>`;
 }
 
 // One item: the 5 numbers, a storage stepper, and the stations.

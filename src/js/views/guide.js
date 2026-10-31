@@ -106,6 +106,7 @@ export function renderGuide(el) {
               '<b>Tools.</b> The Shopping List, Next Upgrades, Disassembly, Find an item and this guide.',
               '<b>Text size.</b> Tap it to switch between normal, bigger and biggest.',
             ])}
+            ${tip('<b>Already ahead in the game?</b> Mark the levels you already built first, one press per level. Then type in what is in your stash. Mark built takes a level\'s items out of storage, so doing it the other way around takes them twice. If that happens, fix the <b>Have</b> number once and you are set. On your first visit a <b>New here?</b> line on this screen reminds you.')}
           </section>
 
           <section class="guide__part" tabindex="-1" id="getting-around">
@@ -189,7 +190,7 @@ export function renderGuide(el) {
               '<b>Have all.</b> Sets aside everything this level needs, as far as your storage allows. If you are short on something, it tells you what.',
               '<b>Clear.</b> Puts this level\'s items back into storage.',
               '<b>Reset station.</b> Shows up once a station has any progress. Starts this one station over and leaves the rest alone.',
-              '<b>Mark built.</b> The big one. Press it after you build the level in game. The items you set aside get used up, just like in the game.',
+              '<b>Mark built.</b> The big one. Press it after you build the level in game. Everything the level needs comes out of your storage, just like in the game, even if you did not set it aside first.',
             ])}
             <p>Clicked <b>Mark built</b> by accident? No problem. Click the level tab you just built and an <b>Undo build</b> button shows up at the bottom.</p>
             ${shot('undo', 'The bottom of a station panel with the Undo build button marked', 'Undo build only shows on the level you built last.')}
@@ -230,6 +231,8 @@ export function renderGuide(el) {
             <p>Coming back from a raid with a full bag? This is the fastest place to log it. Find the item, type what you have, done. The rows never move while you click, so you will not hit the wrong one.</p>
             <p>The three push buttons (2, 3 and 4) work like real latching buttons. Press one and it lights up in its color and sinks in, so you always know a filter is on. Press it again and it pops back out. The number on a button tells you how many items it will show before you press it. The yellow and green ones get their own sections below.</p>
             <p>Search, the push buttons and the item types all work together. In the <b>Used by</b> tags, levels you already built stay in green, so you never lose track of where your Steel went.</p>
+            <p>With <b>Hide done</b> on, a line under the list tells you how many done items are hidden, like <b>12 done items hidden</b>. Press the button again to bring them back.</p>
+            ${tip('Is this item done? Turn on <b>Hide done</b> and type its name in the search. If it is done, a green line says so, like <b>Circuit Board: done, you have enough (have 6, need 6)</b>. Or press <kbd>/</kbd>, type the name, and look for the green check under <b>To find</b>.')}
             ${tip('On a phone each item turns into its own card. Same numbers, same buttons, just stacked so they fit.')}
             ${shot('phone-card', 'One Shopping List item shown as a card on a phone', 'A Shopping List item on a phone.', 'small')}
             ${marks(['<b>Have.</b> Same − and + buttons as on a computer, sized for your thumb.'])}
@@ -284,7 +287,7 @@ export function renderGuide(el) {
             <p>An item only shows up here once you have more than every level not built yet needs, across all three rooms. If even one level is still short, it stays off the list.</p>
             <p>Sold it in game? Hit <b>Mark as sold</b>. Your storage drops to exactly what the hideout still needs, a short message confirms it, and the item leaves the list. No retyping. Sold only part of it? Pop the green button back out and type the new amount in <b>Have</b>.</p>
             ${tip('This only counts the hideout. If you also need an item for something else in the game, hold on to it.')}
-            <p>The yellow and green buttons pop each other out, since one means "I still need this" and the other means "I don't". <b>Hide done</b> works with either.</p>
+            <p>The yellow and green buttons pop each other out, since one means "I still need this" and the other means "I don't". <b>Hide done</b> works with <b>Next upgrades</b>. It does nothing while <b>Safe to sell</b> is on, since every extra is already done.</p>
           </section>
 
           <section class="guide__part" tabindex="-1" id="find">
